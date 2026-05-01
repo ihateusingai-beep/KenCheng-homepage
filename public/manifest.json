@@ -1,0 +1,27 @@
+{
+  "name": "Ken Cheng 電子教學工具",
+  "short_name": "教學工具",
+  "description": "匯集教學輔助、AI應用、開發工具與模擬體驗的個人導航站",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/vite.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "utilities"],
+  "lang": "zh-Hant",
+  "dir": "ltr"
+}
