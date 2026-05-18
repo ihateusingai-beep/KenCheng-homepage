@@ -1,8 +1,8 @@
-const CACHE_NAME = 'kencheng-homepage-v1';
+const CACHE_NAME = 'kencheng-homepage-v2';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/vite.svg'
+  '/KenCheng-homepage/',
+  '/KenCheng-homepage/index.html',
+  '/KenCheng-homepage/vite.svg'
 ];
 
 self.addEventListener('install', (event) => {
