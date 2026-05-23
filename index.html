@@ -30,18 +30,16 @@
   <link rel="stylesheet" crossorigin href="/KenCheng-homepage/assets/index-DSuGoZSV.css">
   <style>
 /* ============================
-   GUNDAM CONSOLE UI THEME
-   RX-0 Unicorn NT-D + Strike Freedom
+   GUNDAM CONSOLE UI - 3 MODES
    ============================ */
-[data-theme="gundam"] {
+
+/* --- NT-D Mode (Unicorn) --- */
+[data-theme="ntd"] {
   --accent: #00D4FF;
-  --accent-glow: rgba(0, 212, 255, 0.25);
+  --accent-glow: rgba(0, 212, 255, 0.3);
   --psychoframe-pink: #FF69B4;
-  --prismatic-blue: #0066CC;
-  --gold-accent: #FFD700;
-  --bg-primary: #0a0f1a;
-  --bg-card: #121830;
-  --bg-input: #1a2540;
+  --primary-bg: #0a0f1a;
+  --card-bg: #121830;
   --border-color: #1E3A5F;
   --text-primary: #E8F4F8;
   --text-secondary: #6A8BA8;
@@ -50,58 +48,136 @@
   --danger: #FF4444;
 }
 
-/* --- HUD Frame --- */
-[data-theme="gundam"] .gundam-hud-card {
+/* --- SEED Freedom Mode (爆Seed) --- */
+[data-theme="seed"] {
+  --accent: #FFD700;
+  --accent-glow: rgba(255, 215, 0, 0.3);
+  --prismatic-blue: #0066CC;
+  --primary-bg: #001225;
+  --card-bg: #002244;
+  --border-color: #003366;
+  --text-primary: #E8F4FF;
+  --text-secondary: #88AACC;
+  --success: #00CC66;
+  --warning: #FF6600;
+  --danger: #FF3333;
+}
+
+/* --- Crossbone X-1 Mode (海盜) --- */
+[data-theme="crossbone"] {
+  --accent: #CC0000;
+  --accent-glow: rgba(204, 0, 0, 0.3);
+  --skull-white: #EEEEEE;
+  --primary-bg: #1a0a0a;
+  --card-bg: #2a1010;
+  --border-color: #440000;
+  --text-primary: #F5E6E6;
+  --text-secondary: #AA8888;
+  --success: #00AA00;
+  --warning: #FF6600;
+  --danger: #FF0000;
+}
+
+/* ===========================
+   SHARED GUNDAM UI ELEMENTS
+   =========================== */
+
+/* HUD Frame - all modes */
+[class*="gundam-mode"] .gundam-hud-card,
+[data-theme="ntd"] .gundam-hud-card,
+[data-theme="seed"] .gundam-hud-card,
+[data-theme="crossbone"] .gundam-hud-card {
   position: relative;
-  background: var(--bg-card);
+  background: var(--card-bg);
   border: 1px solid var(--border-color);
   box-shadow: 0 0 15px var(--accent-glow);
 }
-[data-theme="gundam"] .gundam-hud-card::before,
-[data-theme="gundam"] .gundam-hud-card::after {
+.gundam-hud-card::before,
+.gundam-hud-card::after {
   content: '';
   position: absolute;
   width: 20px;
   height: 20px;
   border: 2px solid var(--accent);
-  opacity: 0.6;
+  opacity: 0.7;
 }
-[data-theme="gundam"] .gundam-hud-card::before {
+.gundam-hud-card::before {
   top: -1px; left: -1px;
   border-right: none; border-bottom: none;
 }
-[data-theme="gundam"] .gundam-hud-card::after {
+.gundam-hud-card::after {
   bottom: -1px; right: -1px;
   border-left: none; border-top: none;
 }
 
-/* --- Psychoframe Pulse --- */
-@keyframes psychoframePulse {
+/* ===========================
+   NT-D ANIMATIONS (Unicorn)
+   =========================== */
+[data-theme="ntd"] .gundam-pulse {
+  animation: ntdPulse 2s ease-in-out infinite;
+}
+@keyframes ntdPulse {
   0%, 100% { 
-    box-shadow: 0 0 10px rgba(255,105,180,0.3), 0 0 20px rgba(255,105,180,0.2);
+    box-shadow: 0 0 10px rgba(255,105,180,0.4), 0 0 25px rgba(255,105,180,0.2);
   }
   50% { 
-    box-shadow: 0 0 25px rgba(255,105,180,0.6), 0 0 50px rgba(255,105,180,0.3);
+    box-shadow: 0 0 30px rgba(255,105,180,0.7), 0 0 60px rgba(255,105,180,0.4);
   }
 }
-[data-theme="gundam"] .gundam-pulse {
-  animation: psychoframePulse 2s ease-in-out infinite;
+
+/* ===========================
+   SEED FREEDOM ANIMATIONS (爆Seed)
+   =========================== */
+[data-theme="seed"] .gundam-pulse {
+  animation: seedBurst 0.8s ease-out infinite;
+}
+@keyframes seedBurst {
+  0% { 
+    box-shadow: 0 0 5px #FFD700, 0 0 10px #0066CC;
+    border-color: #FFD700;
+  }
+  50% { 
+    box-shadow: 0 0 40px #FFD700, 0 0 80px #0066CC, 0 0 120px #00D4FF;
+    border-color: #00D4FF;
+  }
+  100% { 
+    box-shadow: 0 0 5px #FFD700, 0 0 10px #0066CC;
+    border-color: #0066CC;
+  }
+}
+[data-theme="seed"] .gundam-energy-bar-fill {
+  background: linear-gradient(90deg, #0066CC, #00D4FF, #FFD700) !important;
+  animation: seedEnergyFill 1s ease-out infinite alternate !important;
+}
+@keyframes seedEnergyFill {
+  0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+  100% { background-position: 100% 50%; filter: hue-rotate(30deg); }
 }
 
-/* --- Radar Sweep --- */
-@keyframes radarSweep {
-  0% { transform: rotate(0deg); opacity: 0.8; }
-  100% { transform: rotate(360deg); opacity: 0.3; }
+/* ===========================
+   CROSSBONE X-1 ANIMATIONS (海盜)
+   =========================== */
+[data-theme="crossbone"] .gundam-pulse {
+  animation: skullPulse 1.5s ease-in-out infinite;
 }
-@keyframes radarPing {
-  0% { transform: scale(0.5); opacity: 0.8; }
-  100% { transform: scale(2); opacity: 0; }
+@keyframes skullPulse {
+  0%, 100% { 
+    box-shadow: 0 0 10px rgba(204,0,0,0.5), 0 0 20px rgba(204,0,0,0.3);
+    border-color: #CC0000;
+  }
+  50% { 
+    box-shadow: 0 0 25px rgba(204,0,0,0.8), 0 0 50px rgba(204,0,0,0.5);
+    border-color: #FF4444;
+  }
 }
-[data-theme="gundam"] .gundam-radar {
-  position: relative;
-  overflow: hidden;
-}
-[data-theme="gundam"] .gundam-radar::before {
+
+/* ===========================
+   SHARED ANIMATIONS (all modes)
+   =========================== */
+
+/* Radar Sweep */
+.gundam-radar { position: relative; overflow: hidden; }
+.gundam-radar::before {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
@@ -111,7 +187,7 @@
   border: 1px solid var(--accent);
   animation: radarSweep 3s linear infinite;
 }
-[data-theme="gundam"] .gundam-radar::after {
+.gundam-radar::after {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
@@ -121,8 +197,16 @@
   background: var(--accent);
   animation: radarPing 1.5s ease-out infinite;
 }
+@keyframes radarSweep {
+  0% { transform: rotate(0deg); opacity: 0.8; }
+  100% { transform: rotate(360deg); opacity: 0.3; }
+}
+@keyframes radarPing {
+  0% { transform: scale(0.5); opacity: 0.8; }
+  100% { transform: scale(2); opacity: 0; }
+}
 
-/* --- Status Indicators --- */
+/* Status Blinkers */
 @keyframes statusBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
@@ -131,75 +215,61 @@
   0%, 100% { box-shadow: 0 0 5px currentColor; }
   50% { box-shadow: 0 0 15px currentColor, 0 0 25px currentColor; }
 }
-[data-theme="gundam"] .gundam-status-ok { color: var(--success); animation: statusBlink 2s ease-in-out infinite; }
-[data-theme="gundam"] .gundam-status-warn { color: var(--warning); animation: statusGlow 1s ease-in-out infinite; }
-[data-theme="gundam"] .gundam-status-alert { color: var(--danger); animation: statusGlow 0.5s ease-in-out infinite; }
+.gundam-status-ok { color: var(--success); animation: statusBlink 2s ease-in-out infinite; }
+.gundam-status-warn { color: var(--warning); animation: statusGlow 1s ease-in-out infinite; }
+.gundam-status-alert { color: var(--danger); animation: statusGlow 0.5s ease-in-out infinite; }
 
-/* --- Glitch Text --- */
+/* Glitch Text */
 @keyframes glitchText {
-  0%, 100% { 
-    text-shadow: 2px 0 var(--accent), -2px 0 var(--warning);
-    transform: translate(0);
-  }
-  20% { 
-    text-shadow: -2px 0 var(--accent), 2px 0 var(--warning);
-    transform: translate(-2px, 1px);
-  }
-  40% { 
-    text-shadow: 2px 2px var(--accent), -2px -2px var(--warning);
-    transform: translate(2px, -1px);
-  }
+  0%, 100% { text-shadow: 2px 0 var(--accent), -2px 0 var(--warning); transform: translate(0); }
+  20% { text-shadow: -2px 0 var(--accent), 2px 0 var(--warning); transform: translate(-2px, 1px); }
+  40% { text-shadow: 2px 2px var(--accent), -2px -2px var(--warning); transform: translate(2px, -1px); }
 }
 @keyframes glitchFlicker {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.8; }
   75% { opacity: 0.95; }
 }
-[data-theme="gundam"] .gundam-glitch-text {
+.gundam-glitch-text {
   animation: glitchText 0.3s ease-in-out infinite, glitchFlicker 0.1s linear infinite;
 }
-[data-theme="gundam"] .gundam-data-stream {
+.gundam-data-stream {
   font-family: 'Courier New', monospace;
   animation: glitchText 0.5s ease-in-out infinite;
 }
 
-/* --- CRT Scanlines --- */
+/* CRT Scanlines */
 @keyframes scanlineMove {
   0% { background-position: 0 0; }
   100% { background-position: 0 100%; }
 }
-[data-theme="gundam"] .gundam-scanlines::after {
+.gundam-scanlines::after {
   content: '';
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.1) 2px,
-    rgba(0, 0, 0, 0.1) 4px
+    0deg, transparent, transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px
   );
   pointer-events: none;
   animation: scanlineMove 8s linear infinite;
 }
 
-/* --- Gundam Theme Toggle Button --- */
-[data-theme="gundam"] body {
-  background: linear-gradient(135deg, #0a0f1a 0%, #0d1525 50%, #0a0f1a 100%);
-  background-attachment: fixed;
+/* Mode-specific body backgrounds */
+[data-theme="ntd"] body {
+  background: linear-gradient(135deg, #0a0f1a 0%, #0d1525 50%, #0a0f1a 100%) fixed;
 }
-[data-theme="gundam"] .gundam-header-glow {
-  text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-glow);
-  color: var(--accent);
+[data-theme="seed"] body {
+  background: linear-gradient(135deg, #001225 0%, #002244 40%, #001533 70%, #000d1a 100%) fixed;
 }
-[data-theme="gundam"] .gundam-accent-border {
-  border-color: var(--accent) !important;
-  box-shadow: inset 0 0 10px var(--accent-glow), 0 0 10px var(--accent-glow);
+[data-theme="crossbone"] body {
+  background: linear-gradient(135deg, #1a0a0a 0%, #2a1010 50%, #1a0808 100%) fixed;
 }
-[data-theme="gundam"] .gundam-ntd-active {
-  animation: psychoframePulse 2s ease-in-out infinite;
-  border-color: var(--psychoframe-pink);
-}
+
+/* Glitch title effect per mode */
+[data-theme="ntd"] .gundam-glitch-text { color: #FF69B4; }
+[data-theme="seed"] .gundam-glitch-text { color: #FFD700; }
+[data-theme="crossbone"] .gundam-glitch-text { color: #CC0000; }
   </style>
 </head>
 <body>
@@ -208,32 +278,59 @@
   <footer style="text-align:center;padding:20px;border-top:1px solid var(--border-color, #e5e7eb);margin-top:40px;font-size:14px;color:var(--text-secondary, #6b7280);">
     © 2025 Ken Cheng© 2025 <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Ken Cheng</a> Created with Gemini Script &amp; Tailwind CSS
   </footer>
-  <!-- Gundam Console UI Toggle -->
-  <button id="gundam-theme-toggle" onclick="toggleGundamTheme()" title="Gundam Console UI - NT-D Mode" style="position:fixed;bottom:24px;right:24px;z-index:9999;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#FF69B4,#00D4FF);border:3px solid #FF69B4;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 25px rgba(255,105,180,0.5),0 0 50px rgba(0,212,255,0.3);font-size:11px;font-weight:bold;color:#fff;text-shadow:0 0 5px #000;transition:all 0.3s;">
-    🤖
-    <span style="margin-top:2px;font-size:9px;letter-spacing:1px;">NT-D</span>
-  </button>
+  <!-- Gundam Console UI Mode Switcher -->
+  <div id="gundam-switcher" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+    <!-- Mode Buttons -->
+    <div id="gundam-modes" style="display:none;flex-direction:column;gap:8px;">
+      <button onclick="setGundamMode('ntd')" data-mode="ntd" class="gundam-mode-btn" style="width:80px;height:36px;border-radius:20px;border:2px solid #FF69B4;background:linear-gradient(135deg,#1a0a1a,#2a1530);color:#FF69B4;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,105,180,0.3);transition:all 0.2s;">
+        🤖 NT-D
+      </button>
+      <button onclick="setGundamMode('seed')" data-mode="seed" class="gundam-mode-btn" style="width:80px;height:36px;border-radius:20px;border:2px solid #FFD700;background:linear-gradient(135deg,#001225,#002244);color:#FFD700;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,215,0,0.3);transition:all 0.2s;">
+        ⚡ SEED
+      </button>
+      <button onclick="setGundamMode('crossbone')" data-mode="crossbone" class="gundam-mode-btn" style="width:80px;height:36px;border-radius:20px;border:2px solid #CC0000;background:linear-gradient(135deg,#1a0a0a,#2a1010);color:#CC0000;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(204,0,0,0.3);transition:all 0.2s;">
+        💀 CROSSBONE
+      </button>
+      <button onclick="setGundamMode('off')" data-mode="off" class="gundam-mode-btn" style="width:80px;height:36px;border-radius:20px;border:2px solid #888;background:#333;color:#aaa;font-size:11px;font-weight:bold;cursor:pointer;transition:all 0.2s;">
+        ✖ OFF
+      </button>
+    </div>
+    <!-- Main Toggle Button -->
+    <button id="gundam-theme-toggle" onclick="toggleGundamMenu()" title="Gundam Console UI - Click to switch modes" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#FF69B4,#00D4FF,#FFD700);border:3px solid #fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 25px rgba(255,105,180,0.5),0 0 50px rgba(0,212,255,0.3);font-size:10px;font-weight:bold;color:#fff;text-shadow:0 0 5px #000;transition:all 0.3s;">
+      <span style="font-size:22px;">🎮</span>
+      <span style="margin-top:2px;letter-spacing:1px;">MS MODE</span>
+    </button>
+  </div>
   <script>
-    function toggleGundamTheme() {
+    let gundamMenuOpen = false;
+    function toggleGundamMenu() {
+      const menu = document.getElementById('gundam-modes');
+      gundamMenuOpen = !gundamMenuOpen;
+      menu.style.display = gundamMenuOpen ? 'flex' : 'none';
+    }
+    function setGundamMode(mode) {
       const html = document.documentElement;
-      if (html.getAttribute('data-theme') === 'gundam') {
-        html.removeAttribute('data-theme');
-        document.body.style.background = '';
-      } else {
-        html.setAttribute('data-theme', 'gundam');
+      const currentMode = html.getAttribute('data-theme');
+      // Remove all mode classes
+      html.removeAttribute('data-theme');
+      document.body.style.background = '';
+      // Remove gundam classes from elements
+      document.querySelectorAll('.gundam-hud-card, .gundam-glitch-text').forEach(el => {
+        el.classList.remove('gundam-hud-card', 'gundam-glitch-text');
+      });
+      if (mode !== 'off') {
+        html.setAttribute('data-theme', mode);
         // Add Gundam classes to main elements
         document.querySelectorAll('header, nav, main, section, article, .card, [class*="card"]').forEach(el => {
-          if (!el.classList.contains('gundam-hud-card')) el.classList.add('gundam-hud-card');
+          el.classList.add('gundam-hud-card');
         });
-        // Glitch effect on title
         document.querySelectorAll('h1, h2, h3').forEach(el => {
-          if (!el.classList.contains('gundam-glitch-text')) el.classList.add('gundam-glitch-text');
+          el.classList.add('gundam-glitch-text');
         });
       }
-    }
-    // Auto-apply HUD frame to cards when page loads in gundam mode
-    if (document.documentElement.getAttribute('data-theme') === 'gundam') {
-      toggleGundamTheme();
+      // Close menu
+      document.getElementById('gundam-modes').style.display = 'none';
+      gundamMenuOpen = false;
     }
   </script>
     <script>
