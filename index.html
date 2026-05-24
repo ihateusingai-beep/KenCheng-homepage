@@ -30,246 +30,574 @@
   <link rel="stylesheet" crossorigin href="/KenCheng-homepage/assets/index-DSuGoZSV.css">
   <style>
 /* ============================
-   GUNDAM CONSOLE UI - 3 MODES
+   GUNDAM CONSOLE UI - 8 MODES
+   Full system from gundam-console-ui skill
    ============================ */
 
-/* --- NT-D Mode (Unicorn) --- */
-[data-theme="ntd"] {
-  --accent: #00D4FF;
-  --accent-glow: rgba(0, 212, 255, 0.3);
-  --psychoframe-pink: #FF69B4;
-  --primary-bg: #0a0f1a;
-  --card-bg: #121830;
-  --border-color: #1E3A5F;
+/* --- BASE THEME (all gundam-* modes inherit) --- */
+[data-theme^="gundam-"] {
+  --bg-primary: #0a0f1a;
+  --bg-card: #121830;
+  --bg-input: #1a2540;
+  --bg-elevated: #1e2a45;
   --text-primary: #E8F4F8;
   --text-secondary: #6A8BA8;
+  --text-muted: #4A6178;
+  --accent: #00D4FF;
+  --accent-secondary: #FF69B4;
+  --accent-glow: rgba(0, 212, 255, 0.25);
+  --accent-glow-alt: rgba(255, 105, 180, 0.4);
   --success: #00AA00;
   --warning: #FF8C00;
   --danger: #FF4444;
+  --border-color: #1E3A5F;
+  --border-glow: rgba(0, 212, 255, 0.3);
+  --card-glow: 0 0 15px var(--accent-glow);
+  --card-glow-alt: 0 0 15px var(--accent-glow-alt);
 }
 
-/* --- SEED Freedom Mode (爆Seed) --- */
-[data-theme="seed"] {
+/* --- PER-THEME OVERRIDES --- */
+
+/* NT-D (Unicorn) */
+[data-theme="gundam-ntd"] {
+  --accent: #00D4FF;
+  --accent-secondary: #FF69B4;
+  --accent-glow: rgba(0, 212, 255, 0.25);
+  --accent-glow-alt: rgba(255, 105, 180, 0.4);
+  --bg-primary: #0a0f1a;
+  --bg-card: #121830;
+  --border-color: #1E3A5F;
+}
+
+/* SEED Freedom */
+[data-theme="gundam-seed"] {
   --accent: #FFD700;
+  --accent-secondary: #0066CC;
   --accent-glow: rgba(255, 215, 0, 0.3);
-  --prismatic-blue: #0066CC;
-  --primary-bg: #001225;
-  --card-bg: #002244;
-  --border-color: #003366;
-  --text-primary: #E8F4FF;
-  --text-secondary: #88AACC;
-  --success: #00CC66;
-  --warning: #FF6600;
-  --danger: #FF3333;
+  --accent-glow-alt: rgba(0, 102, 204, 0.4);
+  --bg-primary: #080c14;
+  --bg-card: #0c1220;
+  --border-color: #1A3050;
+  --card-glow: 0 0 20px var(--accent-glow), 0 0 40px rgba(255, 215, 0, 0.1);
 }
 
-/* --- Crossbone X-1 Mode (海盜) --- */
-[data-theme="crossbone"] {
+/* Crossbone X-1 */
+[data-theme="gundam-crossbone"] {
   --accent: #CC0000;
-  --accent-glow: rgba(204, 0, 0, 0.3);
-  --skull-white: #EEEEEE;
-  --primary-bg: #1a0a0a;
-  --card-bg: #2a1010;
-  --border-color: #440000;
-  --text-primary: #F5E6E6;
-  --text-secondary: #AA8888;
-  --success: #00AA00;
-  --warning: #FF6600;
-  --danger: #FF0000;
+  --accent-secondary: #F0F0E0;
+  --accent-glow: rgba(204, 0, 0, 0.4);
+  --accent-glow-alt: rgba(240, 240, 224, 0.3);
+  --bg-primary: #0f0808;
+  --bg-card: #1a0808;
+  --border-color: #3A1010;
 }
 
-/* ===========================
-   SHARED GUNDAM UI ELEMENTS
-   =========================== */
+/* NT-D Green Frame */
+[data-theme="gundam-ntd-green"] {
+  --accent: #00FF88;
+  --accent-secondary: #00D4FF;
+  --accent-glow: rgba(0, 255, 136, 0.35);
+  --accent-glow-alt: rgba(0, 212, 255, 0.3);
+  --bg-primary: #080f0a;
+  --bg-card: #091209;
+  --border-color: #1A3A1A;
+}
 
-/* HUD Frame - all modes */
-[class*="gundam-mode"] .gundam-hud-card,
-[data-theme="ntd"] .gundam-hud-card,
-[data-theme="seed"] .gundam-hud-card,
-[data-theme="crossbone"] .gundam-hud-card {
-  position: relative;
-  background: var(--card-bg);
+/* 00 Qubit / Twin Drive */
+[data-theme="gundam-00"] {
+  --accent: #00FF88;
+  --accent-secondary: #FF4466;
+  --accent-glow: rgba(0, 255, 136, 0.35);
+  --accent-glow-alt: rgba(255, 68, 102, 0.4);
+  --bg-primary: #070a0f;
+  --bg-card: #0a1015;
+  --border-color: #1A3A2A;
+}
+
+/* Destiny / Legend */
+[data-theme="gundam-destiny"] {
+  --accent: #CC0000;
+  --accent-secondary: #FFD700;
+  --accent-glow: rgba(204, 0, 0, 0.4);
+  --accent-glow-alt: rgba(255, 215, 0, 0.3);
+  --bg-primary: #0f0808;
+  --bg-card: #1a0808;
+  --border-color: #3A1010;
+}
+
+/* God Gundam */
+[data-theme="gundam-god"] {
+  --accent: #FF6600;
+  --accent-secondary: #FFD700;
+  --accent-glow: rgba(255, 102, 0, 0.4);
+  --accent-glow-alt: rgba(255, 215, 0, 0.4);
+  --bg-primary: #0f0a07;
+  --bg-card: #1a1208;
+  --border-color: #3A2010;
+}
+
+/* Cartoon Kawaii */
+[data-theme="gundam-cartoon"] {
+  --accent: #FF9ECF;
+  --accent-secondary: #7EE8C8;
+  --accent-glow: rgba(255, 158, 207, 0.3);
+  --accent-glow-alt: rgba(126, 232, 200, 0.4);
+  --bg-primary: #FFF5F8;
+  --bg-card: #FFFFFF;
+  --text-primary: #4A3040;
+  --text-secondary: #8A7090;
+  --border-color: #E8D0E0;
+  --card-glow: 0 4px 20px rgba(255, 158, 207, 0.2);
+  --card-glow-alt: 0 4px 20px rgba(126, 232, 200, 0.2);
+}
+
+/* ============================
+   HUD FRAME COMPONENTS
+   ============================ */
+[data-theme^="gundam-"] .gundam-hud-card {
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 8px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 0 15px var(--accent-glow);
+  box-shadow: var(--card-glow);
+  position: relative;
 }
-.gundam-hud-card::before,
-.gundam-hud-card::after {
+[data-theme^="gundam-"] .gundam-hud-card::before,
+[data-theme^="gundam-"] .gundam-hud-card::after {
   content: '';
   position: absolute;
   width: 20px;
   height: 20px;
   border: 2px solid var(--accent);
-  opacity: 0.7;
+  opacity: 0.6;
 }
-.gundam-hud-card::before {
+[data-theme^="gundam-"] .gundam-hud-card::before {
   top: -1px; left: -1px;
   border-right: none; border-bottom: none;
 }
-.gundam-hud-card::after {
+[data-theme^="gundam-"] .gundam-hud-card::after {
   bottom: -1px; right: -1px;
   border-left: none; border-top: none;
 }
 
-/* ===========================
-   NT-D ANIMATIONS (Unicorn)
-   =========================== */
-[data-theme="ntd"] .gundam-pulse {
-  animation: ntdPulse 2s ease-in-out infinite;
+/* ============================
+   PSYCHOFRAME PULSE (NT-D Unicorn)
+   ============================ */
+[data-theme="gundam-ntd"] .gundam-pulse,
+[data-theme="gundam-ntd"] .gundam-hud-card {
+  animation: psychoframePulse 2s ease-in-out infinite;
 }
-@keyframes ntdPulse {
-  0%, 100% { 
-    box-shadow: 0 0 10px rgba(255,105,180,0.4), 0 0 25px rgba(255,105,180,0.2);
+@keyframes psychoframePulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 105, 180, 0.3), 0 0 20px rgba(255, 105, 180, 0.2);
   }
-  50% { 
-    box-shadow: 0 0 30px rgba(255,105,180,0.7), 0 0 60px rgba(255,105,180,0.4);
+  50% {
+    box-shadow: 0 0 25px rgba(255, 105, 180, 0.6), 0 0 50px rgba(255, 105, 180, 0.3);
   }
 }
 
-/* ===========================
-   SEED FREEDOM ANIMATIONS (爆Seed)
-   =========================== */
-[data-theme="seed"] .gundam-pulse {
-  animation: seedBurst 0.8s ease-out infinite;
+/* ============================
+   SEED FREEDOM — 爆SEED BURST + PRISMATIC
+   ============================ */
+[data-theme="gundam-seed"] .gundam-pulse,
+[data-theme="gundam-seed"] .gundam-hud-card {
+  animation: seedBurst 3s ease-in-out infinite;
 }
 @keyframes seedBurst {
-  0% { 
-    box-shadow: 0 0 5px #FFD700, 0 0 10px #0066CC;
-    border-color: #FFD700;
+  0% {
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent-secondary);
+    transform: scale(1);
   }
-  50% { 
-    box-shadow: 0 0 40px #FFD700, 0 0 80px #0066CC, 0 0 120px #00D4FF;
-    border-color: #00D4FF;
+  30% {
+    box-shadow: 0 0 30px var(--accent-secondary), 0 0 60px var(--accent), 0 0 90px rgba(255, 215, 0, 0.3);
+    transform: scale(1.05);
   }
-  100% { 
-    box-shadow: 0 0 5px #FFD700, 0 0 10px #0066CC;
-    border-color: #0066CC;
+  60% {
+    box-shadow: 0 0 15px var(--accent), 0 0 30px var(--accent-secondary);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent-secondary);
+    transform: scale(1);
   }
 }
-[data-theme="seed"] .gundam-energy-bar-fill {
-  background: linear-gradient(90deg, #0066CC, #00D4FF, #FFD700) !important;
-  animation: seedEnergyFill 1s ease-out infinite alternate !important;
+[data-theme="gundam-seed"] .gundam-seed-prismatic {
+  animation: prismaticShift 4s ease-in-out infinite;
 }
-@keyframes seedEnergyFill {
-  0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
-  100% { background-position: 100% 50%; filter: hue-rotate(30deg); }
-}
-
-/* ===========================
-   CROSSBONE X-1 ANIMATIONS (海盜)
-   =========================== */
-[data-theme="crossbone"] .gundam-pulse {
-  animation: skullPulse 1.5s ease-in-out infinite;
-}
-@keyframes skullPulse {
-  0%, 100% { 
-    box-shadow: 0 0 10px rgba(204,0,0,0.5), 0 0 20px rgba(204,0,0,0.3);
-    border-color: #CC0000;
-  }
-  50% { 
-    box-shadow: 0 0 25px rgba(204,0,0,0.8), 0 0 50px rgba(204,0,0,0.5);
-    border-color: #FF4444;
-  }
+@keyframes prismaticShift {
+  0% { filter: hue-rotate(0deg) brightness(1); }
+  50% { filter: hue-rotate(20deg) brightness(1.2); }
+  100% { filter: hue-rotate(0deg) brightness(1); }
 }
 
-/* ===========================
-   SHARED ANIMATIONS (all modes)
-   =========================== */
+/* ============================
+   CROSSBONE X-1 — SKULL FLASH + BONE FRAME
+   ============================ */
+[data-theme="gundam-crossbone"] .gundam-pulse,
+[data-theme="gundam-crossbone"] .gundam-hud-card {
+  animation: skullFlash 4s ease-in-out infinite;
+}
+@keyframes skullFlash {
+  0%, 70%, 100% { opacity: 0.9; text-shadow: 0 0 8px var(--accent); }
+  75% { opacity: 1; text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent-secondary); }
+  80% { opacity: 0.7; text-shadow: 0 0 5px var(--accent); }
+  85% { opacity: 1; text-shadow: 0 0 25px var(--accent), 0 0 50px var(--accent-secondary); }
+}
+@keyframes boneFracture {
+  0%, 100% { border-color: var(--border-color); box-shadow: none; }
+  50% { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+}
+[data-theme="gundam-crossbone"] .gundam-bone-frame {
+  animation: boneFracture 3s ease-in-out infinite;
+  border-style: dashed;
+}
 
-/* Radar Sweep */
-.gundam-radar { position: relative; overflow: hidden; }
-.gundam-radar::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 80px; height: 80px;
-  margin: -40px 0 0 -40px;
+/* ============================
+   NT-D GREEN FRAME — SCAN WAVE + 感应波
+   ============================ */
+[data-theme="gundam-ntd-green"] .gundam-pulse,
+[data-theme="gundam-ntd-green"] .gundam-hud-card {
+  animation: greenScanWave 2s ease-in-out infinite;
+}
+@keyframes greenScanWave {
+  0% {
+    box-shadow: 0 0 10px var(--accent-glow);
+    border-color: var(--accent);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--accent-glow), 0 0 60px rgba(0, 255, 136, 0.2);
+    border-color: var(--accent);
+  }
+  100% {
+    box-shadow: 0 0 10px var(--accent-glow);
+    border-color: var(--border-color);
+  }
+}
+@keyframes 感应波Pulse {
+  0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px var(--accent-glow); }
+  50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 30px var(--accent-glow), 0 0 60px rgba(0, 212, 255, 0.2); }
+  100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px var(--accent-glow); }
+}
+[data-theme="gundam-ntd-green"] .gundam-感应波 {
+  animation: 感应波Pulse 1.5s ease-in-out infinite;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+}
+
+/* ============================
+   00 QUBIT — TRANS-AM + GN PARTICLE
+   ============================ */
+[data-theme="gundam-00"] .gundam-pulse,
+[data-theme="gundam-00"] .gundam-hud-card {
+  animation: transAmBurst 1s ease-out infinite;
+}
+@keyframes transAmBurst {
+  0% {
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent-secondary);
+    transform: scale(1);
+  }
+  30% {
+    box-shadow: 0 0 40px var(--accent), 0 0 80px var(--accent-secondary), 0 0 120px rgba(0, 255, 136, 0.2);
+    transform: scale(1.05);
+    border-color: var(--accent);
+  }
+  60% {
+    box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent-secondary);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent-secondary);
+    transform: scale(1);
+  }
+}
+@keyframes gnParticleFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+[data-theme="gundam-00"] .gundam-gn-particle {
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 50%, var(--accent) 100%);
+  background-size: 200% 100%;
+  animation: gnParticleFlow 2s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+@keyframes qubitPulse {
+  0%, 100% { box-shadow: 0 0 8px var(--accent-glow); transform: scale(1); opacity: 0.9; }
+  50% { box-shadow: 0 0 25px var(--accent-glow), 0 0 50px rgba(0, 255, 136, 0.3); transform: scale(1.1); opacity: 1; }
+}
+[data-theme="gundam-00"] .gundam-qubit-pulse {
+  animation: qubitPulse 1.5s ease-in-out infinite;
   border-radius: 50%;
   border: 1px solid var(--accent);
-  animation: radarSweep 3s linear infinite;
-}
-.gundam-radar::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 20px; height: 20px;
-  margin: -10px 0 0 -10px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: radarPing 1.5s ease-out infinite;
-}
-@keyframes radarSweep {
-  0% { transform: rotate(0deg); opacity: 0.8; }
-  100% { transform: rotate(360deg); opacity: 0.3; }
-}
-@keyframes radarPing {
-  0% { transform: scale(0.5); opacity: 0.8; }
-  100% { transform: scale(2); opacity: 0; }
 }
 
-/* Status Blinkers */
-@keyframes statusBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+/* ============================
+   DESTINY / LEGEND — BEAM BLADE + FLAME SURGE
+   ============================ */
+[data-theme="gundam-destiny"] .gundam-pulse,
+[data-theme="gundam-destiny"] .gundam-hud-card {
+  animation: flameSurge 2.5s ease-in-out infinite;
+}
+@keyframes flameSurge {
+  0%, 100% { box-shadow: 0 0 10px var(--accent-glow); border-color: var(--border-color); }
+  33% { box-shadow: 0 0 30px var(--accent-glow), 0 0 60px rgba(255, 102, 0, 0.3); border-color: var(--accent); }
+  66% { box-shadow: 0 0 15px var(--accent-glow-alt); border-color: var(--accent-secondary); }
+}
+@keyframes beamBladeShimmer {
+  0%, 100% { text-shadow: 0 0 8px var(--accent), 0 0 16px var(--accent-secondary); opacity: 0.9; }
+  25% { text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent-secondary), 0 0 60px rgba(204, 0, 0, 0.3); opacity: 1; }
+  50% { text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-secondary); opacity: 0.85; }
+  75% { text-shadow: 0 0 25px var(--accent), 0 0 50px var(--accent-secondary), 0 0 70px rgba(255, 215, 0, 0.2); opacity: 1; }
+}
+[data-theme="gundam-destiny"] .gundam-beam-blade {
+  animation: beamBladeShimmer 2s ease-in-out infinite;
+  color: var(--accent);
+}
+
+/* ============================
+   GOD GUNDAM — FLAME PATTERN + FIRE PULSE
+   ============================ */
+[data-theme="gundam-god"] .gundam-pulse,
+[data-theme="gundam-god"] .gundam-hud-card {
+  animation: firePulse 1.5s ease-in-out infinite;
+}
+@keyframes firePulse {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--accent-glow), 0 0 20px rgba(255, 102, 0, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px var(--accent-glow), 0 0 60px rgba(255, 102, 0, 0.4), 0 0 90px rgba(255, 215, 0, 0.2);
+    transform: scale(1.03);
+  }
+}
+@keyframes flamePattern {
+  0%, 100% { background-position: 0% 50%; filter: hue-rotate(0deg) brightness(1); }
+  50% { background-position: 100% 50%; filter: hue-rotate(15deg) brightness(1.15); }
+}
+[data-theme="gundam-god"] .gundam-flame-text {
+  animation: flamePattern 3s ease-in-out infinite;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 50%, var(--accent) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================
+   CARTOON KAWAII — BOUNCE + WOBBLE + SPARKLE
+   ============================ */
+[data-theme="gundam-cartoon"] .gundam-hud-card {
+  border-radius: 20px;
+  border: 2px solid var(--border-color);
+  box-shadow: var(--card-glow);
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 158, 207, 0.06) 100%);
+}
+[data-theme="gundam-cartoon"] .gundam-hud-card::before,
+[data-theme="gundam-cartoon"] .gundam-hud-card::after {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border-color: var(--accent);
+}
+[data-theme="gundam-cartoon"] .gundam-status-ok {
+  color: #6ECF8E;
+  animation: cartoonFloat 2s ease-in-out infinite;
+}
+[data-theme="gundam-cartoon"] .gundam-status-warn {
+  color: #FFB347;
+  animation: cartoonWobble 0.8s ease-in-out infinite;
+}
+[data-theme="gundam-cartoon"] .gundam-status-alert {
+  color: #FF6B6B;
+  animation: cartoonBounce 0.4s ease-in-out infinite;
+}
+@keyframes cartoonBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  25% { transform: translateY(-10px) scale(1.03); }
+  50% { transform: translateY(-6px) scale(1.01); }
+  75% { transform: translateY(-8px) scale(1.02); }
+}
+@keyframes cartoonWobble {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  20% { transform: rotate(-6deg) scale(1.02); }
+  40% { transform: rotate(4deg) scale(0.99); }
+  60% { transform: rotate(-4deg) scale(1.01); }
+  80% { transform: rotate(5deg) scale(0.98); }
+}
+@keyframes cartoonSparkle {
+  0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+  30% { opacity: 1; transform: scale(1.3) rotate(15deg); }
+  60% { opacity: 0.8; transform: scale(1.1) rotate(-10deg); }
+}
+@keyframes cartoonFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes cartoonPulse {
+  0%, 100% { box-shadow: 0 4px 12px rgba(255, 158, 207, 0.3); }
+  50% { box-shadow: 0 4px 24px rgba(255, 158, 207, 0.6), 0 0 40px rgba(126, 232, 200, 0.3); }
+}
+[data-theme="gundam-cartoon"] .gundam-cartoon-bounce { animation: cartoonBounce 0.6s ease-in-out infinite; }
+[data-theme="gundam-cartoon"] .gundam-cartoon-wobble { animation: cartoonWobble 0.8s ease-in-out infinite; }
+[data-theme="gundam-cartoon"] .gundam-cartoon-sparkle { animation: cartoonSparkle 1.5s ease-in-out infinite; }
+[data-theme="gundam-cartoon"] .gundam-cartoon-float { animation: cartoonFloat 2s ease-in-out infinite; }
+[data-theme="gundam-cartoon"] .gundam-cartoon-pulse { animation: cartoonPulse 2s ease-in-out infinite; }
+
+/* ============================
+   SHARED — ALL 8 MODES
+   ============================ */
+
+/* Glitch Text */
+@keyframes glitchText {
+  0%, 100% { text-shadow: 2px 0 var(--accent), -2px 0 var(--warning); transform: translate(0); }
+  10% { text-shadow: -2px 0 var(--accent), 2px 0 var(--warning); transform: translate(-2px, 1px); }
+  20% { text-shadow: 2px 2px var(--accent), -2px -2px var(--warning); transform: translate(2px, -1px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(1px, -2px); }
+  50% { transform: translate(-2px, 1px); }
+  60% { transform: translate(2px, -1px); }
+  70% { transform: translate(-1px, -2px); }
+  80% { transform: translate(1px, 2px); }
+  90% { transform: translate(-2px, -1px); }
+}
+[data-theme^="gundam-"] .gundam-glitch-text {
+  animation: glitchText 0.4s ease-in-out infinite;
+  color: var(--accent);
+}
+
+/* Radar Sweep */
+@keyframes radarSweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+[data-theme^="gundam-"] .gundam-radar {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0px,
+    transparent 18px,
+    rgba(0, 212, 255, 0.15) 18px,
+    rgba(0, 212, 255, 0.15) 19px
+  ),
+  conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    rgba(0, 212, 255, 0.4) 30deg,
+    transparent 60deg
+  );
+  animation: radarSweep 3s linear infinite;
+}
+[data-theme^="gundam-"] .gundam-radar::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: psychoframePulse 1.5s ease-out infinite;
+}
+
+/* Energy Bar */
+@keyframes energyFill {
+  0% { width: 0%; }
+  50% { box-shadow: 0 0 15px var(--accent); }
+  100% { box-shadow: 0 0 5px var(--accent); }
+}
+[data-theme^="gundam-"] .gundam-energy-bar {
+  height: 6px;
+  background: var(--bg-input);
+  border-radius: 3px;
+  overflow: hidden;
+}
+[data-theme^="gundam-"] .gundam-energy-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #00ffaa);
+  animation: energyFill 1.5s ease-out forwards;
+}
+
+/* Status Pulse */
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 5px currentColor; }
+  50% { opacity: 0.3; box-shadow: 0 0 15px currentColor, 0 0 25px currentColor; }
 }
 @keyframes statusGlow {
   0%, 100% { box-shadow: 0 0 5px currentColor; }
   50% { box-shadow: 0 0 15px currentColor, 0 0 25px currentColor; }
 }
-.gundam-status-ok { color: var(--success); animation: statusBlink 2s ease-in-out infinite; }
-.gundam-status-warn { color: var(--warning); animation: statusGlow 1s ease-in-out infinite; }
-.gundam-status-alert { color: var(--danger); animation: statusGlow 0.5s ease-in-out infinite; }
-
-/* Glitch Text */
-@keyframes glitchText {
-  0%, 100% { text-shadow: 2px 0 var(--accent), -2px 0 var(--warning); transform: translate(0); }
-  20% { text-shadow: -2px 0 var(--accent), 2px 0 var(--warning); transform: translate(-2px, 1px); }
-  40% { text-shadow: 2px 2px var(--accent), -2px -2px var(--warning); transform: translate(2px, -1px); }
+[data-theme^="gundam-"] .gundam-status-ok {
+  color: var(--success);
+  animation: statusPulse 2s ease-in-out infinite;
 }
-@keyframes glitchFlicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-  75% { opacity: 0.95; }
+[data-theme^="gundam-"] .gundam-status-warn {
+  color: var(--warning);
+  animation: statusPulse 1s ease-in-out infinite;
 }
-.gundam-glitch-text {
-  animation: glitchText 0.3s ease-in-out infinite, glitchFlicker 0.1s linear infinite;
-}
-.gundam-data-stream {
-  font-family: 'Courier New', monospace;
-  animation: glitchText 0.5s ease-in-out infinite;
+[data-theme^="gundam-"] .gundam-status-alert {
+  color: var(--danger);
+  animation: statusGlow 0.5s ease-in-out infinite;
 }
 
-/* CRT Scanlines */
+/* Scanlines */
 @keyframes scanlineMove {
   0% { background-position: 0 0; }
   100% { background-position: 0 100%; }
 }
-.gundam-scanlines::after {
+[data-theme^="gundam-"] .gundam-scanlines {
+  position: relative;
+  overflow: hidden;
+}
+[data-theme^="gundam-"] .gundam-scanlines::after {
   content: '';
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
-    0deg, transparent, transparent 2px,
-    rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
   );
   pointer-events: none;
   animation: scanlineMove 8s linear infinite;
 }
-
-/* Mode-specific body backgrounds */
-[data-theme="ntd"] body {
-  background: linear-gradient(135deg, #0a0f1a 0%, #0d1525 50%, #0a0f1a 100%) fixed;
-}
-[data-theme="seed"] body {
-  background: linear-gradient(135deg, #001225 0%, #002244 40%, #001533 70%, #000d1a 100%) fixed;
-}
-[data-theme="crossbone"] body {
-  background: linear-gradient(135deg, #1a0a0a 0%, #2a1010 50%, #1a0808 100%) fixed;
+[data-theme^="gundam-"] .gundam-scanlines > * {
+  position: relative;
+  z-index: 1;
 }
 
-/* Glitch title effect per mode */
-[data-theme="ntd"] .gundam-glitch-text { color: #FF69B4; }
-[data-theme="seed"] .gundam-glitch-text { color: #FFD700; }
-[data-theme="crossbone"] .gundam-glitch-text { color: #CC0000; }
+/* Mode body backgrounds */
+[data-theme="gundam-ntd"] body { background: linear-gradient(135deg, #0a0f1a 0%, #0d1525 50%, #0a0f1a 100%) fixed; }
+[data-theme="gundam-seed"] body { background: linear-gradient(135deg, #080c14 0%, #002244 40%, #001533 70%, #000d1a 100%) fixed; }
+[data-theme="gundam-crossbone"] body { background: linear-gradient(135deg, #0f0808 0%, #2a1010 50%, #1a0808 100%) fixed; }
+[data-theme="gundam-ntd-green"] body { background: linear-gradient(135deg, #080f0a 0%, #091209 50%, #080f0a 100%) fixed; }
+[data-theme="gundam-00"] body { background: linear-gradient(135deg, #070a0f 0%, #0a1015 50%, #070a0f 100%) fixed; }
+[data-theme="gundam-destiny"] body { background: linear-gradient(135deg, #0f0808 0%, #1a0808 50%, #0f0808 100%) fixed; }
+[data-theme="gundam-god"] body { background: linear-gradient(135deg, #0f0a07 0%, #1a1208 50%, #0f0a07 100%) fixed; }
+[data-theme="gundam-cartoon"] body { background: linear-gradient(135deg, #FFF5F8 0%, #FFE8F0 50%, #FFF5F8 100%) fixed; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme^="gundam-"] .gundam-pulse,
+  [data-theme^="gundam-"] .gundam-glitch-text,
+  [data-theme^="gundam-"] .gundam-radar,
+  [data-theme^="gundam-"] .gundam-scanlines::after,
+  [data-theme^="gundam-"] .gundam-cartoon-bounce,
+  [data-theme^="gundam-"] .gundam-cartoon-wobble,
+  [data-theme^="gundam-"] .gundam-cartoon-sparkle {
+    animation: none;
+  }
+  [data-theme^="gundam-"] .gundam-glitch-text {
+    text-shadow: none;
+    transform: none;
+  }
+}
   </style>
 </head>
 <body>
@@ -282,16 +610,31 @@
   <div id="gundam-switcher" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
     <!-- Mode Buttons -->
     <div id="gundam-modes" style="display:none;flex-direction:column;gap:8px;">
-      <button onclick="setGundamMode('ntd')" data-mode="ntd" class="gundam-mode-btn" style="width:80px;height:36px;border-radius:20px;border:2px solid #FF69B4;background:linear-gradient(135deg,#1a0a1a,#2a1530);color:#FF69B4;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,105,180,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-ntd')" data-mode="gundam-ntd" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #FF69B4;background:linear-gradient(135deg,#1a0a1a,#2a1530);color:#FF69B4;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,105,180,0.3);transition:all 0.2s;">
         🤖 NT-D
       </button>
-      <button onclick="setGundamMode('seed')" data-mode="seed" class="gundam-mode-btn" style="width:80px;height:36px;border-radius:20px;border:2px solid #FFD700;background:linear-gradient(135deg,#001225,#002244);color:#FFD700;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,215,0,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-seed')" data-mode="gundam-seed" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #FFD700;background:linear-gradient(135deg,#001225,#002244);color:#FFD700;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,215,0,0.3);transition:all 0.2s;">
         ⚡ SEED
       </button>
-      <button onclick="setGundamMode('crossbone')" data-mode="crossbone" class="gundam-mode-btn" style="width:80px;height:36px;border-radius:20px;border:2px solid #CC0000;background:linear-gradient(135deg,#1a0a0a,#2a1010);color:#CC0000;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(204,0,0,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-crossbone')" data-mode="gundam-crossbone" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #CC0000;background:linear-gradient(135deg,#1a0a0a,#2a1010);color:#CC0000;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(204,0,0,0.3);transition:all 0.2s;">
         💀 CROSSBONE
       </button>
-      <button onclick="setGundamMode('off')" data-mode="off" class="gundam-mode-btn" style="width:80px;height:36px;border-radius:20px;border:2px solid #888;background:#333;color:#aaa;font-size:11px;font-weight:bold;cursor:pointer;transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-ntd-green')" data-mode="gundam-ntd-green" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #00FF88;background:linear-gradient(135deg,#080f0a,#091209);color:#00FF88;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(0,255,136,0.3);transition:all 0.2s;">
+        🌿 GREEN
+      </button>
+      <button onclick="setGundamMode('gundam-00')" data-mode="gundam-00" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #00FF88;background:linear-gradient(135deg,#070a0f,#0a1015);color:#00FF88;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(0,255,136,0.3);transition:all 0.2s;">
+        🌐 00
+      </button>
+      <button onclick="setGundamMode('gundam-destiny')" data-mode="gundam-destiny" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #CC0000;background:linear-gradient(135deg,#0f0808,#1a0808);color:#CC0000;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(204,0,0,0.3);transition:all 0.2s;">
+        ⚔ DESTINY
+      </button>
+      <button onclick="setGundamMode('gundam-god')" data-mode="gundam-god" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #FF6600;background:linear-gradient(135deg,#0f0a07,#1a1208);color:#FF6600;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,102,0,0.3);transition:all 0.2s;">
+        🔥 GOD
+      </button>
+      <button onclick="setGundamMode('gundam-cartoon')" data-mode="gundam-cartoon" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #FF9ECF;background:linear-gradient(135deg,#FFF5F8,#FFE8F0);color:#FF9ECF;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,158,207,0.3);transition:all 0.2s;">
+        ✨ KAWAII
+      </button>
+      <button onclick="setGundamMode('off')" data-mode="off" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #888;background:#333;color:#aaa;font-size:11px;font-weight:bold;cursor:pointer;transition:all 0.2s;">
         ✖ OFF
       </button>
     </div>
@@ -310,25 +653,12 @@
     }
     function setGundamMode(mode) {
       const html = document.documentElement;
-      const currentMode = html.getAttribute('data-theme');
-      // Remove all mode classes
       html.removeAttribute('data-theme');
       document.body.style.background = '';
-      // Remove gundam classes from elements
-      document.querySelectorAll('.gundam-hud-card, .gundam-glitch-text').forEach(el => {
-        el.classList.remove('gundam-hud-card', 'gundam-glitch-text');
-      });
       if (mode !== 'off') {
         html.setAttribute('data-theme', mode);
-        // Add Gundam classes to main elements
-        document.querySelectorAll('header, nav, main, section, article, .card, [class*="card"]').forEach(el => {
-          el.classList.add('gundam-hud-card');
-        });
-        document.querySelectorAll('h1, h2, h3').forEach(el => {
-          el.classList.add('gundam-glitch-text');
-        });
+        document.body.style.background = 'var(--bg-primary)';
       }
-      // Close menu
       document.getElementById('gundam-modes').style.display = 'none';
       gundamMenuOpen = false;
     }
