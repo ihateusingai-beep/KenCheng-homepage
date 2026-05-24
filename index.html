@@ -1201,6 +1201,70 @@
             });
         }
     </script>
+
+    <script>
+    (function() {
+      function initRecommendations() {
+        if (!window.__recommendTools) return;
+        var bk = JSON.parse(localStorage.getItem('kencheng-bookmarks') || '[]');
+        var ru = JSON.parse(localStorage.getItem('kencheng-recent') || '[]');
+        if (bk.length === 0 && ru.length === 0) return;
+
+        var recs = window.__recommendTools();
+        if (!recs || recs.length === 0) return;
+
+        // Find the weekly picks section h2
+        var h2s = document.querySelectorAll('h2');
+        var weeklyH2 = null;
+        for (var i = 0; i < h2s.length; i++) {
+          if (h2s[i].textContent.trim() === '每週精選') {
+            weeklyH2 = h2s[i];
+            break;
+          }
+        }
+        if (!weeklyH2) return;
+
+        // Find the parent section
+        var section = weeklyH2.closest('section');
+        if (!section) return;
+
+        // Find the tool cards container (the grid div inside section)
+        var grid = section.querySelector('.grid');
+        if (!grid) return;
+
+        // Build recommendation cards - matching the existing card structure
+        var icons = {Wrench: 'Wrench', Bot: 'Bot', Calculator: 'Calculator', Video: 'Video', Atom: 'Atom', Star: 'Star', Folder: 'Folder'};
+        var html = '';
+        for (var j = 0; j < recs.length && j < 5; j++) {
+          var tool = recs[j];
+          var iconName = icons[tool.icon] || 'Star';
+          var starBadge = '<div class="absolute -top-1 -left-1 px-2 py-0.5 text-xs font-bold rounded-full bg-purple-600 text-white">★</div>';
+          var card = '<div class="relative">' + starBadge +
+            '<div class="p-4 rounded-xl border border-gray-200 dark:border-cyan-500/30 bg-white dark:bg-slate-900/50 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="window.open(\'' + tool.url + '\', \'_blank\')">' +
+            '<h3 class="font-bold text-gray-800 dark:text-cyan-50 text-sm mb-1">' + tool.name + '</h3>' +
+            '<p class="text-xs text-gray-500 dark:text-slate-400 line-clamp-2">' + tool.desc + '</p>' +
+            '</div></div>';
+          html += card;
+        }
+
+        if (html) {
+          grid.innerHTML = html;
+          // Update section heading
+          var newH2 = weeklyH2.cloneNode(true);
+          newH2.innerHTML = '⭐ 為你推薦';
+          weeklyH2.parentNode.replaceChild(newH2, weeklyH2);
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initRecommendations);
+      } else {
+        // Small delay to ensure React has rendered
+        setTimeout(initRecommendations, 500);
+      }
+    })();
+    </script>
+
 <!-- HUD Corner Assets — Fixed position corners -->
   <div id="hud-corner-tl" class="hud-corner" style="position:fixed;top:0;left:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;"></div>
   <div id="hud-corner-tr" class="hud-corner" style="position:fixed;top:0;right:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;transform:scaleX(-1);"></div>
