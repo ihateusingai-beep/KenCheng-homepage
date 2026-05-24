@@ -1101,12 +1101,10 @@
             }
           });
 
-          // P5: Tool cards in the list — find divs that contain an h3 and are inside role=region
-          document.querySelectorAll('[role="region"] > div').forEach(function(el) {
+          // P5: Tool cards in the list — div.rounded-xl with border and h3 inside
+          document.querySelectorAll('div.rounded-xl.border.border-gray-100').forEach(function(el) {
             var h3 = el.querySelector('h3');
-            if (h3 && el.className.indexOf('gundam') === -1) {
-              el.classList.add('gundam-tool-card');
-            }
+            if (h3) el.classList.add('gundam-tool-card');
           });
 
           // Also theme the existing React buttons (深色/夜視/淺色 theme toggles)
