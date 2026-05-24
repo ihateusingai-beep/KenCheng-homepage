@@ -743,6 +743,156 @@
     transform: none;
   }
 }
+  /* ============================
+   FULL-UPGRADE ADDITIONS
+   P2: Stat card HUD corners + Neon numbers
+   P3: Weekly star status pulse
+   P4: Category bar neon glow
+   P5: Tool card HUD corners
+   ============================ */
+
+/* --- P2: Stat number neon glow --- */
+[data-theme^="gundam-"] .gundam-stat-card p.text-3xl,
+[data-theme^="gundam-"] .gundam-stat-number {
+  color: var(--accent) !important;
+  text-shadow:
+    0 0 5px var(--accent),
+    0 0 10px var(--accent),
+    0 0 20px var(--accent),
+    0 0 40px var(--accent-secondary) !important;
+  font-family: 'Orbitron', 'Rajdhani', monospace !important;
+}
+
+/* --- P2: Stat card HUD frame --- */
+[data-theme^="gundam-"] .gundam-stat-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--card-glow) !important;
+  position: relative;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+[data-theme^="gundam-"] .gundam-stat-card::before,
+[data-theme^="gundam-"] .gundam-stat-card::after {
+  content: '' !important;
+  position: absolute !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 2px solid var(--accent) !important;
+  opacity: 0.7 !important;
+  pointer-events: none !important;
+}
+[data-theme^="gundam-"] .gundam-stat-card::before {
+  top: -1px !important; left: -1px !important;
+  border-right: none !important; border-bottom: none !important;
+}
+[data-theme^="gundam-"] .gundam-stat-card::after {
+  bottom: -1px !important; right: -1px !important;
+  border-left: none !important; border-top: none !important;
+}
+
+/* --- P3: Weekly Pick star badge — status pulse in Gundam mode --- */
+[data-theme^="gundam-"] .gundam-star-badge {
+  background: var(--accent) !important;
+  color: var(--bg-primary) !important;
+  box-shadow: 0 0 8px var(--accent-glow), 0 0 16px var(--accent-glow-alt) !important;
+  animation: gundamStarPulse 1.5s ease-in-out infinite !important;
+}
+@keyframes gundamStarPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent-glow);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 15px var(--accent), 0 0 30px var(--accent-glow-alt);
+    transform: scale(1.1);
+  }
+}
+
+/* --- P4: Category distribution bars — neon glow fill --- */
+[data-theme^="gundam-"] .gundam-category-bar {
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary)) !important;
+  box-shadow: 0 0 8px var(--accent-glow), 0 0 16px var(--accent-glow-alt) !important;
+}
+
+/* --- P5: Tool card HUD corners --- */
+[data-theme^="gundam-"] .gundam-tool-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--card-glow) !important;
+  position: relative;
+}
+[data-theme^="gundam-"] .gundam-tool-card::before,
+[data-theme^="gundam-"] .gundam-tool-card::after {
+  content: '' !important;
+  position: absolute !important;
+  width: 12px !important;
+  height: 12px !important;
+  border: 1.5px solid var(--accent) !important;
+  opacity: 0.5 !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s;
+}
+[data-theme^="gundam-"] .gundam-tool-card::before {
+  top: -1px !important; left: -1px !important;
+  border-right: none !important; border-bottom: none !important;
+}
+[data-theme^="gundam-"] .gundam-tool-card::after {
+  bottom: -1px !important; right: -1px !important;
+  border-left: none !important; border-top: none !important;
+}
+
+/* --- NT-D mode: special psychoframe pulse on stat cards and stars --- */
+[data-theme="gundam-ntd"] .gundam-stat-card {
+  animation: psychoframePulse 2s ease-in-out infinite;
+}
+[data-theme="gundam-ntd"] .gundam-star-badge {
+  animation: gundamStarPulseNTD 1s ease-in-out infinite !important;
+}
+@keyframes gundamStarPulseNTD {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 5px #FF69B4, 0 0 10px rgba(255,105,180,0.4);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 20px #FF69B4, 0 0 40px rgba(255,105,180,0.6);
+    transform: scale(1.15);
+  }
+}
+
+/* --- SEED mode: prismatic star --- */
+[data-theme="gundam-seed"] .gundam-star-badge {
+  animation: seedStarPrismatic 3s ease-in-out infinite !important;
+}
+@keyframes seedStarPrismatic {
+  0%, 100% {
+    box-shadow: 0 0 8px #FFD700, 0 0 16px rgba(255,215,0,0.4);
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 20px #FFD700, 0 0 40px rgba(0,102,204,0.5);
+    filter: hue-rotate(15deg) brightness(1.3);
+  }
+}
+
+/* --- P4: Category section header glow --- */
+[data-theme^="gundam-"] .gundam-section-header {
+  color: var(--accent) !important;
+  text-shadow: 0 0 8px var(--accent-glow) !important;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif !important;
+  letter-spacing: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme^="gundam-"] .gundam-star-badge,
+  [data-theme^="gundam-"] .gundam-stat-card { animation: none !important; }
+  [data-theme^="gundam-"] .gundam-stat-card p.text-3xl { text-shadow: none !important; }
+}
+
   </style>
 </head>
 <body>
@@ -756,10 +906,10 @@
     <!-- Mode Buttons -->
     <div id="gundam-modes" style="display:none;flex-direction:column;gap:8px;">
       <button onclick="setGundamMode('gundam-ntd')" data-mode="gundam-ntd" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #FF69B4;background:linear-gradient(135deg,#1a0a1a,#2a1530);color:#FF69B4;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,105,180,0.3);transition:all 0.2s;">
-        🤖 NT-D
+        NT-D
       </button>
       <button onclick="setGundamMode('gundam-seed')" data-mode="gundam-seed" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #FFD700;background:linear-gradient(135deg,#001225,#002244);color:#FFD700;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,215,0,0.3);transition:all 0.2s;">
-        ⚡ SEED
+        SEED
       </button>
       <button onclick="setGundamMode('gundam-crossbone')" data-mode="gundam-crossbone" class="gundam-mode-btn" style="width:90px;height:36px;border-radius:20px;border:2px solid #CC0000;background:linear-gradient(135deg,#1a0a0a,#2a1010);color:#CC0000;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(204,0,0,0.3);transition:all 0.2s;">
         💀 CROSSBONE
@@ -924,6 +1074,59 @@
             document.getElementById('sparkle-3').style.opacity = '0.7';
             document.getElementById('sparkle-4').style.opacity = '0.5';
           }
+
+          // --- Inject Gundam CSS classes onto React elements ---
+          // P2: Stat number cards (97, 16, 7, 5)
+          document.querySelectorAll('.grid.grid-cols-2.md\\:grid-cols-4.gap-4 > div').forEach(function(el) {
+            el.classList.add('gundam-stat-card');
+          });
+
+          // P3: Weekly Pick star badges (★)
+          document.querySelectorAll('.relative.inline-flex.items-center.justify-center.w-6.h-6').forEach(function(el) {
+            if (el.textContent.trim() === '★') {
+              el.classList.add('gundam-star-badge');
+            }
+          });
+
+          // P4: Category bars
+          document.querySelectorAll('.h-full.rounded-full.transition-all.duration-500.bg-primary').forEach(function(el) {
+            el.classList.add('gundam-category-bar');
+          });
+
+          // P4: Section headers (工具統計, 分類分布, 每週精選)
+          document.querySelectorAll('h2').forEach(function(el) {
+            var text = el.textContent.trim();
+            if (text === '工具統計' || text === '分類分布' || text === '每週精選') {
+              el.classList.add('gundam-section-header');
+            }
+          });
+
+          // P5: Tool cards in the list
+          document.querySelectorAll('[role="region"] h3').forEach(function(el) {
+            var card = el.closest('div[class*="rounded"]');
+            if (card) card.classList.add('gundam-tool-card');
+          });
+
+          // Also theme the existing React buttons (深色/夜視/淺色 theme toggles)
+          document.querySelectorAll('button').forEach(function(btn) {
+            var text = btn.textContent.trim();
+            if (text.includes('深色主題') || text.includes('淺色主題') || text.includes('夜視主題') || text === '網格檢視' || text === '列表檢視') {
+              btn.style.borderColor = cornerColor;
+              btn.style.boxShadow = '0 0 8px ' + cornerColor + '40';
+            }
+          });
+
+          // Theme the search input
+          var searchInput = document.querySelector('input[type="text"], input[placeholder*="搜尋"]');
+          if (searchInput) {
+            searchInput.style.borderColor = cornerColor;
+            searchInput.style.boxShadow = '0 0 8px ' + cornerColor + '30';
+          }
+
+          // Category tab glow
+          document.querySelectorAll('[role="tab"]').forEach(function(tab) {
+            tab.style.setProperty('--tab-glow', cornerColor);
+          });
 
           // Emblem badge (actual PNG)
           document.getElementById('emblem-badge').style.opacity = '1';
