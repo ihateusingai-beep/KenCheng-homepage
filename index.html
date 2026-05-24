@@ -572,6 +572,12 @@
   z-index: 1;
 }
 
+/* Emblem Pulse */
+@keyframes gundamEmblemPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--accent-glow); }
+  50% { box-shadow: 0 0 25px var(--accent-glow), 0 0 50px var(--accent-glow-alt); }
+}
+
 /* Mode body backgrounds */
 [data-theme="gundam-ntd"] body { background: linear-gradient(135deg, #0a0f1a 0%, #0d1525 50%, #0a0f1a 100%) fixed; }
 [data-theme="gundam-seed"] body { background: linear-gradient(135deg, #080c14 0%, #002244 40%, #001533 70%, #000d1a 100%) fixed; }
@@ -581,6 +587,24 @@
 [data-theme="gundam-destiny"] body { background: linear-gradient(135deg, #0f0808 0%, #1a0808 50%, #0f0808 100%) fixed; }
 [data-theme="gundam-god"] body { background: linear-gradient(135deg, #0f0a07 0%, #1a1208 50%, #0f0a07 100%) fixed; }
 [data-theme="gundam-cartoon"] body { background: linear-gradient(135deg, #FFF5F8 0%, #FFE8F0 50%, #FFF5F8 100%) fixed; }
+
+/* Corner HUD frames with actual PNG assets */
+[data-theme^="gundam-"] #hud-corner-tl {
+  background: url('/KenCheng-homepage/assets/gundam-assets/hud-corner-tl.png') no-repeat;
+  background-size: contain;
+}
+[data-theme^="gundam-"] #hud-corner-tr {
+  background: url('/KenCheng-homepage/assets/gundam-assets/hud-corner-tl.png') no-repeat;
+  background-size: contain;
+}
+[data-theme^="gundam-"] #hud-corner-bl {
+  background: url('/KenCheng-homepage/assets/gundam-assets/hud-corner-br.png') no-repeat;
+  background-size: contain;
+}
+[data-theme^="gundam-"] #hud-corner-br {
+  background: url('/KenCheng-homepage/assets/gundam-assets/hud-corner-br.png') no-repeat;
+  background-size: contain;
+}
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
@@ -655,9 +679,85 @@
       const html = document.documentElement;
       html.removeAttribute('data-theme');
       document.body.style.background = '';
+
+      // Hide all HUD elements with fade
+      const hudElements = ['hud-corner-tl','hud-corner-tr','hud-corner-bl','hud-corner-br','theme-emblem','hud-radar','hud-energy','hud-status','ms-silhouette','scanline-overlay'];
+      hudElements.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.style.transition = 'opacity 0.3s'; el.style.opacity = '0'; }
+      });
+
       if (mode !== 'off') {
         html.setAttribute('data-theme', mode);
         document.body.style.background = 'var(--bg-primary)';
+
+        // Show HUD corners
+        setTimeout(() => {
+          document.getElementById('hud-corner-tl').style.opacity = '1';
+          document.getElementById('hud-corner-tr').style.opacity = '1';
+          document.getElementById('hud-corner-bl').style.opacity = '1';
+          document.getElementById('hud-corner-br').style.opacity = '1';
+
+          // Corner frame backgrounds via CSS
+          const cornerColor = {
+            'gundam-ntd': '#FF69B4',
+            'gundam-seed': '#FFD700',
+            'gundam-crossbone': '#CC0000',
+            'gundam-ntd-green': '#00FF88',
+            'gundam-00': '#00FF88',
+            'gundam-destiny': '#CC0000',
+            'gundam-god': '#FF6600',
+            'gundam-cartoon': '#FF9ECF'
+          }[mode] || '#00D4FF';
+
+          // Emblem via CSS text
+          const emblemText = {
+            'gundam-ntd': 'NT-D',
+            'gundam-seed': 'SEED',
+            'gundam-crossbone': 'X-1',
+            'gundam-ntd-green': 'GREEN',
+            'gundam-00': '00',
+            'gundam-destiny': 'DESTINY',
+            'gundam-god': 'GOD',
+            'gundam-cartoon': 'KAWAII'
+          }[mode] || '';
+
+          const emblem = document.getElementById('theme-emblem');
+          emblem.innerHTML = '<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:monospace;font-size:16px;font-weight:bold;color:' + cornerColor + ';text-shadow:0 0 10px ' + cornerColor + ', 0 0 20px ' + cornerColor + ';letter-spacing:2px;padding:8px;border:2px solid ' + cornerColor + ';background:rgba(0,0,0,0.5);border-radius:4px;animation:gundamEmblemPulse 2s ease-in-out infinite;">' + emblemText + '</div>';
+          emblem.style.opacity = '1';
+
+          // Status text
+          const statusText = {
+            'gundam-ntd': 'PSYCHOFRAME ACTIVE',
+            'gundam-seed': 'PLANT DEFENSE',
+            'gundam-crossbone': 'CROSSBONE MARAUDER',
+            'gundam-ntd-green': 'SCANNING',
+            'gundam-00': 'TWIN DRIVE ONLINE',
+            'gundam-destiny': 'PULSE EDGE READY',
+            'gundam-god': 'FLAME TOME ACTIVE',
+            'gundam-cartoon': '萌え全開！'
+          }[mode] || 'SYSTEM ONLINE';
+          const status = document.getElementById('hud-status');
+          status.style.color = cornerColor;
+          status.style.textShadow = '0 0 8px ' + cornerColor;
+          status.textContent = statusText;
+          status.style.opacity = '1';
+
+          // Energy bar
+          const energy = document.getElementById('hud-energy');
+          energy.innerHTML = '<div style="font-family:monospace;font-size:9px;color:' + cornerColor + ';margin-bottom:4px;letter-spacing:1px;">ENERGY</div><div style="width:160px;height:8px;background:rgba(0,0,0,0.6);border:1px solid ' + cornerColor + ';border-radius:2px;overflow:hidden;"><div style="width:75%;height:100%;background:linear-gradient(90deg,' + cornerColor + ',transparent);animation:energyFill 2s ease-out infinite;"></div></div>';
+          energy.style.opacity = '1';
+
+          // MS Silhouette
+          const ms = document.getElementById('ms-silhouette');
+          ms.style.filter = 'drop-shadow(0 0 30px ' + cornerColor + ')';
+          ms.innerHTML = '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:280px;opacity:0.08;">🤖</div>';
+          ms.style.opacity = '1';
+
+          // Scanline overlay
+          document.getElementById('scanline-overlay').style.opacity = '1';
+
+        }, 100);
       }
       document.getElementById('gundam-modes').style.display = 'none';
       gundamMenuOpen = false;
@@ -676,5 +776,29 @@
             });
         }
     </script>
+<!-- HUD Corner Assets — Fixed position corners -->
+  <div id="hud-corner-tl" class="hud-corner" style="position:fixed;top:0;left:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;"></div>
+  <div id="hud-corner-tr" class="hud-corner" style="position:fixed;top:0;right:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;transform:scaleX(-1);"></div>
+  <div id="hud-corner-bl" class="hud-corner" style="position:fixed;bottom:0;left:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;transform:scaleY(-1);"></div>
+  <div id="hud-corner-br" class="hud-corner" style="position:fixed;bottom:0;right:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;transform:scale(-1);"></div>
+
+  <!-- Theme Emblem — Top center badge -->
+  <div id="theme-emblem" class="hud-corner" style="position:fixed;top:16px;left:50%;transform:translateX(-50%);width:120px;height:60px;z-index:8888;pointer-events:none;opacity:0;"></div>
+
+  <!-- Radar HUD — Top right -->
+  <div id="hud-radar" class="hud-corner" style="position:fixed;top:20px;right:120px;width:64px;height:64px;z-index:8888;pointer-events:none;opacity:0;"></div>
+
+  <!-- Energy Bar — Bottom left -->
+  <div id="hud-energy" class="hud-corner" style="position:fixed;bottom:100px;left:24px;width:160px;z-index:8888;pointer-events:none;opacity:0;"></div>
+
+  <!-- Status Text — Bottom left -->
+  <div id="hud-status" class="hud-corner" style="position:fixed;bottom:24px;left:24px;z-index:8888;pointer-events:none;opacity:0;font-family:'Courier New',monospace;font-size:11px;color:var(--accent);text-shadow:0 0 8px var(--accent);"></div>
+
+  <!-- Gundam MS Silhouette — Center background -->
+  <div id="ms-silhouette" class="hud-corner" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;z-index:1;pointer-events:none;opacity:0;filter:drop-shadow(0 0 20px var(--accent));"></div>
+
+  <!-- Scanline overlay -->
+  <div id="scanline-overlay" style="position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 6px);animation:scanlineMove 10s linear infinite;"></div>
+
 </body>
 </html>
