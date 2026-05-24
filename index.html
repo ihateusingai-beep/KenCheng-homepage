@@ -151,6 +151,57 @@
   --card-glow-alt: 0 4px 20px rgba(126, 232, 200, 0.2);
 }
 
+
+/* ============================
+   GUNDAM MODE BUTTONS (extracted from inline)
+   ============================ */
+#gundam-switcher {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+#gundam-modes {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.gundam-mode-btn {
+  width: 90px;
+  height: 36px;
+  border-radius: 20px;
+  border: 2px solid;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.gundam-mode-btn:hover {
+  transform: scale(1.05);
+}
+#gundam-theme-toggle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF69B4, #00D4FF, #FFD700);
+  border: 3px solid #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 5px #000;
+  transition: all 0.3s;
+  box-shadow: 0 0 25px rgba(255, 105, 180, 0.5), 0 0 50px rgba(0, 212, 255, 0.3);
+}
+
 /* ============================
    HUD FRAME COMPONENTS
    ============================ */
@@ -898,43 +949,43 @@
 <body>
   <div id="root"></div>
   <!-- Footer -->
-  <footer style="text-align:center;padding:20px;border-top:1px solid var(--border-color, #e5e7eb);margin-top:40px;font-size:14px;color:var(--text-secondary, #6b7280);" role="contentinfo">
-    © 2025 <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Ken Cheng</a> Created with Gemini Script &amp; Tailwind CSS
+  <footer  role="contentinfo">
+    © 2025 <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" target="_blank" rel="noopener" >Ken Cheng</a> Created with Gemini Script &amp; Tailwind CSS
   </footer>
   <!-- Gundam Console UI Mode Switcher -->
-  <div id="gundam-switcher" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+  <div id="gundam-switcher" >
     <!-- Mode Buttons -->
-    <div id="gundam-modes" role="menu" style="display:none;flex-direction:column;gap:8px;">
-      <button onclick="setGundamMode('gundam-ntd')" data-mode="gundam-ntd" class="gundam-mode-btn" aria-label="Switch to NT-D theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #FF69B4;background:linear-gradient(135deg,#1a0a1a,#2a1530);color:#FF69B4;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,105,180,0.3);transition:all 0.2s;">
+    <div id="gundam-modes" role="menu" >
+      <button onclick="setGundamMode('gundam-ntd')" data-mode="gundam-ntd" class="gundam-mode-btn" aria-label="Switch to NT-D theme" style="border-color:#FF69B4;background:linear-gradient(135deg,#1a0a1a,#2a1530);color:#FF69B4;box-shadow:0 0 10px rgba(255,105,180,0.3);">
         NT-D
       </button>
-      <button onclick="setGundamMode('gundam-seed')" data-mode="gundam-seed" class="gundam-mode-btn" aria-label="Switch to SEED theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #FFD700;background:linear-gradient(135deg,#001225,#002244);color:#FFD700;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,215,0,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-seed')" data-mode="gundam-seed" class="gundam-mode-btn" aria-label="Switch to SEED theme" style="border-color:#FFD700;background:linear-gradient(135deg,#001225,#002244);color:#FFD700;box-shadow:0 0 10px rgba(255,215,0,0.3);">
         SEED
       </button>
-      <button onclick="setGundamMode('gundam-crossbone')" data-mode="gundam-crossbone" class="gundam-mode-btn" aria-label="Switch to Crossbone theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #CC0000;background:linear-gradient(135deg,#1a0a0a,#2a1010);color:#CC0000;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(204,0,0,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-crossbone')" data-mode="gundam-crossbone" class="gundam-mode-btn" aria-label="Switch to Crossbone theme" style="border-color:#CC0000;background:linear-gradient(135deg,#1a0a0a,#2a1010);color:#CC0000;box-shadow:0 0 10px rgba(204,0,0,0.3);">
         💀 CROSSBONE
       </button>
-      <button onclick="setGundamMode('gundam-ntd-green')" data-mode="gundam-ntd-green" class="gundam-mode-btn" aria-label="Switch to Green NT-D theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #00FF88;background:linear-gradient(135deg,#080f0a,#091209);color:#00FF88;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(0,255,136,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-ntd-green')" data-mode="gundam-ntd-green" class="gundam-mode-btn" aria-label="Switch to Green NT-D theme" style="border-color:#00FF88;background:linear-gradient(135deg,#080f0a,#091209);color:#00FF88;box-shadow:0 0 10px rgba(0,255,136,0.3);">
         🌿 GREEN
       </button>
-      <button onclick="setGundamMode('gundam-00')" data-mode="gundam-00" class="gundam-mode-btn" aria-label="Switch to 00 Twin Drive theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #00FF88;background:linear-gradient(135deg,#070a0f,#0a1015);color:#00FF88;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(0,255,136,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-00')" data-mode="gundam-00" class="gundam-mode-btn" aria-label="Switch to 00 Twin Drive theme" style="border-color:#00FF88;background:linear-gradient(135deg,#070a0f,#0a1015);color:#00FF88;box-shadow:0 0 10px rgba(0,255,136,0.3);">
         🌐 00
       </button>
-      <button onclick="setGundamMode('gundam-destiny')" data-mode="gundam-destiny" class="gundam-mode-btn" aria-label="Switch to Destiny theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #CC0000;background:linear-gradient(135deg,#0f0808,#1a0808);color:#CC0000;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(204,0,0,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-destiny')" data-mode="gundam-destiny" class="gundam-mode-btn" aria-label="Switch to Destiny theme" style="border-color:#CC0000;background:linear-gradient(135deg,#0f0808,#1a0808);color:#CC0000;box-shadow:0 0 10px rgba(204,0,0,0.3);">
         ⚔ DESTINY
       </button>
-      <button onclick="setGundamMode('gundam-god')" data-mode="gundam-god" class="gundam-mode-btn" aria-label="Switch to God Gundam theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #FF6600;background:linear-gradient(135deg,#0f0a07,#1a1208);color:#FF6600;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,102,0,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-god')" data-mode="gundam-god" class="gundam-mode-btn" aria-label="Switch to God Gundam theme" style="border-color:#FF6600;background:linear-gradient(135deg,#0f0a07,#1a1208);color:#FF6600;box-shadow:0 0 10px rgba(255,102,0,0.3);">
         🔥 GOD
       </button>
-      <button onclick="setGundamMode('gundam-cartoon')" data-mode="gundam-cartoon" class="gundam-mode-btn" aria-label="Switch to Kawaii theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #FF9ECF;background:linear-gradient(135deg,#FFF5F8,#FFE8F0);color:#FF9ECF;font-size:11px;font-weight:bold;cursor:pointer;box-shadow:0 0 10px rgba(255,158,207,0.3);transition:all 0.2s;">
+      <button onclick="setGundamMode('gundam-cartoon')" data-mode="gundam-cartoon" class="gundam-mode-btn" aria-label="Switch to Kawaii theme" style="border-color:#FF9ECF;background:linear-gradient(135deg,#FFF5F8,#FFE8F0);color:#FF9ECF;box-shadow:0 0 10px rgba(255,158,207,0.3);">
         ✨ KAWAII
       </button>
-      <button onclick="setGundamMode('off')" data-mode="off" class="gundam-mode-btn" aria-label="Turn off Gundam theme" style="width:90px;height:36px;border-radius:20px;border:2px solid #888;background:#333;color:#aaa;font-size:11px;font-weight:bold;cursor:pointer;transition:all 0.2s;">
+      <button onclick="setGundamMode('off')" data-mode="off" class="gundam-mode-btn" aria-label="Turn off Gundam theme" style="border-color:#888;background:#333;color:#aaa;">
         ✖ OFF
       </button>
     </div>
     <!-- Main Toggle Button -->
-    <button id="gundam-theme-toggle" onclick="toggleGundamMenu()" title="Gundam Console UI - Click to switch modes" aria-label="Gundam Console UI mode switcher" style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#FF69B4,#00D4FF,#FFD700);border:3px solid #fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 25px rgba(255,105,180,0.5),0 0 50px rgba(0,212,255,0.3);font-size:10px;font-weight:bold;color:#fff;text-shadow:0 0 5px #000;transition:all 0.3s;" aria-haspopup="true" aria-expanded="false">
+    <button id="gundam-theme-toggle" onclick="toggleGundamMenu()" title="Gundam Console UI - Click to switch modes" aria-label="Gundam Console UI mode switcher"  aria-haspopup="true" aria-expanded="false">
       <span style="font-size:22px;">🎮</span>
       <span style="margin-top:2px;letter-spacing:1px;">MS MODE</span>
     </button>
