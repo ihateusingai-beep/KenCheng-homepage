@@ -606,6 +606,127 @@
   background-size: contain;
 }
 
+/* Grid backgrounds */
+[data-theme^="gundam-"] body {
+  background-image:
+    url('/KenCheng-homepage/assets/gundam-assets/hex-grid.png'),
+    linear-gradient(var(--bg-primary) 0%, var(--bg-primary) 100%);
+  background-repeat: repeat, no-repeat;
+  background-size: auto, cover;
+}
+
+/* Burst effects — fixed position overlays */
+.burst-effect {
+  position: fixed;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+#burst-tl { top: 60px; left: 60px; width: 200px; height: 200px; }
+#burst-tr { top: 60px; right: 60px; width: 200px; height: 200px; transform: scaleX(-1); }
+#burst-bl { bottom: 60px; left: 60px; width: 200px; height: 200px; transform: scaleY(-1); }
+#burst-br { bottom: 60px; right: 60px; width: 200px; height: 200px; transform: scale(-1); }
+
+/* Warp streak — diagonal speed lines */
+@keyframes warpStreakMove {
+  0% { transform: translateX(-100%) skewX(-20deg); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.3; }
+  100% { transform: translateX(200%) skewX(-20deg); opacity: 0; }
+}
+.warp-streak {
+  position: fixed;
+  top: 0; bottom: 0;
+  width: 300px;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 40%, transparent 100%);
+  animation: warpStreakMove 1.5s ease-out infinite;
+}
+#warp-left { left: -50px; }
+#warp-right { right: -50px; animation-direction: reverse; }
+
+/* Glitch overlay */
+#glitch-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+  opacity: 0;
+  background: url('/KenCheng-homepage/assets/gundam-assets/glitch-overlay.png') center/cover;
+  mix-blend-mode: screen;
+}
+
+/* Emblem badge — themed per mode */
+#emblem-badge {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 60px;
+  z-index: 8889;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+[data-theme="gundam-ntd"] #emblem-badge {
+  background-image: url('/KenCheng-homepage/assets/gundam-assets/emblem-ntd.png');
+}
+[data-theme="gundam-seed"] #emblem-badge {
+  background-image: url('/KenCheng-homepage/assets/gundam-assets/emblem-seed.png');
+}
+[data-theme="gundam-crossbone"] #emblem-badge {
+  background-image: url('/KenCheng-homepage/assets/gundam-assets/emblem-crossbone.png');
+}
+[data-theme="gundam-ntd-green"] #emblem-badge {
+  background-image: url('/KenCheng-homepage/assets/gundam-assets/emblem-ntd-green.png');
+}
+
+/* Sparkle effects — floating particles */
+.sparkle-particle {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0;
+  background: url('/KenCheng-homepage/assets/gundam-assets/sparkle.png') center/contain no-repeat;
+}
+@keyframes sparkleFloat {
+  0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.9; }
+  80% { opacity: 0.5; }
+  100% { transform: translateY(-120px) scale(1.2) rotate(180deg); opacity: 0; }
+}
+#sparkle-1 { top: 20%; left: 15%; animation: sparkleFloat 3s ease-out infinite; }
+#sparkle-2 { top: 40%; left: 80%; animation: sparkleFloat 4s ease-out infinite 0.5s; }
+#sparkle-3 { top: 70%; left: 25%; animation: sparkleFloat 3.5s ease-out infinite 1s; }
+#sparkle-4 { top: 30%; left: 70%; animation: sparkleFloat 2.8s ease-out infinite 0.3s; }
+
+/* Pixel dust effect */
+#pixel-dust {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  background: url('/KenCheng-homepage/assets/gundam-assets/pixel-dust.png') center/cover;
+}
+
+/* Burst animation for cards */
+@keyframes burstPop {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  50% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+[data-theme="gundam-ntd"] .gundam-hud-card { animation: burstPop 3s ease-in-out infinite; }
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   [data-theme^="gundam-"] .gundam-pulse,
@@ -681,7 +802,7 @@
       document.body.style.background = '';
 
       // Hide all HUD elements with fade
-      const hudElements = ['hud-corner-tl','hud-corner-tr','hud-corner-bl','hud-corner-br','theme-emblem','hud-radar','hud-energy','hud-status','ms-silhouette','scanline-overlay'];
+      const hudElements = ['hud-corner-tl','hud-corner-tr','hud-corner-bl','hud-corner-br','theme-emblem','hud-radar','hud-energy','hud-status','ms-silhouette','scanline-overlay','emblem-badge','burst-tl','burst-tr','burst-bl','burst-br','warp-left','warp-right','glitch-overlay','pixel-dust','sparkle-1','sparkle-2','sparkle-3','sparkle-4'];
       hudElements.forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.style.transition = 'opacity 0.3s'; el.style.opacity = '0'; }
@@ -755,7 +876,46 @@
           ms.style.opacity = '1';
 
           // Scanline overlay
-          document.getElementById('scanline-overlay').style.opacity = '1';
+          document.getElementById('scanline-overlay').style.opacity = '0.5';
+
+          // Burst effects — show based on theme
+          const burstColors = {
+            'gundam-ntd': 'burst-pink.png',
+            'gundam-seed': 'burst-gold.png',
+            'gundam-crossbone': 'burst-cyan.png',
+            'gundam-ntd-green': 'burst-green.png',
+            'gundam-00': 'burst-green.png',
+            'gundam-destiny': 'burst-cyan.png',
+            'gundam-god': 'burst-gold.png',
+            'gundam-cartoon': 'burst-pink.png'
+          }[mode] || 'burst-cyan.png';
+          document.getElementById('burst-tl').style.opacity = '0.7';
+          document.getElementById('burst-tr').style.opacity = '0.5';
+          document.getElementById('burst-bl').style.opacity = '0.6';
+          document.getElementById('burst-br').style.opacity = '0.4';
+
+          // Warp streaks
+          document.getElementById('warp-left').style.opacity = '0.3';
+          document.getElementById('warp-right').style.opacity = '0.3';
+
+          // Glitch overlay (mostly for NT-D/Crossbone)
+          if (['gundam-ntd', 'gundam-crossbone', 'gundam-destiny'].includes(mode)) {
+            document.getElementById('glitch-overlay').style.opacity = '0.15';
+          }
+
+          // Pixel dust
+          document.getElementById('pixel-dust').style.opacity = '0.08';
+
+          // Sparkles (for SEED/Cartoon/Kawaii)
+          if (['gundam-seed', 'gundam-cartoon', 'gundam-god'].includes(mode)) {
+            document.getElementById('sparkle-1').style.opacity = '0.8';
+            document.getElementById('sparkle-2').style.opacity = '0.6';
+            document.getElementById('sparkle-3').style.opacity = '0.7';
+            document.getElementById('sparkle-4').style.opacity = '0.5';
+          }
+
+          // Emblem badge (actual PNG)
+          document.getElementById('emblem-badge').style.opacity = '1';
 
         }, 100);
       }
@@ -782,7 +942,32 @@
   <div id="hud-corner-bl" class="hud-corner" style="position:fixed;bottom:0;left:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;transform:scaleY(-1);"></div>
   <div id="hud-corner-br" class="hud-corner" style="position:fixed;bottom:0;right:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;transform:scale(-1);"></div>
 
-  <!-- Theme Emblem — Top center badge -->
+  <!-- Theme Emblem Badge — Top center -->
+  <div id="emblem-badge"></div>
+
+  <!-- Burst Effects — 4 corners -->
+  <div id="burst-tl" class="burst-effect" style="background:url('/KenCheng-homepage/assets/gundam-assets/burst-pink.png') center/contain no-repeat;"></div>
+  <div id="burst-tr" class="burst-effect" style="background:url('/KenCheng-homepage/assets/gundam-assets/burst-cyan.png') center/contain no-repeat;"></div>
+  <div id="burst-bl" class="burst-effect" style="background:url('/KenCheng-homepage/assets/gundam-assets/burst-gold.png') center/contain no-repeat;"></div>
+  <div id="burst-br" class="burst-effect" style="background:url('/KenCheng-homepage/assets/gundam-assets/burst-green.png') center/contain no-repeat;"></div>
+
+  <!-- Warp Speed Streaks — Left & Right -->
+  <div id="warp-left" class="warp-streak"></div>
+  <div id="warp-right" class="warp-streak"></div>
+
+  <!-- Glitch Overlay -->
+  <div id="glitch-overlay"></div>
+
+  <!-- Sparkle Particles -->
+  <div id="sparkle-1" class="sparkle-particle"></div>
+  <div id="sparkle-2" class="sparkle-particle"></div>
+  <div id="sparkle-3" class="sparkle-particle"></div>
+  <div id="sparkle-4" class="sparkle-particle"></div>
+
+  <!-- Pixel Dust -->
+  <div id="pixel-dust"></div>
+
+  <!-- Theme Emblem — Top center badge (text fallback) -->
   <div id="theme-emblem" class="hud-corner" style="position:fixed;top:16px;left:50%;transform:translateX(-50%);width:120px;height:60px;z-index:8888;pointer-events:none;opacity:0;"></div>
 
   <!-- Radar HUD — Top right -->
