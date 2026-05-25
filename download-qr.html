@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>下載 QR Code | Ken Cheng 學生專區</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkClass: 'dark',
+      theme: {
+        extend: {
+          fontFamily: { noto: ['Noto Sans TC', 'sans-serif'] },
+          colors: {
+            primary: { 50:'#eef2ff',100:'#e0e7ff',500:'#6366f1',600:'#4f46e5',700:'#4338ca' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Noto Sans TC', sans-serif; }
+    body { background: #f8f5ff; }
+    .dark body { background: #0f0e1a; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/students.html" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-800 dark:text-primary-300 text-sm font-medium mb-6">
+      ← 返回學生專區
+    </a>
+
+    <div class="text-center mb-8">
+      <div class="text-5xl mb-4">📥</div>
+      <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">下載全部 QR Code</h1>
+      <p class="text-gray-500 dark:text-gray-400">一鍵下載 PDF，每個工具一頁，方便打印帶回家</p>
+    </div>
+
+    <!-- Status -->
+    <div id="status-panel" class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 mb-6 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-semibold text-gray-700 dark:text-gray-200">準備下載</span>
+        <span id="progress-text" class="text-sm text-gray-400">共 43 個工具</span>
+      </div>
+      <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+        <div id="progress-bar" class="h-full bg-primary-500 rounded-full transition-all duration-300" style="width:0%"></div>
+      </div>
+      <div id="status-detail" class="mt-3 text-sm text-gray-500 dark:text-gray-400 text-center"></div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+      <button id="btn-all" onclick="generatePDF('all')"
+              class="py-4 px-6 rounded-2xl bg-primary-500 hover:bg-primary-600 text-white font-bold text-lg transition-colors flex flex-col items-center gap-2 shadow-lg">
+        <span class="text-2xl">📄</span>
+        <span>全部 QR Code PDF</span>
+        <span class="text-xs font-normal opacity-80">43個工具 · A4豎向</span>
+      </button>
+
+      <button id="btn-math" onclick="generatePDF('math')"
+              class="py-4 px-6 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-lg transition-colors flex flex-col items-center gap-2 shadow-lg">
+        <span class="text-2xl">📐</span>
+        <span>數學工具 QR Code</span>
+        <span class="text-xs font-normal opacity-80">12個工具</span>
+      </button>
+
+      <button id="btn-science" onclick="generatePDF('science')"
+              class="py-4 px-6 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white font-bold text-lg transition-colors flex flex-col items-center gap-2 shadow-lg">
+        <span class="text-2xl">🔬</span>
+        <span>科學工具 QR Code</span>
+        <span class="text-xs font-normal opacity-80">13個工具</span>
+      </button>
+
+      <button id="btn-lang" onclick="generatePDF('lang')"
+              class="py-4 px-6 rounded-2xl bg-pink-500 hover:bg-pink-600 text-white font-bold text-lg transition-colors flex flex-col items-center gap-2 shadow-lg">
+        <span class="text-2xl">📖</span>
+        <span>語文工具 QR Code</span>
+        <span class="text-xs font-normal opacity-80">4個工具</span>
+      </button>
+    </div>
+
+    <div class="text-center text-gray-400 dark:text-gray-600 text-sm">
+      <p>每個工具一頁 QR Code，方便家長學生打印 📠</p>
+    </div>
+  </div>
+
+<script>
+// ============================================================
+// STUDENT TOOLS DATA
+// ============================================================
+const STUDENT_TOOLS = [
+  // 數學 TDA (12)
+  { name: "平面圖形", url: "https://chengky-bot.github.io/plane-shapes/", desc: "互動式平面圖形認識與性質學習工具", cat: "math", icon: "📐" },
+  { name: "一元一次方程天平遊戲", url: "https://chengky-bot.github.io/equation-balance/", desc: "以天平平衡原理學習一元一次方程", cat: "math", icon: "⚖️" },
+  { name: "小數加法樂園", url: "https://chengky-bot.github.io/decimal-add/", desc: "小數位值加法互動練習", cat: "math", icon: "🎯" },
+  { name: "數學2位減法樂園", url: "https://chengky-bot.github.io/subtraction-2digit/", desc: "兩位數減法練習，帶棒形圖輔助", cat: "math", icon: "🔢" },
+  { name: "兩位數減法(動物篇)", url: "https://chengky-bot.github.io/subtract-animal/", desc: "以動物情境學習兩位數減法", cat: "math", icon: "🐾" },
+  { name: "減法小幫手 - 棒形圖教學工具", url: "https://chengky-bot.github.io/subtraction-bar/", desc: "棒形圖輔助減法學習", cat: "math", icon: "📊" },
+  { name: "10的分解", url: "https://chengky-bot.github.io/number-breakdown/", desc: "10的分解與合成互動學習", cat: "math", icon: "🔟" },
+  { name: "2D 圖形認識", url: "https://chengky-bot.github.io/2d-shapes/", desc: "互動式二維圖形辨識與分類", cat: "math", icon: "🔷" },
+  { name: "4位數字比較遊戲", url: "https://chengky-bot.github.io/4digit-compare/", desc: "四位數大小比較競速遊戲", cat: "math", icon: "🏆" },
+  { name: "校園精靈", url: "https://school-elf.lovable.app/", desc: "校園主題數學闖關遊戲", cat: "math", icon: "🏫" },
+  { name: "知識地下城", url: "https://chengky-bot.github.io/knowledge-dungeon/", desc: "RPG 風格知識問答遊戲", cat: "math", icon: "⚔️" },
+  { name: "乘數城市 (Multiplication Town)", url: "https://chengky-bot.github.io/multiplication-town/", desc: "城市建設主題乘法學習 RPG", cat: "math", icon: "🏙️" },
+  // 語文 TDA (4)
+  { name: "四素句寫作", url: "https://chat.qwen.ai/s/deploy/t_51b2aac5-2727-4c20-81c2-85201717ac69", desc: "練習時間、地點、人物、事件的造句結構", cat: "lang", icon: "✍️" },
+  { name: "朗讀文章工具", url: "https://chat.qwen.ai/s/deploy/t_35a735bb-7e27-421a-b9f3-1a4910b71ca1", desc: "AI 語音朗讀文章，輔助閱讀障礙或語言聽力訓練", cat: "lang", icon: "📢" },
+  { name: "朗讀詞彙", url: "https://chengky-bot.github.io/read-aloud-word/", desc: "輸入詞彙即可朗讀，輔助語言學習與發音練習", cat: "lang", icon: "🔊" },
+  { name: "生活偵探事務所：成語解密", url: "https://chengky-bot.github.io/idiom-detective/", desc: "以偵探遊戲學習成語意義與應用", cat: "lang", icon: "🔍" },
+  // 科學 TDA (13)
+  { name: "交通燈模擬器", url: "https://chengky-bot.github.io/traffic-light/", desc: "模擬交通燈運作原理與行人安全教育", cat: "science", icon: "🚦" },
+  { name: "小水滴的地球大冒險", url: "https://chengky-bot.github.io/water-adventure/", desc: "跟隨小水滴經歷地球水循環的冒險故事", cat: "science", icon: "💧" },
+  { name: "水的四態循環", url: "https://chengky-bot.github.io/water-four-states/", desc: "互動學習固、液、氣、冰四態變化", cat: "science", icon: "❄️" },
+  { name: "水循環消消樂", url: "https://chengky-bot.github.io/water-cycle-match/", desc: "配對消除遊戲學習水循環知識", cat: "science", icon: "🎮" },
+  { name: "水循環互動學習", url: "https://chengky-bot.github.io/water-cycle-interactive/", desc: "可拖拽的水循環互動學習工具", cat: "science", icon: "🌊" },
+  { name: "蒸發模擬工具", url: "https://chengky-bot.github.io/evaporation/", desc: "模擬蒸發過程與影響因素的互動工具", cat: "science", icon: "💨" },
+  { name: "水的溶解打地鼠", url: "https://chengky-bot.github.io/dissolve-whack/", desc: "溶解概念打地鼠遊戲", cat: "science", icon: "🕳️" },
+  { name: "彩虹水實驗", url: "https://chengky-bot.github.io/rainbow-water/", desc: "模擬彩虹水實驗，理解液體分層與密度", cat: "science", icon: "🌈" },
+  { name: "磁力遊戲", url: "https://chengky-bot.github.io/magnet-game/", desc: "探索磁鐵的特性與互動遊戲", cat: "science", icon: "🧲" },
+  { name: "物質溶解實驗", url: "https://chengky-bot.github.io/dissolution/", desc: "虛擬實驗室學習物質溶解現象", cat: "science", icon: "🧪" },
+  { name: "浮力模擬", url: "https://chengky-bot.github.io/buoyancy-sim/", desc: "模擬浮力原理與物體沉浮條件", cat: "science", icon: "🚤" },
+  { name: "浮力遊戲 (POE)", url: "https://chengky-bot.github.io/buoyancy-poe/", desc: "Predict-Observe-Explain 浮力探究遊戲", cat: "science", icon: "🔬" },
+  { name: "科學互動工具 (Base44)", url: "https://base44.ai/tools/science", desc: "AI 科學互動工具合集", cat: "science", icon: "🤖" },
+  // 生活
+  { name: "早安天氣與早餐", url: "https://morning-meal-mate.lovable.app/", desc: "結合天氣資訊的早餐選擇助手，培養生活自理能力", cat: "life", icon: "🌤️" },
+  // 課堂
+  { name: "課堂情緒溫度計", url: "https://v0-classroom-mood-thermometer.vercel.app/", desc: "檢測課堂情緒氛圍的互動工具", cat: "classroom", icon: "🌡️" },
+  { name: "情緒舒緩", url: "https://chengky-bot.github.io/cf-video/", desc: "提供情緒舒緩與放鬆的輔助工具", cat: "classroom", icon: "🧘" },
+  { name: "StarClass Hub", url: "https://ihateusingai-beep.github.io/starclass-hub/", desc: "課堂獎勵系統：學生管理、角色、等級與星星兑換", cat: "classroom", icon: "⭐" },
+  { name: "Friendly Classroom", url: "https://chengky-bot.github.io/friendly-classroom/", desc: "正向行為支持與課堂管理工具", cat: "classroom", icon: "🤝" },
+  { name: "學生任務任務應用", url: "https://chengky-bot.github.io/student-mission/", desc: "學生任務追蹤與完成激勵工具", cat: "classroom", icon: "📋" },
+  // 創意
+  { name: "空氣畫 (Air Drawing)", url: "https://air-drawing.vercel.app/", desc: "用身體姿勢作畫，互動創意藝術體驗", cat: "art", icon: "🎨" },
+  { name: "The Toymaker", url: "https://www.thetoymaker.com/", desc: "免費紙藝模型與摺紙資源", cat: "art", icon: "✂️" },
+  // 遊戲
+  { name: "Jigidi", url: "https://www.jigidi.com/", desc: "免費線上拼圖遊戲，訓練觀察力與專注", cat: "game", icon: "🧩" },
+  { name: "GeoFS", url: "https://www.geo-fs.com/", desc: "基於瀏覽器的全球飛行模擬器", cat: "game", icon: "✈️" },
+  // 實用
+  { name: "QR Code 產生器", url: "https://chengky-bot.github.io/qrcode-gen/", desc: "為工具生成 QR Code，方便移動裝置掃描", cat: "life", icon: "📱" },
+  { name: "打字練習工具", url: "https://chengky-bot.github.io/typing-practice/", desc: "鍵盤指法練習，提升打字速度", cat: "life", icon: "⌨️" },
+  { name: "Kiddo Worksheets", url: "https://www.kiddoworksheets.com/", desc: "免費可列印兒童學習工作紙", cat: "math", icon: "📝" },
+  { name: "PhET Interactive Simulations", url: "https://phet.colorado.edu/", desc: "科羅拉多大學互動科學模擬實驗室", cat: "science", icon: "🔬" },
+  { name: "Explore.org", url: "https://explore.org/", desc: "野生動物直播與環境教育影片", cat: "science", icon: "🦁" },
+  { name: "Animagraffs", url: "https://www.animagraffs.com/", desc: "剖面圖解機械與生物運作原理", cat: "science", icon: "⚙️" },
+  { name: "Doubao (豆包)", url: "https://www.doubao.com/", desc: "位元組跳動 AI 助手，適合簡單學習問題", cat: "life", icon: "🤖" },
+];
+
+const CAT_INFO = {
+  math:     { label: '📐 數學', color: '#7c3aed', bgColor: '#f3e8ff' },
+  lang:     { label: '📖 語文', color: '#db2777', bgColor: '#fce7f3' },
+  science:  { label: '🔬 科學', color: '#2563eb', bgColor: '#dbeafe' },
+  life:     { label: '🌱 生活', color: '#059669', bgColor: '#d1fae5' },
+  classroom:{ label: '🏠 課堂', color: '#0891b2', bgColor: '#e0f2fe' },
+  game:     { label: '🎮 遊戲', color: '#d97706', bgColor: '#fef3c7' },
+  art:      { label: '🎨 創意', color: '#db2777', bgColor: '#fce7f3' },
+};
+
+let isGenerating = false;
+
+function makeQRUrl(url, size = 256) {
+  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(url)}`;
+}
+
+async function generatePDF(catFilter) {
+  if (isGenerating) return;
+  isGenerating = true;
+
+  const tools = catFilter === 'all' ? STUDENT_TOOLS : STUDENT_TOOLS.filter(t => t.cat === catFilter);
+  const total = tools.length;
+  const label = catFilter === 'all' ? '全部工具' : (CAT_INFO[catFilter]?.label || catFilter);
+  const color = catFilter === 'all' ? '#4f46e5' : (CAT_INFO[catFilter]?.color || '#4f46e5');
+
+  document.getElementById('progress-text').textContent = `正在生成... 0 / ${total}`;
+  document.getElementById('btn-all').disabled = true;
+  document.getElementById('btn-all').classList.add('opacity-50', 'cursor-not-allowed');
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210;
+  const H = 297;
+  const margin = 15;
+  const qrSize = 70;
+
+  for (let i = 0; i < tools.length; i++) {
+    const tool = tools[i];
+    const pageNum = i + 1;
+    const pct = Math.round((i / total) * 100);
+
+    doc.setDrawColor(230);
+    doc.setFillColor(250, 248, 255);
+    doc.rect(0, 0, W, H, 'FD');
+
+    // Header bar
+    doc.setFillColor(99, 102, 241);
+    doc.rect(0, 0, W, 18, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Ken Cheng 電子學習工具  QR Code', margin, 12);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${label}  ·  ${pageNum} / ${total}`, W - margin, 12, { align: 'right' });
+
+    // Category badge
+    const catInfo = CAT_INFO[tool.cat] || { label: tool.cat, color: '#6366f1', bgColor: '#eef2ff' };
+    const badgeLabel = catInfo.label;
+    doc.setFontSize(9);
+    const badgeW = doc.getTextWidth(badgeLabel) + 10;
+    const badgeX = (W - badgeW) / 2;
+    doc.setFillColor(catInfo.color);
+    doc.roundedRect(badgeX, 22, badgeW, 8, 2, 2, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text(badgeLabel, W / 2, 27.5, { align: 'center' });
+
+    // Icon + Tool name
+    doc.setTextColor(30, 30, 60);
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text(tool.icon || '🔗', margin, 52);
+    doc.setFontSize(18);
+    const nameX = margin + 16;
+    doc.text(tool.name, nameX, 52);
+
+    // Description
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 80, 100);
+    const descLines = doc.splitTextToSize(tool.desc, W - 2 * margin - 10);
+    doc.text(descLines, margin, 62);
+
+    // QR Code
+    const qrUrl = makeQRUrl(tool.url, 512);
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 512;
+      canvas.height = 512;
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, 512, 512);
+      img.src = qrUrl;
+      await new Promise((res, rej) => {
+        img.onload = res;
+        img.onerror = rej;
+        setTimeout(rej, 8000);
+      });
+      ctx.drawImage(img, 0, 0, 512, 512);
+      const qrDataUrl = canvas.toDataURL('image/png');
+      const qrX = (W - qrSize) / 2;
+      const qrY = 75;
+      doc.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
+    } catch (e) {
+      // Fallback: draw placeholder QR square
+      doc.setDrawColor(180);
+      doc.setFillColor(245, 245, 245);
+      const qrX = (W - qrSize) / 2;
+      doc.rect(qrX, 75, qrSize, qrSize, 'FD');
+      doc.setFontSize(10);
+      doc.setTextColor(150);
+      doc.text('QR 載入中...', W / 2, 75 + qrSize / 2 + 4, { align: 'center' });
+    }
+
+    // URL
+    doc.setFontSize(9);
+    doc.setTextColor(120, 120, 160);
+    doc.text(tool.url, W / 2, 155, { align: 'center', maxWidth: W - 2 * margin });
+
+    // Footer
+    doc.setFillColor(240, 238, 255);
+    doc.rect(0, H - 14, W, 14, 'F');
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 180);
+    doc.text('Ken Cheng 電子教學工具 · 學生專區', margin, H - 5);
+    doc.text('掃描 QR Code 即可使用', W - margin, H - 5, { align: 'right' });
+
+    if (i < tools.length - 1) doc.addPage();
+
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = `正在生成... ${i + 1} / ${total}`;
+    document.getElementById('status-detail').textContent = tool.name;
+    await new Promise(r => setTimeout(r, 50));
+  }
+
+  document.getElementById('progress-bar').style.width = '100%';
+  document.getElementById('progress-text').textContent = `完成！共 ${total} 個工具`;
+  document.getElementById('status-detail').textContent = '正在下載...';
+
+  const filename = catFilter === 'all' ? 'KenCheng_QR_Codes.pdf' : `KenCheng_${catFilter}_QR.pdf`;
+  doc.save(filename);
+
+  isGenerating = false;
+  document.getElementById('btn-all').disabled = false;
+  document.getElementById('btn-all').classList.remove('opacity-50', 'cursor-not-allowed');
+}
+</script>
+</body>
+</html>
