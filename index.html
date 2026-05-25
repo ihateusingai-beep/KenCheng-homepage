@@ -249,10 +249,10 @@
 }
 @keyframes psychoframePulse {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(255, 105, 180, 0.3), 0 0 20px rgba(255, 105, 180, 0.2);
+    box-shadow: 0 0 8px rgba(255, 105, 180, 0.2), 0 0 16px rgba(255, 105, 180, 0.1);
   }
   50% {
-    box-shadow: 0 0 25px rgba(255, 105, 180, 0.6), 0 0 50px rgba(255, 105, 180, 0.3);
+    box-shadow: 0 0 15px rgba(255, 105, 180, 0.3), 0 0 30px rgba(255, 105, 180, 0.15);
   }
 }
 
@@ -691,8 +691,8 @@
 /* Warp streak — diagonal speed lines */
 @keyframes warpStreakMove {
   0% { transform: translateX(-100%) skewX(-20deg); opacity: 0; }
-  20% { opacity: 0.6; }
-  80% { opacity: 0.3; }
+  20% { opacity: 0.25; }
+  80% { opacity: 0.1; }
   100% { transform: translateX(200%) skewX(-20deg); opacity: 0; }
 }
 .warp-streak {
@@ -817,9 +817,7 @@
   color: var(--accent) !important;
   text-shadow:
     0 0 5px var(--accent),
-    0 0 10px var(--accent),
-    0 0 20px var(--accent),
-    0 0 40px var(--accent-secondary) !important;
+    0 0 10px var(--accent) !important;
   font-family: 'Orbitron', 'Rajdhani', monospace !important;
 }
 
@@ -827,7 +825,7 @@
 [data-theme^="gundam-"] .gundam-stat-card {
   background: var(--bg-card) !important;
   border: 1px solid var(--border-color) !important;
-  box-shadow: var(--card-glow) !important;
+  box-shadow: 0 0 10px var(--accent-glow) !important;
   position: relative;
   transition: box-shadow 0.3s, border-color 0.3s;
 }
@@ -859,14 +857,14 @@
 }
 @keyframes gundamStarPulse {
   0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent-glow);
+    opacity: 0.85;
+    box-shadow: 0 0 4px var(--accent), 0 0 8px var(--accent-glow);
     transform: scale(1);
   }
   50% {
-    opacity: 0.7;
-    box-shadow: 0 0 15px var(--accent), 0 0 30px var(--accent-glow-alt);
-    transform: scale(1.1);
+    opacity: 0.6;
+    box-shadow: 0 0 8px var(--accent), 0 0 16px var(--accent-glow-alt);
+    transform: scale(1.05);
   }
 }
 
@@ -912,14 +910,14 @@
 }
 @keyframes gundamStarPulseNTD {
   0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 5px #FF69B4, 0 0 10px rgba(255,105,180,0.4);
+    opacity: 0.85;
+    box-shadow: 0 0 4px #FF69B4, 0 0 8px rgba(255,105,180,0.3);
     transform: scale(1);
   }
   50% {
-    opacity: 0.8;
-    box-shadow: 0 0 20px #FF69B4, 0 0 40px rgba(255,105,180,0.6);
-    transform: scale(1.15);
+    opacity: 0.65;
+    box-shadow: 0 0 12px #FF69B4, 0 0 24px rgba(255,105,180,0.4);
+    transform: scale(1.08);
   }
 }
 
@@ -941,7 +939,7 @@
 /* --- P4: Category section header glow --- */
 [data-theme^="gundam-"] .gundam-section-header {
   color: var(--accent) !important;
-  text-shadow: 0 0 8px var(--accent-glow) !important;
+  text-shadow: 0 0 6px var(--accent-glow) !important;
   font-family: 'Orbitron', 'Rajdhani', sans-serif !important;
   letter-spacing: 2px;
 }
