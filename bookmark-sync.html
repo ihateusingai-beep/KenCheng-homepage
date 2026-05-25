@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>書籤同步 - Ken Cheng</title>
+  <style>
+    :root {
+      --bg: #0a0a1a;
+      --card: #12122a;
+      --border: #2a2a5a;
+      --text: #e0e0ff;
+      --muted: #8888bb;
+      --accent: #7c3aed;
+      --accent2: #a855f7;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --gradient: linear-gradient(135deg, #7c3aed, #a855f7);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .container { max-width: 700px; margin: 0 auto; }
+    h1 {
+      font-size: 1.8rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle { color: var(--muted); margin-bottom: 2rem; font-size: 0.9rem; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-title .icon { font-size: 1.2rem; }
+
+    .btn-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .btn {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-export {
+      background: var(--gradient);
+      color: white;
+    }
+    .btn-import {
+      background: var(--card);
+      color: var(--accent2);
+      border: 2px solid var(--accent);
+    }
+    .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn:active { transform: translateY(0); }
+
+    #importFile { display: none; }
+
+    .msg {
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      display: none;
+    }
+    .msg-success { background: rgba(34,197,94,0.15); color: var(--success); border: 1px solid rgba(34,197,94,0.3); }
+    .msg-error { background: rgba(239,68,68,0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .stat {
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 10px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent2); }
+    .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem; }
+
+    .preview {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+    }
+    .preview::-webkit-scrollbar { width: 6px; }
+    .preview::-webkit-scrollbar-track { background: var(--bg); }
+    .preview::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .preview-item {
+      padding: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .preview-item:last-child { border-bottom: none; }
+    .preview-item .name { font-weight: 600; }
+    .preview-item .cat { font-size: 0.75rem; color: var(--muted); }
+    .cat-badge {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 20px;
+      background: rgba(124,58,237,0.2);
+      color: var(--accent2);
+    }
+
+    .info-box {
+      background: rgba(124,58,237,0.08);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 10px;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 1.5rem;
+    }
+    .info-box strong { color: var(--text); }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent2);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/students.html" class="back-link">← 返回學生專區</a>
+
+    <h1>📑 書籤同步</h1>
+    <p class="subtitle">Export 或 Import 你嘅書籤收藏</p>
+
+    <!-- Export Card -->
+    <div class="card">
+      <div class="card-title"><span class="icon">📤</span> 匯出書籤</div>
+      <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem;">將書籤存為 JSON 檔案，方便備份或轉移到其他設備</p>
+      <div class="btn-group">
+        <button class="btn btn-export" onclick="exportBookmarks()">
+          <span>💾</span> 匯出 JSON
+        </button>
+        <button class="btn btn-import" onclick="previewBookmarks()">
+          <span>👁️</span> 預覽內容
+        </button>
+      </div>
+      <div id="exportStats" class="stats" style="display:none;"></div>
+      <div id="preview" class="preview" style="display:none;"></div>
+      <div id="exportMsg" class="msg"></div>
+    </div>
+
+    <!-- Import Card -->
+    <div class="card">
+      <div class="card-title"><span class="icon">📥</span> 匯入書籤</div>
+      <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem;">從之前匯出的 JSON 檔案還原書籤</p>
+      <div class="btn-group">
+        <button class="btn btn-import" onclick="document.getElementById('importFile').click()">
+          <span>📁</span> 選擇 JSON 檔案
+        </button>
+        <button class="btn btn-export" onclick="sampleImport()">
+          <span>🧪</span> 載入範例
+        </button>
+      </div>
+      <input type="file" id="importFile" accept=".json" onchange="importBookmarks(event)">
+      <div id="importStats" class="stats" style="display:none;"></div>
+      <div id="importMsg" class="msg"></div>
+    </div>
+
+    <div class="info-box">
+      <strong>💡 提示：</strong><br>
+      • 匯出會下載包含所有書籤嘅 JSON 檔案<br>
+      • 匯入會與現有書籤合併（不會覆蓋）<br>
+      • 書籤數據儲存於本瀏覽器，刪除快取會消失<br>
+      • 建議定期匯出備份
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'kencheng_bookmarks';
+
+    function getBookmarks() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function saveBookmarks(bookmarks) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks));
+    }
+
+    function getAllTools() {
+      return [
+        { id: 'm1', name: 'Math Quest ARPG', cat: 'math', url: 'https://ihateusingai-beep.github.io/math-quest/', icon: '⚔️' },
+        { id: 'm2', name: 'Kahoot!', cat: 'math', url: 'https://kahoot.com/', icon: '🎮' },
+        { id: 'm3', name: 'Times Table', cat: 'math', url: 'https://media.kahoot.dev/times-tables/', icon: '🔢' },
+        { id: 's1', name: 'PhET', cat: 'science', url: 'https://phet.colorado.edu/', icon: '🔬' },
+        { id: 's2', name: 'National Geographic Kids', cat: 'science', url: 'https://kids.nationalgeographic.com/', icon: '🌍' },
+        { id: 'l1', name: 'Epic!', cat: 'language', url: 'https://www.getepic.com/', icon: '📚' },
+        { id: 'l2', name: 'StarClass Hub', cat: 'language', url: 'https://ihateusingai-beep.github.io/starclass-hub/', icon: '⭐' },
+      ];
+    }
+
+    function exportBookmarks() {
+      const bookmarks = getBookmarks();
+      if (bookmarks.length === 0) {
+        showMsg('exportMsg', 'error', '目前沒有書籤可以匯出');
+        return;
+      }
+
+      const exportData = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        total: bookmarks.length,
+        bookmarks: bookmarks
+      };
+
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kencheng-bookmarks-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showStats('exportStats', bookmarks.length);
+      showMsg('exportMsg', 'success', `✅ 已匯出 ${bookmarks.length} 個書籤`);
+    }
+
+    function previewBookmarks() {
+      const bookmarks = getBookmarks();
+      const preview = document.getElementById('preview');
+
+      if (bookmarks.length === 0) {
+        preview.innerHTML = '<div style="color:var(--muted);text-align:center;padding:1rem;">目前沒有書籤</div>';
+        preview.style.display = 'block';
+        return;
+      }
+
+      preview.innerHTML = bookmarks.map(b => `
+        <div class="preview-item">
+          <div>
+            <div class="name">${b.name}</div>
+            <div class="cat">${b.url}</div>
+          </div>
+          <span class="cat-badge">${b.cat}</span>
+        </div>
+      `).join('');
+      preview.style.display = 'block';
+      showStats('exportStats', bookmarks.length);
+    }
+
+    function importBookmarks(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          const imported = data.bookmarks || [];
+          const existing = getBookmarks();
+
+          // Merge: add new, skip duplicates by url
+          const existingUrls = new Set(existing.map(b => b.url));
+          let added = 0;
+          imported.forEach(b => {
+            if (!existingUrls.has(b.url)) {
+              existing.push(b);
+              added++;
+            }
+          });
+
+          saveBookmarks(existing);
+          showStats('importStats', existing.length);
+          showMsg('importMsg', 'success', `✅ 已匯入 ${added} 個新書籤（目前共 ${existing.length} 個）`);
+          event.target.value = '';
+        } catch (err) {
+          showMsg('importMsg', 'error', '❌ 檔案格式錯誤，請選擇有效的 JSON 檔案');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function sampleImport() {
+      const sample = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        total: 3,
+        bookmarks: [
+          { id: 'sample1', name: '範例書籤 1', url: 'https://example.com', cat: 'math', icon: '📐' },
+          { id: 'sample2', name: '範例書籤 2', url: 'https://example.org', cat: 'science', icon: '🧪' },
+          { id: 'sample3', name: '範例書籤 3', url: 'https://example.net', cat: 'language', icon: '📖' },
+        ]
+      };
+
+      const existing = getBookmarks();
+      const existingUrls = new Set(existing.map(b => b.url));
+      let added = 0;
+      sample.bookmarks.forEach(b => {
+        if (!existingUrls.has(b.url)) {
+          existing.push(b);
+          added++;
+        }
+      });
+      saveBookmarks(existing);
+      showStats('importStats', existing.length);
+      showMsg('importMsg', 'success', `✅ 已載入 ${added} 個範例書籤（目前共 ${existing.length} 個）`);
+    }
+
+    function showStats(id, total) {
+      const el = document.getElementById(id);
+      el.innerHTML = `
+        <div class="stat"><div class="stat-value">${total}</div><div class="stat-label">總書籤</div></div>
+        <div class="stat"><div class="stat-value">${getBookmarks().filter(b => b.cat === 'math').length}</div><div class="stat-label">數學</div></div>
+        <div class="stat"><div class="stat-value">${getBookmarks().filter(b => b.cat === 'science').length}</div><div class="stat-label">科學+語文</div></div>
+      `;
+      el.style.display = 'grid';
+    }
+
+    function showMsg(id, type, text) {
+      const el = document.getElementById(id);
+      el.className = `msg msg-${type}`;
+      el.textContent = text;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 5000);
+    }
+  </script>
+</body>
+</html>
