@@ -17,6 +17,22 @@
     <meta name="twitter:title" content="Ken Cheng的電子教學工具 | Resource Dashboard">
     <meta name="twitter:description" content="Ken Cheng的電子教學工具導航站，匯集教學輔助、AI應用、開發工具與模擬體驗，旨在提升教學效率、激發創意靈感。">
 
+    <!-- Dark Mode Init - MUST be before body renders to prevent flash -->
+    <script>
+    (function(){
+      var stored = localStorage.getItem('kc-theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+      // Also apply gundam theme from sessionStorage if set
+      var gTheme = sessionStorage.getItem('kc-gundam-theme');
+      if (gTheme) {
+        document.documentElement.setAttribute('data-theme', gTheme);
+      }
+    })();
+    </script>
+
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#4f46e5">
     <meta name="mobile-web-app-capable" content="yes">
@@ -31,10 +47,12 @@
     <link rel="icon" type="image/svg+xml" href="/KenCheng-homepage/vite.svg">
     <link rel="apple-touch-icon" href="/KenCheng-homepage/vite.svg">
 
-    <!-- Fonts -->
+    <!-- Fonts with preconnect and dns-prefetch for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap"></noscript>
   <script type="module" crossorigin src="/KenCheng-homepage/assets/index-ChxI5wjT.js"></script>
   <link rel="stylesheet" crossorigin href="/KenCheng-homepage/assets/index-DSuGoZSV.css">
   <style>
@@ -1106,8 +1124,11 @@ background: rgba(255,255,255,0.97);
   </div>
 </div>
 
+  <!-- Skip Link for Accessibility -->
+  <a href="#root" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:99999;padding:8px 16px;background:#6366f1;color:#fff;font-weight:600;border-radius:0 0 8px 8px;text-decoration:none;transition:top .2s;" onfocus="this.style.left='16px';this.style.top='0';this.style.width='auto';this.style.height='auto';this.style.overflow='visible';" onblur="this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">跳至主要內容</a>
+
   <!-- Dark Mode Toggle (P5) -->
-  <button id="dark-mode-toggle" onclick="toggleDarkMode()" title="切換深色/淺色主題" aria-label="切換深色/淺色主題" style="position:fixed;bottom:24px;left:24px;z-index:9999;width:48px;height:48px;border-radius:50%;border:2px solid var(--border-color,#334155);background:var(--bg-card,#1e293b);color:var(--accent,#00D4FF);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 12px var(--accent-glow,rgba(0,212,255,0.2));transition:all .3s;">
+  <button id="dark-mode-toggle" onclick="toggleDarkMode()" title="切換深色/淺色主題" aria-label="切換深色/淺色主題（目前為淺色模式）" style="position:fixed;bottom:24px;left:24px;z-index:9999;width:48px;height:48px;border-radius:50%;border:2px solid var(--border-color,#334155);background:var(--bg-card,#1e293b);color:var(--accent,#00D4FF);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 12px var(--accent-glow,rgba(0,212,255,0.2));transition:all .3s;" aria-pressed="false">
     🌙
   </button>
 
@@ -1154,17 +1175,29 @@ background: rgba(255,255,255,0.97);
     </button>
   </div>
   <script>
-// Dark Mode Toggle (P5)
+// Dark Mode Toggle (P5) - persisted to localStorage
 function toggleDarkMode() {
   var isDark = document.documentElement.classList.contains('dark');
   var html = document.documentElement;
   var toggle = document.getElementById('dark-mode-toggle');
   if (isDark) {
     html.classList.remove('dark');
-    if (toggle) { toggle.textContent = '🌙'; toggle.style.color = '#00D4FF'; }
+    localStorage.setItem('kc-theme', 'light');
+    if (toggle) {
+      toggle.textContent = '🌙';
+      toggle.style.color = '#00D4FF';
+      toggle.setAttribute('aria-label', '切換深色/淺色主題（目前為淺色模式）');
+      toggle.setAttribute('aria-pressed', 'false');
+    }
   } else {
     html.classList.add('dark');
-    if (toggle) { toggle.textContent = '☀️'; toggle.style.color = '#FFD700'; }
+    localStorage.setItem('kc-theme', 'dark');
+    if (toggle) {
+      toggle.textContent = '☀️';
+      toggle.style.color = '#FFD700';
+      toggle.setAttribute('aria-label', '切換深色/淺色主題（目前為深色模式）');
+      toggle.setAttribute('aria-pressed', 'true');
+    }
   }
 }
 
@@ -1202,23 +1235,42 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// TTS Welcome Message (P5)
+// TTS Welcome Message (P5) — with quota/error handling
 function playWelcome() {
-  if (!('speechSynthesis' in window)) return;
-  var msg = new SpeechSynthesisUtterance('歡迎來到Ken Cheng的電子教學工具導航站');
-  msg.lang = 'zh-Hant';
-  msg.rate = 0.9;
-  msg.pitch = 1.1;
-  window.speechSynthesis.cancel();
-  setTimeout(function() { window.speechSynthesis.speak(msg); }, 1500);
+  try {
+    if (!('speechSynthesis' in window)) return;
+    // Cancel any ongoing speech first
+    window.speechSynthesis.cancel();
+    var msg = new SpeechSynthesisUtterance('歡迎來到Ken Cheng的電子教學工具導航站');
+    msg.lang = 'zh-Hant';
+    msg.rate = 0.9;
+    msg.pitch = 1.1;
+    msg.volume = 0.8;
+    // Handle quota/error gracefully
+    msg.onerror = function(e) {
+      // Silently ignore TTS errors (quota, network, etc.)
+    };
+    msg.onend = function() {
+      // Clean up after speaking done
+    };
+    // Use a timeout to ensure speech starts after cancel
+    setTimeout(function() {
+      try { window.speechSynthesis.speak(msg); } catch(e) { /* TTS unavailable */ }
+    }, 100);
+  } catch(e) { /* TTS completely unavailable */ }
 }
 window.addEventListener('load', function() {
   var played = sessionStorage.getItem('kc-tts-played');
   if (!played) {
     sessionStorage.setItem('kc-tts-played', '1');
-    playWelcome();
+    // Delay to ensure page is ready
+    setTimeout(playWelcome, 2000);
   }
 });
+// Respect user's motion preferences
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  sessionStorage.removeItem('kc-tts-played');
+}
 </script>
   <script>
     let gundamMenuOpen = false;
@@ -1231,6 +1283,13 @@ window.addEventListener('load', function() {
       const html = document.documentElement;
       html.removeAttribute('data-theme');
       document.body.style.background = '';
+
+      // Persist gundam theme selection
+      if (mode !== 'off') {
+        sessionStorage.setItem('kc-gundam-theme', mode);
+      } else {
+        sessionStorage.removeItem('kc-gundam-theme');
+      }
 
       // Hide all HUD elements with fade
       const hudElements = ['hud-corner-tl','hud-corner-tr','hud-corner-bl','hud-corner-br','theme-emblem','hud-radar','hud-energy','hud-status','ms-silhouette','scanline-overlay','emblem-badge','burst-tl','burst-tr','burst-bl','burst-br','warp-left','warp-right','glitch-overlay','pixel-dust','sparkle-1','sparkle-2','sparkle-3','sparkle-4'];
@@ -1452,7 +1511,7 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/KenCheng-homepage/sw.js')
                     .then((registration) => {
-                        // SW registered
+                        // SW registered - v6 with offline support
                     })
                     .catch((error) => {
                         console.error('SW registration failed:', error);
@@ -1758,15 +1817,21 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
     document.querySelectorAll('.filter-btn').forEach(function(b){
       b.classList.toggle('dark',dark);
       if(dark){
-        b.style.cssText='display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #334155;background:#1e293b;color:#94a3b8;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1';
+        b.style.borderColor='#334155';
+        b.style.background='#1e293b';
+        b.style.color='#94a3b8';
       } else {
-        b.style.cssText='display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1';
+        b.style.borderColor='#e2e8f0';
+        b.style.background='#fff';
+        b.style.color='#64748b';
       }
       if(b.classList.contains('act')){
         b.style.background=dark?'#22d3ee':'#6366f1';
         b.style.borderColor=dark?'#22d3ee':'#6366f1';
         b.style.color=dark?'#0f172a':'#fff';
         b.style.boxShadow=dark?'0 2px 10px rgba(34,211,238,.3)':'0 2px 10px rgba(99,102,241,.3)';
+      } else {
+        b.style.boxShadow='none';
       }
     });
   }
