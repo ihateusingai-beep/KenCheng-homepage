@@ -16,6 +16,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Ken Cheng的電子教學工具 | Resource Dashboard">
     <meta name="twitter:description" content="Ken Cheng的電子教學工具導航站，匯集教學輔助、AI應用、開發工具與模擬體驗，旨在提升教學效率、激發創意靈感。">
+    <!-- Canonical -->
+    <link rel="canonical" href="https://ihateusingai-beep.github.io/KenCheng-homepage/">
 
     <!-- Dark Mode Init - MUST be before body renders to prevent flash -->
     <script>
@@ -85,6 +87,24 @@
 ::selection { background: #00D4FF; color: #0a0f1a; }
 .dark ::selection { background: #FF69B4; color: #0a0f1a; }
 [data-theme^="gundam-"] ::selection { background: var(--accent); color: var(--bg-primary); }
+
+/* Accessibility: focus-visible — clear visible focus ring for keyboard users */
+:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.dark :focus-visible {
+  outline-color: #22d3ee;
+}
+[data-theme^="gundam-"] :focus-visible {
+  outline-color: var(--accent);
+  outline-offset: 3px;
+}
+/* Remove outline for mouse clicks */
+:focus:not(:focus-visible) {
+  outline: none;
+}
 
 /* Loading Skeleton */
 @keyframes shimmer {
@@ -1065,12 +1085,12 @@ background: rgba(255,255,255,0.97);
   background: rgba(15,23,42,0.97);
 }
 .about-inner { padding: 28px; overflow-y: auto; max-height: calc(100vh - 96px); }
-.about-close {
-  position: absolute; top: 14px; right: 14px;
-  width: 32px; height: 32px; border-radius: 50%;
-  border: none; background: #f1f5f9; cursor: pointer;
-  font-size: 14px; color: #64748b; display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
+.about-close{
+  position:absolute; top:14px; right:14px;
+  width:44px; height:44px; border-radius:50%;
+  border:none; background:#f1f5f9; cursor:pointer;
+  font-size:14px; color:#64748b; display:flex; align-items:center; justify-content:center;
+  transition:background .2s;
 }
 .about-close:hover { background: #e2e8f0; }
 .about-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
@@ -1114,7 +1134,7 @@ background: rgba(255,255,255,0.97);
 </style>
 
 
-<style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}</style>
+<style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;min-height:44px}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}</style>
 </head>
 <body>
   <!-- Hero Animated Background (P4) -->
@@ -1128,7 +1148,7 @@ background: rgba(255,255,255,0.97);
   <a href="#root" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:99999;padding:8px 16px;background:#6366f1;color:#fff;font-weight:600;border-radius:0 0 8px 8px;text-decoration:none;transition:top .2s;" onfocus="this.style.left='16px';this.style.top='0';this.style.width='auto';this.style.height='auto';this.style.overflow='visible';" onblur="this.style.left='-9999px';this.style.width='1px';this.style.height='1px';">跳至主要內容</a>
 
   <!-- Dark Mode Toggle (P5) -->
-  <button id="dark-mode-toggle" onclick="toggleDarkMode()" title="切換深色/淺色主題" aria-label="切換深色/淺色主題（目前為淺色模式）" style="position:fixed;bottom:24px;left:24px;z-index:9999;width:48px;height:48px;border-radius:50%;border:2px solid var(--border-color,#334155);background:var(--bg-card,#1e293b);color:var(--accent,#00D4FF);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 12px var(--accent-glow,rgba(0,212,255,0.2));transition:all .3s;" aria-pressed="false">
+  <button id="dark-mode-toggle" onclick="toggleDarkMode()" title="切換深色/淺色主題" aria-label="切換深色/淺色主題（目前為淺色模式）" style="position:fixed;bottom:24px;left:24px;z-index:9999;width:49px;height:49px;border-radius:50%;border:2px solid var(--border-color,#334155);background:var(--bg-card,#1e293b);color:var(--accent,#00D4FF);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 12px var(--accent-glow,rgba(0,212,255,0.2));transition:all .3s;" aria-pressed="false">
     🌙
   </button>
 
@@ -1513,8 +1533,8 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
                     .then((registration) => {
                         // SW registered - v6 with offline support
                     })
-                    .catch((error) => {
-                        console.error('SW registration failed:', error);
+                    .catch(function() {
+                        // SW registration failed silently — not critical
                     });
             });
         }
@@ -1651,7 +1671,7 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
         <kbd style="padding:4px 10px;background:#e2e8f0;border-radius:6px;font-size:13px;font-family:monospace;font-weight:600;color:#334155;">ESC</kbd>
       </div>
     </div>
-    <button onclick="document.getElementById('keyboard-help').setAttribute('aria-hidden','true')" aria-label="關閉" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:#f1f5f9;cursor:pointer;font-size:14px;color:#64748b;display:flex;align-items:center;justify-content:center;">✕</button>
+    <button onclick="document.getElementById('keyboard-help').setAttribute('aria-hidden','true')" aria-label="關閉" style="position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;border:none;background:#f1f5f9;cursor:pointer;font-size:14px;color:#64748b;display:flex;align-items:center;justify-content:center;">✕</button>
   </div>
 </div>
 <style>#keyboard-help[aria-hidden="false"] { pointer-events: all; opacity: 1; }#keyboard-help[aria-hidden="false"] > div:last-child { transform: translateY(0); }</style>
@@ -1750,7 +1770,7 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
       btn.className='filter-btn'+(first?' act':'');
       btn.id='fb-'+g;
       btn.dataset.group=g;
-      btn.style.cssText='display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1';
+      btn.style.cssText='display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;min-height:44px';
       var span=document.createElement('span');
       span.className='fc';
       btn.appendChild(document.createTextNode(groups[g]+' '));
