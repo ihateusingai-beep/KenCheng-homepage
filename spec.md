@@ -84,6 +84,16 @@
 
 ---
 
+## Round 7 (2026-05-27)
+**Commit:** b273742
+**Status:** ✅ Done
+
+- `bookmark-sync.html` — OG tags + canonical
+- `download-qr.html` — OG tags + canonical
+- Remove `.netlify/` dead weight
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
