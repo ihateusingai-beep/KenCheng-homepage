@@ -63,6 +63,16 @@
 
 ---
 
+## Round 5 (2026-05-27)
+**Commit:** 7e6d29f
+**Status:** ✅ Done
+
+- Generate Open Graph image (og-image.png, 1200×630, SVG→PNG via qlmanage)
+- Remove orphan `public/` directory (old Vite artifact)
+- GitHub Pages: confirmed built and serving
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
