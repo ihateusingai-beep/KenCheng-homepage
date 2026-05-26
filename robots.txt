@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ihateusingai-beep.github.io/KenCheng-homepage/sitemap.xml
