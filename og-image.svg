@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="50%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#ec4899"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.15)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.05)"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Grid overlay -->
+  <g opacity="0.08" stroke="white" stroke-width="1">
+    <line x1="0" y1="0" x2="1200" y2="0"/>
+    <line x1="0" y1="70" x2="1200" y2="70"/>
+    <line x1="0" y1="140" x2="1200" y2="140"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="280" x2="1200" y2="280"/>
+    <line x1="0" y1="350" x2="1200" y2="350"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="490" x2="1200" y2="490"/>
+    <line x1="0" y1="560" x2="1200" y2="560"/>
+    <line x1="0" y1="630" x2="1200" y2="630"/>
+    <line x1="0" y1="0" x2="0" y2="630"/>
+    <line x1="100" y1="0" x2="100" y2="630"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="500" y1="0" x2="500" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="700" y1="0" x2="700" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+    <line x1="1100" y1="0" x2="1100" y2="630"/>
+    <line x1="1200" y1="0" x2="1200" y2="630"/>
+  </g>
+
+  <!-- Icon cards -->
+  <!-- Book icon card -->
+  <g transform="translate(120, 180)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">📚</text>
+  </g>
+
+  <!-- AI/Brain card -->
+  <g transform="translate(230, 120)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">🧠</text>
+  </g>
+
+  <!-- Code card -->
+  <g transform="translate(340, 180)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">💻</text>
+  </g>
+
+  <!-- Lightbulb card -->
+  <g transform="translate(450, 120)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">💡</text>
+  </g>
+
+  <!-- Calculator card -->
+  <g transform="translate(560, 180)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">🔢</text>
+  </g>
+
+  <!-- Game card -->
+  <g transform="translate(670, 120)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">🎮</text>
+  </g>
+
+  <!-- Music card -->
+  <g transform="translate(780, 180)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">🎵</text>
+  </g>
+
+  <!-- Palette card -->
+  <g transform="translate(890, 120)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">🎨</text>
+  </g>
+
+  <!-- Bottom row -->
+  <!-- Video card -->
+  <g transform="translate(175, 300)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">🎬</text>
+  </g>
+
+  <!-- QR card -->
+  <g transform="translate(285, 300)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">📱</text>
+  </g>
+
+  <!-- Bookmark card -->
+  <g transform="translate(395, 300)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">🔖</text>
+  </g>
+
+  <!-- Trophy card -->
+  <g transform="translate(505, 300)">
+    <rect width="80" height="80" rx="16" fill="url(#cardGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="40" y="56" font-size="40" text-anchor="middle">🏆</text>
+  </g>
+
+  <!-- Main title -->
+  <text x="600" y="480" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="white" text-anchor="middle" filter="url(#glow)">Ken Cheng</text>
+  <text x="600" y="540" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="400" fill="rgba(255,255,255,0.9)" text-anchor="middle">電子教學工具 | Resource Dashboard</text>
+
+  <!-- URL -->
+  <text x="600" y="600" font-family="monospace" font-size="16" fill="rgba(255,255,255,0.6)" text-anchor="middle">ihateusingai-beep.github.io/KenCheng-homepage</text>
+</svg>
