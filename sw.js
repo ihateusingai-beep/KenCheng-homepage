@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kencheng-homepage-v7';
+const CACHE_NAME = 'kencheng-homepage-v8';
 const STATIC_ASSETS = [
   '/KenCheng-homepage/',
   '/KenCheng-homepage/index.html',
@@ -11,7 +11,8 @@ const STATIC_ASSETS = [
 const EXTERNAL_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap',
   '/KenCheng-homepage/assets/index-ChxI5wjT.js',
-  '/KenCheng-homepage/assets/index-DSuGoZSV.css'
+  '/KenCheng-homepage/assets/index-DSuGoZSV.css',
+  '/KenCheng-homepage/assets/images/avatar.png'
 ];
 
 self.addEventListener('install', (event) => {
