@@ -94,6 +94,16 @@
 
 ---
 
+## Round 8 (2026-05-27)
+**Commit:** 4c621e2
+**Status:** ✅ Done
+
+- Replace `i.imgur.com` hotlinks → local `/assets/images/avatar.png` (21KB self-hosted)
+- SW v8 bump (avatar.png in cache list)
+- Skip gundam-assets PNG compression (photo quality, already optimized, 6.3MB total acceptable)
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
