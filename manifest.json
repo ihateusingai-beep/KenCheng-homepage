@@ -3,6 +3,7 @@
   "short_name": "教學工具",
   "description": "匯集教學輔助、AI應用、開發工具與模擬體驗的個人導航站",
   "start_url": "/KenCheng-homepage/",
+  "scope": "/KenCheng-homepage/",
   "display": "standalone",
   "background_color": "#f8fafc",
   "theme_color": "#4f46e5",
@@ -19,9 +20,20 @@
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/KenCheng-homepage/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "categories": ["education", "utilities"],
   "lang": "zh-Hant",
-  "dir": "ltr"
+  "dir": "ltr",
+  "id": "kencheng-homepage",
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }

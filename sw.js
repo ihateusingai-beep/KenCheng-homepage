@@ -1,14 +1,17 @@
-const CACHE_NAME = 'kencheng-homepage-v6';
+const CACHE_NAME = 'kencheng-homepage-v7';
 const STATIC_ASSETS = [
   '/KenCheng-homepage/',
   '/KenCheng-homepage/index.html',
   '/KenCheng-homepage/vite.svg',
-  '/KenCheng-homepage/manifest.json'
+  '/KenCheng-homepage/manifest.json',
+  '/KenCheng-homepage/sw.js'
 ];
 
 // External resources to cache
 const EXTERNAL_ASSETS = [
-  'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap',
+  '/KenCheng-homepage/assets/index-ChxI5wjT.js',
+  '/KenCheng-homepage/assets/index-DSuGoZSV.css'
 ];
 
 self.addEventListener('install', (event) => {

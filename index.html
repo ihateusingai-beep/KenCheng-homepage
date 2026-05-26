@@ -6,6 +6,7 @@
     <title>Ken Cheng的 電子教學工具 | Resource Dashboard</title>
     <meta name="description" content="Ken Cheng的電子教學工具導航站，匯集教學輔助、AI應用、開發工具與模擬體驗，旨在提升教學效率、激發創意靈感。">
     <meta name="keywords" content="教學工具, AI, 教育, TDA, 電子學習, 教學平台">
+    <meta name="robots" content="index, follow">
     <meta name="author" content="Ken Cheng">
     <!-- Open Graph -->
     <meta property="og:title" content="Ken Cheng的電子教學工具 | Resource Dashboard">
@@ -53,8 +54,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <!-- Preload critical font -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap"></noscript>
+  <!-- Preload critical JS and CSS for faster interactivity -->
+  <link rel="preload" as="script" href="/KenCheng-homepage/assets/index-ChxI5wjT.js" crossorigin>
+  <link rel="preload" as="style" href="/KenCheng-homepage/assets/index-DSuGoZSV.css" crossorigin>
+  <!-- Prefetch PWA manifest and service worker for installability -->
+  <link rel="prefetch" href="/KenCheng-homepage/manifest.json" as="fetch" crossorigin>
+  <link rel="prefetch" href="/KenCheng-homepage/sw.js" as="script">
   <script type="module" crossorigin src="/KenCheng-homepage/assets/index-ChxI5wjT.js"></script>
   <link rel="stylesheet" crossorigin href="/KenCheng-homepage/assets/index-DSuGoZSV.css">
   <style>
@@ -125,6 +134,10 @@
   height: 120px;
   margin-bottom: 12px;
 }
+
+/* CSS containment for performance */
+#root { contain: content layout style paint; }
+main .grid { contain: layout style; }
 
 /* ============================
    GUNDAM CONSOLE UI - 8 MODES
@@ -1134,7 +1147,19 @@ background: rgba(255,255,255,0.97);
 </style>
 
 
-<style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;min-height:44px}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}</style>
+<style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;min-height:44px}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}
+/* Card micro-interactions */
+#root .group.relative{transition:transform .2s,box-shadow .2s}
+#root .group.relative:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+#root .group.relative:active{transform:translateY(0) scale(.98)}
+.dark #root .group.relative:hover{box-shadow:0 8px 24px rgba(0,0,0,.4)}
+/* Ken badge pulse animation */
+@keyframes kenBadgePulse{0%,100%{box-shadow:0 0 4px rgba(99,102,241,.5)}50%{box-shadow:0 0 10px rgba(99,102,241,.8),0 0 20px rgba(139,92,246,.4)}}
+.tda-badge.ken{animation:kenBadgePulse 2s ease-in-out infinite}
+/* Card appearing animation */
+@keyframes cardAppear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#root .group.relative{animation:cardAppear .3s ease-out}
+</style>
 </head>
 <body>
   <!-- Hero Animated Background (P4) -->
@@ -1763,7 +1788,7 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
     bar.setAttribute('role','group');
     bar.setAttribute('aria-label','Author filter');
 
-    var groups={all:'All',ken:'Ken',colleague:'Colleague',student:'Student'};
+    var groups={all:'全部',ken:'👤 Ken',colleague:'👥 Colleague',student:'🎮 Student'};
     var first=true;
     Object.keys(groups).forEach(function(g){
       var btn=document.createElement('button');
@@ -1792,13 +1817,18 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
       var a=card.querySelector('a[href]');
       var href=a?a.getAttribute('href'):'';
       var badge=null;
-      if(isStudentURL(href)){badge=makeBadge('student','Student');counts.student++;}
-      else if(isColleagueURL(href)){badge=makeBadge('colleague','Colleague');counts.colleague++;}
-      else if(isKenURL(href)){badge=makeBadge('ken','Ken');counts.ken++;}
+      var authorType=null;
+      if(isStudentURL(href)){badge=makeBadge('student','Student');counts.student++;authorType='student';}
+      else if(isColleagueURL(href)){badge=makeBadge('colleague','Colleague');counts.colleague++;authorType='colleague';}
+      else if(isKenURL(href)){badge=makeBadge('ken','Ken');counts.ken++;authorType='ken';}
       if(badge){card.style.position='relative';card.appendChild(badge);}
     });
 
-    // Update button counts
+    // Update button counts - ALL button shows total visible, not count
+    var allBtn=document.getElementById('fb-all');
+    var totalCards=document.querySelectorAll('#root .group.relative').length;
+    var allSpan=allBtn?allBtn.querySelector('.fc'):null;
+    if(allSpan)allSpan.textContent='('+totalCards+')';
     var ke=document.getElementById('fb-ken');
     var co=document.getElementById('fb-colleague');
     var st=document.getElementById('fb-student');
