@@ -1035,9 +1035,23 @@ background: rgba(255,255,255,0.97);
 .about-inner::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 .dark .about-inner::-webkit-scrollbar-thumb { background: #475569; }
 </style>
+
+
+<style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}.tda-badge.colleague::before{content:")F9 "}.tda-badge.student::before{content:"*D5 "}</style>
 </head>
 <body>
   <div id="root"></div>
+<div id="filter-bar-slot">
+  <div class="filter-bar-outer" id="filter-bar-outer">
+    <div class="filter-bar" role="group" aria-label="Author filter">
+      <button class="filter-btn act" id="fb-all" data-group="all">All <span class="fc"></span></button>
+      <button class="filter-btn" id="fb-ken" data-group="ken">Ken <span class="fc"></span></button>
+      <button class="filter-btn" id="fb-colleague" data-group="colleague">Colleague <span class="fc"></span></button>
+      <button class="filter-btn" id="fb-student" data-group="student">Student <span class="fc"></span></button>
+    </div>
+  </div>
+</div>
+
   <!-- Footer -->
   <footer  role="contentinfo">
     © 2025 <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" target="_blank" rel="noopener" >Ken Cheng</a> · <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/students.html" class="underline hover:text-primary-400" target="_blank" rel="noopener">🎓 學生專區</a> · <a href="https://ihateusingai-beep.github.io/pdf-tool/" class="underline hover:text-primary-400" target="_blank" rel="noopener">📄 PDF 工具箱</a> · <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" class="underline hover:text-primary-400">返回主頁</a>
@@ -1486,5 +1500,103 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
   </div>
 </div>
 
-<div id="watermark" style="position:fixed;bottom:16px;right:16px;display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.6);border-radius:8px;z-index:9999;pointer-events:none"><img src="https://i.imgur.com/OQwyeIV.png" alt="KC" style="height:24px;width:auto;"><span style="color:#fff;font-size:12px;font-family:sans-serif;">© Ken Cheng 製作 <button onclick="openAboutModal()" style="pointer-events:auto;background:none;border:none;color:#fff;text-decoration:underline;cursor:pointer;font-size:11px;padding:0;margin-left:6px">關於我</button></span></div></body>
+<div id="watermark" style="position:fixed;bottom:16px;right:16px;display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.6);border-radius:8px;z-index:9999;pointer-events:none"><img src="https://i.imgur.com/OQwyeIV.png" alt="KC" style="height:24px;width:auto;"><span style="color:#fff;font-size:12px;font-family:sans-serif;">© Ken Cheng 製作 <button onclick="openAboutModal()" style="pointer-events:auto;background:none;border:none;color:#fff;text-decoration:underline;cursor:pointer;font-size:11px;padding:0;margin-left:6px">關於我</button></span></div>
+
+<script id="phase23-js">
+(function(){
+  var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','computer-logo-prompt--builder/','Student-mission-app/','multiplication-town/','air-drawing/','starclass-hub/','friendly-classroom/','Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/']);
+  var STUDENT_URLS = new Set(['math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','air-drawing/']);
+  var COLLEAGUE_URLS = new Set(['Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','friendly-classroom/','starclass-hub/']);
+
+  function isKenURL(h){for(var u of KEN_URLS)if(h.includes(u))return true;return false}
+  function isStudentURL(h){for(var u of STUDENT_URLS)if(h.includes(u))return true;return false}
+  function isColleagueURL(h){for(var u of COLLEAGUE_URLS)if(h.includes(u))return true;return false}
+
+  function makeBadge(cls,text){
+    var d=document.createElement('div');
+    d.className='tda-badge '+cls;
+    d.textContent=text;
+    d.setAttribute('aria-hidden','true');
+    return d;
+  }
+
+  function injectBadges(){
+    var cards=document.querySelectorAll('#root .group.relative');
+    cards.forEach(function(card){
+      if(card.querySelector('.tda-badge'))return;
+      var a=card.querySelector('a[href]');
+      var href=a?a.getAttribute('href'):'';
+      var badge=null;
+      if(isStudentURL(href))badge=makeBadge('student','Student');
+      else if(isColleagueURL(href))badge=makeBadge('colleague','Colleague');
+      else if(isKenURL(href))badge=makeBadge('ken','Ken');
+      if(badge){card.style.position='relative';card.appendChild(badge);}
+    });
+    updateFilterCounts();
+  }
+
+  function updateFilterCounts(){
+    var k=document.querySelectorAll('.tda-badge.ken').length;
+    var c=document.querySelectorAll('.tda-badge.colleague').length;
+    var s=document.querySelectorAll('.tda-badge.student').length;
+    var ke=document.getElementById('fb-ken');
+    var co=document.getElementById('fb-colleague');
+    var st=document.getElementById('fb-student');
+    if(ke)ke.querySelector('.fc').textContent='('+k+')';
+    if(co)co.querySelector('.fc').textContent='('+c+')';
+    if(st)st.querySelector('.fc').textContent='('+s+')';
+  }
+
+  function filterGroup(e){
+    var g=e.currentTarget.dataset.group;
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('act');});
+    e.currentTarget.classList.add('act');
+    var cards=document.querySelectorAll('#root .group.relative');
+    var vis={ken:0,colleague:0,student:0};
+    cards.forEach(function(card){
+      var a=card.querySelector('a[href]');
+      var href=a?a.getAttribute('href'):'';
+      var show=(g==='all')||(g==='student'&&isStudentURL(href))||(g==='colleague'&&isColleagueURL(href))||(g==='ken'&&isKenURL(href)&&!isStudentURL(href)&&!isColleagueURL(href));
+      card.style.display=show?'':'none';
+      if(show){
+        if(isStudentURL(href))vis.student++;
+        else if(isColleagueURL(href))vis.colleague++;
+        else vis.ken++;
+      }
+    });
+    var spans={ken:document.querySelector('#fb-ken .fc'),colleague:document.querySelector('#fb-colleague .fc'),student:document.querySelector('#fb-student .fc')};
+    Object.keys(spans).forEach(function(k){if(spans[k])spans[k].textContent='('+vis[k]+')';});
+  }
+
+  function bindFilterBar(){
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.addEventListener('click',filterGroup);});
+  }
+
+  function observeTheme(){
+    var obs=new MutationObserver(function(){
+      var dark=document.documentElement.classList.contains('dark')||document.documentElement.dataset.theme==='dark'||document.documentElement.dataset.theme==='cyber';
+      document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.toggle('dark',dark);});
+    });
+    obs.observe(document.documentElement,{attributes:true,attributeFilter:['class','data-theme']});
+    var dark=document.documentElement.classList.contains('dark')||document.documentElement.dataset.theme==='dark'||document.documentElement.dataset.theme==='cyber';
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.toggle('dark',dark);});
+  }
+
+  function waitForReact(cb){
+    var tries=0;
+    var iv=setInterval(function(){
+      tries++;
+      var cards=document.querySelectorAll('#root .group.relative');
+      if(cards.length>0||tries>40){clearInterval(iv);cb(cards.length);}
+    },300);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){waitForReact(injectBadges);});
+  } else {
+    waitForReact(function(n){injectBadges();bindFilterBar();observeTheme();});
+  }
+})();
+</script>
+</body>
 </html>
