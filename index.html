@@ -7,6 +7,15 @@
     <meta name="description" content="Ken Cheng的電子教學工具導航站，匯集教學輔助、AI應用、開發工具與模擬體驗，旨在提升教學效率、激發創意靈感。">
     <meta name="keywords" content="教學工具, AI, 教育, TDA, 電子學習, 教學平台">
     <meta name="author" content="Ken Cheng">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Ken Cheng的電子教學工具 | Resource Dashboard">
+    <meta property="og:description" content="Ken Cheng的電子教學工具導航站，匯集教學輔助、AI應用、開發工具與模擬體驗，旨在提升教學效率、激發創意靈感。">
+    <meta property="og:image" content="https://ihateusingai-beep.github.io/KenCheng-homepage/og-image.png">
+    <meta property="og:url" content="https://ihateusingai-beep.github.io/KenCheng-homepage/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ken Cheng的電子教學工具 | Resource Dashboard">
+    <meta name="twitter:description" content="Ken Cheng的電子教學工具導航站，匯集教學輔助、AI應用、開發工具與模擬體驗，旨在提升教學效率、激發創意靈感。">
 
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#4f46e5">
@@ -29,6 +38,56 @@
   <script type="module" crossorigin src="/KenCheng-homepage/assets/index-ChxI5wjT.js"></script>
   <link rel="stylesheet" crossorigin href="/KenCheng-homepage/assets/index-DSuGoZSV.css">
   <style>
+/* ============================
+   PHASE 4: HERO ANIMATED BG + CUSTOM SCROLLBAR
+   ============================ */
+.hero-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 420px;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 60%, #f5576c 100%);
+  background-size: 400% 400%;
+  animation: heroGradient 12s ease infinite;
+  opacity: 0.15;
+  filter: blur(40px);
+}
+@keyframes heroGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Custom Scrollbar (gundam theme compatible) */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #1a2540; }
+::-webkit-scrollbar-thumb { background: #00D4FF; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #FF69B4; }
+::selection { background: #00D4FF; color: #0a0f1a; }
+.dark ::selection { background: #FF69B4; color: #0a0f1a; }
+[data-theme^="gundam-"] ::selection { background: var(--accent); color: var(--bg-primary); }
+
+/* Loading Skeleton */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+}
+.skeleton-card {
+  height: 120px;
+  margin-bottom: 12px;
+}
+
 /* ============================
    GUNDAM CONSOLE UI - 8 MODES
    Full system from gundam-console-ui skill
@@ -1037,12 +1096,20 @@ background: rgba(255,255,255,0.97);
 </style>
 
 
-<style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}.tda-badge.colleague::before{content:")F9 "}.tda-badge.student::before{content:"*D5 "}</style>
+<style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}</style>
 </head>
 <body>
+  <!-- Hero Animated Background (P4) -->
+  <div class="hero-bg" aria-hidden="true"></div>
+
   <div id="root"></div>
   </div>
 </div>
+
+  <!-- Dark Mode Toggle (P5) -->
+  <button id="dark-mode-toggle" onclick="toggleDarkMode()" title="切換深色/淺色主題" aria-label="切換深色/淺色主題" style="position:fixed;bottom:24px;left:24px;z-index:9999;width:48px;height:48px;border-radius:50%;border:2px solid var(--border-color,#334155);background:var(--bg-card,#1e293b);color:var(--accent,#00D4FF);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 12px var(--accent-glow,rgba(0,212,255,0.2));transition:all .3s;">
+    🌙
+  </button>
 
   <!-- Footer -->
   <footer  role="contentinfo">
@@ -1086,6 +1153,73 @@ background: rgba(255,255,255,0.97);
       <span style="margin-top:2px;letter-spacing:1px;">MS MODE</span>
     </button>
   </div>
+  <script>
+// Dark Mode Toggle (P5)
+function toggleDarkMode() {
+  var isDark = document.documentElement.classList.contains('dark');
+  var html = document.documentElement;
+  var toggle = document.getElementById('dark-mode-toggle');
+  if (isDark) {
+    html.classList.remove('dark');
+    if (toggle) { toggle.textContent = '🌙'; toggle.style.color = '#00D4FF'; }
+  } else {
+    html.classList.add('dark');
+    if (toggle) { toggle.textContent = '☀️'; toggle.style.color = '#FFD700'; }
+  }
+}
+
+// Keyboard Shortcuts (P5): H=help, R=random gundam, ESC=close modals
+document.addEventListener('keydown', function(e) {
+  // Skip if typing in input
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  var key = e.key.toUpperCase();
+  if (key === 'H' && !e.ctrlKey && !e.metaKey) {
+    e.preventDefault();
+    var help = document.getElementById('keyboard-help');
+    if (help) {
+      var isHidden = help.getAttribute('aria-hidden') !== 'false';
+      help.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+      if (!isHidden) help.querySelector('.help-backdrop') && help.querySelector('.help-backdrop').click();
+    }
+  }
+  if (key === 'R' && !e.ctrlKey && !e.metaKey) {
+    e.preventDefault();
+    var modes = ['gundam-ntd','gundam-seed','gundam-crossbone','gundam-ntd-green','gundam-00','gundam-destiny','gundam-god','gundam-cartoon'];
+    var current = document.documentElement.dataset.theme;
+    var idx = current ? modes.indexOf(current) : -1;
+    var next = modes[(idx + 1) % modes.length];
+    setGundamMode(next);
+  }
+  if (e.key === 'Escape') {
+    // Close any open modal
+    var about = document.getElementById('about-modal');
+    if (about && about.getAttribute('aria-hidden') === 'false') closeAboutModal();
+    var help = document.getElementById('keyboard-help');
+    if (help && help.getAttribute('aria-hidden') === 'false') {
+      var backdrop = help.querySelector('.help-backdrop');
+      if (backdrop) backdrop.click();
+    }
+  }
+});
+
+// TTS Welcome Message (P5)
+function playWelcome() {
+  if (!('speechSynthesis' in window)) return;
+  var msg = new SpeechSynthesisUtterance('歡迎來到Ken Cheng的電子教學工具導航站');
+  msg.lang = 'zh-Hant';
+  msg.rate = 0.9;
+  msg.pitch = 1.1;
+  window.speechSynthesis.cancel();
+  setTimeout(function() { window.speechSynthesis.speak(msg); }, 1500);
+}
+window.addEventListener('load', function() {
+  var played = sessionStorage.getItem('kc-tts-played');
+  if (!played) {
+    sessionStorage.setItem('kc-tts-played', '1');
+    playWelcome();
+  }
+});
+</script>
   <script>
     let gundamMenuOpen = false;
     function toggleGundamMenu() {
@@ -1439,6 +1573,30 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
   <!-- Scanline overlay -->
   <div id="scanline-overlay" style="position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 6px);animation:scanlineMove 10s linear infinite;"></div>
 
+<!-- Keyboard Shortcuts Help Overlay (P5) -->
+<div id="keyboard-help" role="dialog" aria-modal="true" aria-labelledby="help-title" aria-hidden="true" tabindex="-1" style="position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .3s;">
+  <div class="help-backdrop" onclick="document.getElementById('keyboard-help').setAttribute('aria-hidden','true')" style="position:absolute;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);cursor:pointer;"></div>
+  <div style="position:relative;z-index:1;background:#fff;border-radius:16px;padding:28px;max-width:380px;width:calc(100vw-32px);box-shadow:0 24px 80px rgba(0,0,0,.2);transform:translateY(16px);transition:transform .3s;">
+    <h2 id="help-title" style="font-size:18px;font-weight:700;margin:0 0 16px;color:#1e293b;">⌨️ 鍵盤快捷鍵</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:8px;">
+        <span style="font-size:14px;color:#475569;">開啟/關閉快捷鍵面板</span>
+        <kbd style="padding:4px 10px;background:#e2e8f0;border-radius:6px;font-size:13px;font-family:monospace;font-weight:600;color:#334155;">H</kbd>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:8px;">
+        <span style="font-size:14px;color:#475569;">切換下個高達主題</span>
+        <kbd style="padding:4px 10px;background:#e2e8f0;border-radius:6px;font-size:13px;font-family:monospace;font-weight:600;color:#334155;">R</kbd>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border-radius:8px;">
+        <span style="font-size:14px;color:#475569;">關閉彈出視窗</span>
+        <kbd style="padding:4px 10px;background:#e2e8f0;border-radius:6px;font-size:13px;font-family:monospace;font-weight:600;color:#334155;">ESC</kbd>
+      </div>
+    </div>
+    <button onclick="document.getElementById('keyboard-help').setAttribute('aria-hidden','true')" aria-label="關閉" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:#f1f5f9;cursor:pointer;font-size:14px;color:#64748b;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+</div>
+<style>#keyboard-help[aria-hidden="false"] { pointer-events: all; opacity: 1; }#keyboard-help[aria-hidden="false"] > div:last-child { transform: translateY(0); }</style>
+
 <!-- About Modal -->
 <div id="about-modal" role="dialog" aria-modal="true" aria-labelledby="about-modal-title" aria-hidden="true" tabindex="-1">
   <div class="about-backdrop" onclick="closeAboutModal()"></div>
@@ -1485,6 +1643,8 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
             <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" target="_blank" rel="noopener" class="about-link">🏠 主頁</a>
             <a href="https://ihateusingai-beep.github.io/starclass-hub/" target="_blank" rel="noopener" class="about-link">⭐ StarClass Hub</a>
             <a href="https://ihateusingai-beep.github.io/friendly-classroom/" target="_blank" rel="noopener" class="about-link">😊 Friendly Classroom</a>
+            <a href="https://github.com/ihateusingai-beep" target="_blank" rel="noopener" class="about-link">🐙 GitHub</a>
+            <a href="https://www.linkedin.com/in/ken-cheng-123456789/" target="_blank" rel="noopener" class="about-link">💼 LinkedIn</a>
           </div>
         </div>
       </div>
@@ -1645,6 +1805,75 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
   } else {
     waitForReact(init);
   }
+
+  // Phase 3+4: Tech stack tags + hot/pin tracking
+  function injectTechTags(){
+    var cards=document.querySelectorAll('#root .group.relative');
+    var TECH_MAP={
+      'TDA-Prompt-Builder':'Vibe Coding','qr-code-generator':'QR Code','cf-video':'Video','computer-logo-prompt--builder':'AI Design',
+      'Student-mission-app':'Mission','multiplication-town':'Math','air-drawing':'AR','starclass-hub':'AI','friendly-classroom':'AI',
+      'Collaborative-Learning-Grouping-Tool':'Grouping','morning-meal-mate':'Meal','math-minus--Text-based-Questions-':'Math',
+      'math-2d-Shapes':'Math','math-2d-rpg-mon':'Math RPG','math-2digit-minus-animal':'Math','math-2digit-subtract':'Math',
+      'Subtraction-within-10':'Math','read-aloud-word':'Reading','Chinese-find-word':'Chinese','4digit-compare':'Math',
+      'water-cycle-demo':'Science','sci-waterfour-cycle':'Science','sci-water-mole':'Science','sci-watercycle':'Science',
+      'water-cycle-candycrush':'Science','sci-rainbow-water':'Science'
+    };
+    cards.forEach(function(card){
+      if(card.querySelector('.tech-tag'))return;
+      var a=card.querySelector('a[href]');
+      var href=a?a.getAttribute('href'):'';
+      var tag=null;
+      Object.keys(TECH_MAP).forEach(function(key){
+        if(href.includes(key)){tag=TECH_MAP[key];}
+      });
+      if(tag){
+        var el=document.createElement('span');
+        el.className='tech-tag';
+        el.textContent=tag;
+        el.style.cssText='position:absolute;bottom:8px;left:8px;font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:rgba(99,102,241,.15);color:#6366f1;letter-spacing:.3px;pointer-events:none;';
+        card.appendChild(el);
+      }
+    });
+  }
+
+  function initHotTracking(){
+    injectTechTags();
+    var cards=document.querySelectorAll('#root .group.relative');
+    cards.forEach(function(card){
+      card.addEventListener('click',function(){
+        var a=card.querySelector('a[href]');
+        if(!a)return;
+        var href=a.getAttribute('href');
+        var key='kc-hot-'+href;
+        var count=parseInt(localStorage.getItem(key)||'0')+1;
+        localStorage.setItem(key,String(count));
+      });
+    });
+
+    // Sort by click count every 30s
+    setInterval(sortByHot,30000);
+  }
+
+  function sortByHot(){
+    var main=document.querySelector('main');
+    if(!main)return;
+    var grid=main.querySelector('.grid');
+    if(!grid)return;
+    var cards=Array.from(grid.querySelectorAll('.group.relative'));
+    if(cards.length<2)return;
+    cards.sort(function(a,b){
+      var ha=a.querySelector('a[href]')?localStorage.getItem('kc-hot-'+a.querySelector('a[href]').getAttribute('href'))||'0':'0';
+      var hb=b.querySelector('a[href]')?localStorage.getItem('kc-hot-'+b.querySelector('a[href]').getAttribute('href'))||'0':'0';
+      return parseInt(hb)-parseInt(ha);
+    });
+    cards.forEach(function(c){grid.appendChild(c);});
+  }
+  window.addEventListener('load',function(){
+    setTimeout(function(){
+      initHotTracking();
+      sortByHot();
+    },2000);
+  });
 })();
 </script>
 </body>
