@@ -73,6 +73,17 @@
 
 ---
 
+## Round 6 (2026-05-27)
+**Commit:** 3960fed
+**Status:** ✅ Done
+
+- `sitemap.xml` — SEO sitemap (4 URLs)
+- `robots.txt` — allow all, point to sitemap
+- `students.html` — add OG tags + canonical
+- `og-image.png` — compress 626KB→377KB (900px max)
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
