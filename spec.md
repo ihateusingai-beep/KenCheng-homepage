@@ -155,6 +155,21 @@
 
 ---
 
+## Round 16 (2026-05-27)
+**Commit:** 90f8eb3
+**Status:** ✅ Done
+
+- `favicon.ico`：生成 16×16 purple ico，修复 apple-touch-icon
+- `index.html`：favicon.ico + apple-touch-icon 指向 .ico
+
+## Round 17 (2026-05-27)
+**Commit:** e4c718a
+**Status:** ✅ Done
+
+- `index.html`：Schema.org structured data（WebSite + ItemList）
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
