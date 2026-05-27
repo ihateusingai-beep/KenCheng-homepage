@@ -104,6 +104,15 @@
 
 ---
 
+## Round 9 (2026-05-27)
+**Commit:** 7fd7838
+**Status:** ✅ Done
+
+- `manifest.json` — `background_color` #f8fafc → #0a0f1a (dark theme match, PWA FOUC fix)
+- `index.html` — add `revisit-after: 7 days` meta
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
