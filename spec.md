@@ -133,6 +133,17 @@
 
 ---
 
+## Round 12 (2026-05-27)
+**Commit:** 33291a4
+**Status:** ✅ Done
+
+- All gundam theme buttons: English `aria-label` → Chinese (NT-D/SEED/Crossbone/00/Destiny/God/Kawaii/OFF)
+- Footer `<footer aria-label="頁腳">` (semantic landmark)
+- Filter bar: `aria-label="Author filter"` → `aria-label="作者篩選"`
+- Footer year: 2025 → 2026
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
