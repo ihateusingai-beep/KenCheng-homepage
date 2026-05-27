@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>404 - 找不到頁面 | Ken Cheng 電子教學工具</title>
+  <meta name="description" content="抱歉，您訪問的頁面不存在於此網站。">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans TC', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #e2e8f0;
+      text-align: center;
+      padding: 2rem;
+    }
+    .error-code {
+      font-size: 8rem;
+      font-weight: 900;
+      color: #6366f1;
+      text-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    p { color: #94a3b8; margin-bottom: 2rem; max-width: 400px; }
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      background: #6366f1;
+      color: white;
+      text-decoration: none;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .home-btn:hover { background: #4f46e5; transform: translateY(-2px); }
+    .search-box {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.5rem;
+      max-width: 400px;
+      width: 100%;
+    }
+    .search-box input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      background: #1e293b;
+      color: white;
+      font-size: 1rem;
+    }
+    .search-box input:focus { outline: none; border-color: #6366f1; }
+    .search-box button {
+      padding: 0.75rem 1.5rem;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .search-box button:hover { background: #4f46e5; }
+  </style>
+</head>
+<body>
+  <div class="error-code">404</div>
+  <h1>頁面未找到</h1>
+  <p>您訪問的路徑不存在或已被移動。請返回首頁或使用搜尋功能。</p>
+  <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" class="home-btn">
+    ← 返回首頁
+  </a>
+  <form class="search-box" action="https://ihateusingai-beep.github.io/KenCheng-homepage/" method="get">
+    <input type="text" name="q" placeholder="搜尋工具..." aria-label="搜尋">
+    <button type="submit">搜尋</button>
+  </form>
+</body>
+</html>
