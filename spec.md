@@ -122,6 +122,17 @@
 
 ---
 
+## Round 11 (2026-05-27)
+**Commit:** cc22e23
+**Status:** ✅ Done
+
+- `loading="lazy"` on avatar images (2x)
+- Skip link "跳至主要內容" (keyboard accessibility)
+- `role="main" aria-label` on #root
+- Remove duplicate skip link
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
