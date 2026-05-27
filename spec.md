@@ -113,6 +113,15 @@
 
 ---
 
+## Round 10 (2026-05-27)
+**Commit:** 84c8285
+**Status:** ✅ Done
+
+- Fix broken `pdf-tool/` footer link → 404 removed
+- Add JSON-LD WebSite schema (author, publisher, about)
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
