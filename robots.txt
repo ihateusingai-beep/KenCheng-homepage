@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
+Disallow: /node_modules/
+Disallow: /.git/
 
 Sitemap: https://ihateusingai-beep.github.io/KenCheng-homepage/sitemap.xml
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
