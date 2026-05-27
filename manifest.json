@@ -5,7 +5,7 @@
   "start_url": "/KenCheng-homepage/",
   "scope": "/KenCheng-homepage/",
   "display": "standalone",
-  "background_color": "#f8fafc",
+  "background_color": "#0a0f1a",
   "theme_color": "#4f46e5",
   "orientation": "portrait-primary",
   "icons": [
