@@ -179,6 +179,16 @@
 
 ---
 
+## Round 27 (2026-05-28)
+**Commit:** 4795ef9 / 10804c8
+**Status:** ✅ Done
+
+- `bookmark-sync.html` — `theme-color` + preconnect/dns-prefetch (Tailwind)
+- `download-qr.html` — `theme-color` + preconnect/dns-prefetch (Tailwind + jsPDF CDN)
+- `students.html` — remove unused Google Fonts preconnect (Tailwind only, system font fallback)
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
