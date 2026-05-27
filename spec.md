@@ -170,6 +170,15 @@
 
 ---
 
+## Round 26 (2026-05-27)
+**Commit:** 64fbf4f
+**Status:** ✅ Done
+
+- `404.html`：color-scheme + favicon.ico + apple-touch-icon
+- 全頁面 meta 一致化完成（color-scheme/hreflang/icon/manifest）
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
