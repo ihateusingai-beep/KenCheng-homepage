@@ -144,6 +144,17 @@
 
 ---
 
+## Round 13 (2026-05-27)
+**Commit:** (pending)
+**Status:** In Progress
+
+- `students.html`: full SEO meta (robots/author/revisit/twitter/title/description + enhanced og:description)
+- `bookmark-sync.html`: full SEO meta + enhanced description
+- `download-qr.html`: full SEO meta + enhanced description
+- `sitemap.xml`: lastmod dates updated to 2026-05-27
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
