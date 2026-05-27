@@ -1,8 +1,13 @@
-const CACHE_NAME = 'kencheng-homepage-v8';
+const CACHE_NAME = 'kencheng-homepage-v9';
 const STATIC_ASSETS = [
   '/KenCheng-homepage/',
   '/KenCheng-homepage/index.html',
+  '/KenCheng-homepage/404.html',
+  '/KenCheng-homepage/students.html',
+  '/KenCheng-homepage/bookmark-sync.html',
+  '/KenCheng-homepage/download-qr.html',
   '/KenCheng-homepage/vite.svg',
+  '/KenCheng-homepage/favicon.ico',
   '/KenCheng-homepage/manifest.json',
   '/KenCheng-homepage/sw.js'
 ];

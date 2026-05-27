@@ -1625,7 +1625,7 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/KenCheng-homepage/sw.js')
                     .then((registration) => {
-                        // SW registered - v6 with offline support
+                        // SW registered - v9 with full page caching + 404
                     })
                     .catch(function() {
                         // SW registration failed silently — not critical
