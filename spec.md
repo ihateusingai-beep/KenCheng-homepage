@@ -189,6 +189,17 @@
 
 ---
 
+## Round 32 (2026-05-28)
+**Commit:** 7e6e1bc
+**Status:** ✅ Done
+
+- `bookmark-sync.html` — remove obsolete `revisit-after`
+- `students.html` — remove obsolete `revisit-after`
+- `download-qr.html` — remove obsolete `revisit-after`
+- `README.md` — update changelog R25–R32, SW v9→v10
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*

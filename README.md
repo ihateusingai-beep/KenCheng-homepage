@@ -24,7 +24,7 @@
 ## 技術棧
 
 - Vite + Tailwind CSS + React 18
-- PWA（Service Worker v9，可離線）
+- PWA（Service Worker v10，可離線）
 - MiniMax TTS / 語音合成
 - GitHub Pages 托管
 
@@ -41,6 +41,14 @@ cd KenCheng-homepage
 
 ## 更新日誌
 
+- **R32 (2026-05-28):** Remove revisit-after from all pages (Google ignores since 2019)
+- **R31 (2026-05-28):** Remove revisit-after from index.html + restore og:title
+- **R30 (2026-05-28):** OG/Twitter image dimensions + SW cache v9→v10
+- **R29 (2026-05-28):** SEO polish (sitemap, robots.txt anthropic-ai, manifest, index indent)
+- **R28 (2026-05-28):** PWA meta tags + viewport user-scalable=no
+- **R27 (2026-05-28):** theme-color + preconnect/dns-prefetch per page
+- **R26 (2026-05-27):** 404.html color-scheme + favicon.ico + 全頁面meta一致化
+- **R25 (2026-05-27):** download-qr cdnjs preconnect/dns-prefetch
 - **R21 (2026-05-27):** SW v9 全頁緩存（404 + 所有 HTML）
 - **R20 (2026-05-27):** hreflang + color-scheme + DNS prefetch
 - **R18 (2026-05-27):** 404 fallback 頁面
