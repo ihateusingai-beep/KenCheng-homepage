@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kencheng-homepage-v9';
+const CACHE_NAME = 'kencheng-homepage-v10';
 const STATIC_ASSETS = [
   '/KenCheng-homepage/',
   '/KenCheng-homepage/index.html',
