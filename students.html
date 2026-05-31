@@ -484,13 +484,15 @@
 
     function makeCard(tool) {
       const isFav = getFavorites().includes(tool.name);
+      const lastVisit = getLastVisitedFor(tool.name);
       const gradeBadge = tool.level === 'all'
         ? `<span class="grade-p1" style="font-size:0.65rem;padding:0.15rem 0.45rem;border-radius:20px;background:rgba(99,102,241,0.2);color:#a5b4fc;">通用</span>`
         : `<span class="grade-${tool.level.toLowerCase()}" style="font-size:0.65rem;padding:0.15rem 0.45rem;border-radius:20px;">${tool.level}</span>`;
+      const visitBadge = lastVisit ? `<span style="font-size:0.65rem;padding:0.15rem 0.45rem;border-radius:20px;background:rgba(34,197,94,0.15);color:#4ade80;">${lastVisit}</span>` : '';
 
       return `
-      <div class="tool-card" data-cat="${tool.cat}" data-grade="${tool.level}">
-        ${gradeBadge}
+      <div class="tool-card" data-cat="${tool.cat}" data-grade="${tool.level}" onclick="setLastVisited('${tool.name.replace(/'/g, "\\'")}')">
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;justify-content:center;">${gradeBadge}${visitBadge}</div>
         <div class="icon">${tool.icon}</div>
         <button class="fav-star ${isFav ? 'active' : ''}" onclick="toggleFav('${tool.name.replace(/'/g, "\\'")}', this)" title="${isFav ? '移除收藏' : '加入收藏'}">${isFav ? '⭐' : '☆'}</button>
         <div style="flex:1;width:100%;">
@@ -564,12 +566,49 @@
     function setTheme(theme) {
       if (theme === 'light') {
         document.documentElement.classList.add('light');
+        localStorage.setItem('students_theme', 'light');
       } else {
         document.documentElement.classList.remove('light');
+        localStorage.setItem('students_theme', 'dark');
       }
+      updateThemeButtons();
     }
 
-    // Init - dark default (tools loaded via fetch above)
+    function updateThemeButtons() {
+      const isLight = document.documentElement.classList.contains('light');
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.style.opacity = (isLight && btn.textContent.includes('☀️')) || (!isLight && btn.textContent.includes('🌙')) ? '1' : '0.4';
+      });
+    }
+
+    function getLastVisited() {
+      try { return JSON.parse(localStorage.getItem('student_last_visited') || '{}'); }
+      catch { return {}; }
+    }
+
+    function setLastVisited(name) {
+      const visited = getLastVisited();
+      visited[name] = Date.now();
+      localStorage.setItem('student_last_visited', JSON.stringify(visited));
+    }
+
+    function getLastVisitedFor(name) {
+      const ts = getLastVisited()[name];
+      if (!ts) return null;
+      const diff = Date.now() - ts;
+      if (diff < 60000) return '刚刚';
+      if (diff < 3600000) return Math.floor(diff / 60000) + '分鐘前';
+      if (diff < 86400000) return Math.floor(diff / 3600000) + '小時前';
+      return Math.floor(diff / 86400000) + '天前';
+    }
+
+    // Init
+    const savedTheme = localStorage.getItem('students_theme');
+    if (savedTheme === 'light') {
+      document.documentElement.classList.add('light');
+    }
+    updateThemeButtons();
+    // Tools loaded via fetch below
   </script>
 </body>
 </html>
