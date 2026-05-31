@@ -296,6 +296,10 @@
         <div class="text-2xl font-bold text-indigo-400" id="tool-count">-</div>
         <div class="text-gray-500">個工具</div>
       </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-emerald-400" id="filter-count">-</div>
+        <div class="text-gray-500">篩選結果</div>
+      </div>
     </div>
   </header>
 
@@ -369,6 +373,7 @@
       .then(data => {
         STUDENT_TOOLS = data;
         document.getElementById('tool-count').textContent = STUDENT_TOOLS.length;
+        document.getElementById('filter-count').textContent = STUDENT_TOOLS.length;
         renderTools();
       })
       .catch(() => { document.getElementById('tool-count').textContent = '?'; });
@@ -423,6 +428,7 @@
         const q = currentSearch.trim().toLowerCase();
         tools = tools.filter(t => t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q));
       }
+      document.getElementById('filter-count').textContent = tools.length;
       if (tools.length === 0) {
         grid.innerHTML = '';
         noResults.classList.remove('hidden');
