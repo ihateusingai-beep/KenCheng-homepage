@@ -1997,13 +1997,40 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
   function injectTechTags(){
     var cards=document.querySelectorAll('#root .group.relative');
     var TECH_MAP={
+      // Ken's own TDA (Vite-built, internal)
       'TDA-Prompt-Builder':'Vibe Coding','qr-code-generator':'QR Code','cf-video':'Video','computer-logo-prompt--builder':'AI Design',
       'Student-mission-app':'Mission','multiplication-town':'Math','air-drawing':'AR','starclass-hub':'AI','friendly-classroom':'AI',
       'Collaborative-Learning-Grouping-Tool':'Grouping','morning-meal-mate':'Meal','math-minus--Text-based-Questions-':'Math',
       'math-2d-Shapes':'Math','math-2d-rpg-mon':'Math RPG','math-2digit-minus-animal':'Math','math-2digit-subtract':'Math',
       'Subtraction-within-10':'Math','read-aloud-word':'Reading','Chinese-find-word':'Chinese','4digit-compare':'Math',
       'water-cycle-demo':'Science','sci-waterfour-cycle':'Science','sci-water-mole':'Science','sci-watercycle':'Science',
-      'water-cycle-candycrush':'Science','sci-rainbow-water':'Science'
+      'water-cycle-candycrush':'Science','sci-rainbow-water':'Science',
+      // Ken's chengky-bot pages (math)
+      'math-quest':'Math','typing-kingdom':'Typing','typing-practice':'Typing','qrcode-gen':'QR Code',
+      'plane-shapes':'Math','equation-balance':'Math','decimal-add':'Math','subtraction-2digit':'Math',
+      'subtract-animal':'Math','subtraction-bar':'Math','number-breakdown':'Math','school-elf':'Math',
+      'knowledge-dungeon':'Math','2d-shapes':'Math',
+      // Ken's chengky-bot pages (science)
+      'magnet-game':'Science','dissolution':'Science','buoyancy-sim':'Science','buoyancy-poe':'Science',
+      'traffic-light':'Science','water-adventure':'Science','water-four-states':'Science',
+      'water-cycle-match':'Science','water-cycle-interactive':'Science','evaporation':'Science',
+      'dissolve-whack':'Science','rainbow-water':'Science',
+      // Ken's chengky-bot pages (language + misc)
+      'idiom-detective':'Chinese','student-mission':'Mission',
+      // External: math
+      'kahoot':'Game','times-tables':'Math','school-elf.lovable.app':'Math','kiddoworksheets':'Math',
+      // External: science
+      'kids.nationalgeographic':'Science','phet.colorado.edu':'Science','explore.org':'Science','animagraffs':'Science',
+      // External: language/reading
+      'getepic.com':'Reading',
+      // External: classroom/tools
+      'classroom-mood-thermometer':'Classroom','air-drawing.vercel.app':'AR','thetoymaker':'Art',
+      // External: game
+      'jigidi':'Game','geo-fs':'Game',
+      // External: AI/utilities
+      'doubao.com':'AI','base44.ai':'AI',
+      // flower-garden (new)
+      'flower-garden':'Science'
     };
     cards.forEach(function(card){
       if(card.querySelector('.tech-tag'))return;

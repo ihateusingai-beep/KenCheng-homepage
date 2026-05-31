@@ -200,6 +200,16 @@
 
 ---
 
+## Round 35 (2026-06-01)
+**Commit:** a4b2c1d
+**Status:** ✅ Done
+
+- `index.html` TECH_MAP 擴展：~20個 → ~60個
+- 涵蓋：Ken自家TDA + chengky-bot全部工具 + 主要外部工具 + flower-garden
+- 分類：Math/Science/Reading/Chinese/Typing/Mission/Game/AR/Art/Classroom/AI
+
+---
+
 ## Deployed URLs
 - **GitHub Pages:** https://ihateusingai-beep.github.io/KenCheng-homepage/
 - **Netlify (previous):** https://vermillion-kulfi-544479.netlify.app/ *(deprecation recommended — files not served correctly)*
