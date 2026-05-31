@@ -440,6 +440,16 @@
     let currentSearch = '';
     let currentSort = 'default';
 
+    function restoreSortPreference() {
+      const saved = localStorage.getItem('students_sort');
+      if (saved === 'name' || saved === 'cat') {
+        currentSort = saved;
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.sort === saved);
+        });
+      }
+    }
+
     function getFavorites() {
       try { return JSON.parse(localStorage.getItem('student_favorites') || '[]'); }
       catch { return []; }
@@ -552,6 +562,7 @@
 
     function setSort(sort) {
       currentSort = sort;
+      localStorage.setItem('students_sort', sort);
       document.querySelectorAll('.sort-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.sort === sort);
       });
@@ -608,6 +619,7 @@
       document.documentElement.classList.add('light');
     }
     updateThemeButtons();
+    restoreSortPreference();
     // Tools loaded via fetch below
   </script>
 </body>
