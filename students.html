@@ -359,73 +359,19 @@
   </footer>
 
   <script>
-    const STUDENT_TOOLS = [
-      // ===== 數學 =====
-      { name: "平面圖形", url: "https://chengky-bot.github.io/plane-shapes/", desc: "互動式平面圖形認識與性質學習工具", cat: "math", level: "P1", icon: "📐" },
-      { name: "一元一次方程天平遊戲", url: "https://chengky-bot.github.io/equation-balance/", desc: "以天平平衡原理學習一元一次方程", cat: "math", level: "P2", icon: "⚖️" },
-      { name: "小數加法樂園", url: "https://chengky-bot.github.io/decimal-add/", desc: "小數位值加法互動練習", cat: "math", level: "P2", icon: "🎯" },
-      { name: "數學2位減法樂園", url: "https://chengky-bot.github.io/subtraction-2digit/", desc: "两位數減法練習，帶棒形圖輔助", cat: "math", level: "P1", icon: "🔢" },
-      { name: "兩位數減法(動物篇)", url: "https://chengky-bot.github.io/subtract-animal/", desc: "以動物情境學習兩位數減法", cat: "math", level: "P1", icon: "🐾" },
-      { name: "減法小幫手 - 棒形圖教學工具", url: "https://chengky-bot.github.io/subtraction-bar/", desc: "棒形圖輔助減法學習", cat: "math", level: "P1", icon: "📊" },
-      { name: "10的分解", url: "https://chengky-bot.github.io/number-breakdown/", desc: "10的分解與合成互動學習", cat: "math", level: "P1", icon: "🔟" },
-      { name: "2D 圖形認識", url: "https://chengky-bot.github.io/2d-shapes/", desc: "互動式二維圖形辨識與分類", cat: "math", level: "P1", icon: "🔷" },
-      { name: "4位數字比較遊戲", url: "https://chengky-bot.github.io/4digit-compare/", desc: "四位數大小比較競速遊戲", cat: "math", level: "P2", icon: "🏆" },
-      { name: "校園精靈", url: "https://school-elf.lovable.app/", desc: "校園主題數學闖關遊戲", cat: "math", level: "P2", icon: "🏫" },
-      { name: "知識地下城", url: "https://chengky-bot.github.io/knowledge-dungeon/", desc: "RPG 風格知識問答遊戲", cat: "math", level: "P3", icon: "⚔️" },
-      { name: "乘數城市 (Multiplication Town)", url: "https://chengky-bot.github.io/multiplication-town/", desc: "城市建設主題乘法學習 RPG", cat: "math", level: "P2", icon: "🏙️" },
-      // ===== 語文 =====
-      { name: "四素句寫作", url: "https://chat.qwen.ai/s/deploy/t_51b2aac5-2727-4c20-81c2-85201717ac69", desc: "練習時間、地點、人物、事件的造句結構", cat: "lang", level: "P2", icon: "✍️" },
-      { name: "朗讀文章工具", url: "https://chat.qwen.ai/s/deploy/t_35a735bb-7e27-421a-b9f3-1a4910b71ca1", desc: "AI 語音朗讀文章，輔助閱讀障礙或語言聽力訓練", cat: "lang", level: "P1", icon: "📢" },
-      { name: "朗讀詞彙", url: "https://chengky-bot.github.io/read-aloud-word/", desc: "輸入詞彙即可朗讀，輔助語言學習與發音練習", cat: "lang", level: "P1", icon: "🔊" },
-      { name: "生活偵探事務所：成語解密", url: "https://chengky-bot.github.io/idiom-detective/", desc: "以偵探遊戲學習成語意義與應用", cat: "lang", level: "P3", icon: "🔍" },
-      // ===== 科學 =====
-      { name: "交通燈模擬器", url: "https://chengky-bot.github.io/traffic-light/", desc: "模擬交通燈運作原理與行人安全教育", cat: "science", level: "P1", icon: "🚦" },
-      { name: "小水滴的地球大冒險", url: "https://chengky-bot.github.io/water-adventure/", desc: "跟隨小水滴經歷地球水循環的冒險故事", cat: "science", level: "P1", icon: "💧" },
-      { name: "水的四態循環", url: "https://chengky-bot.github.io/water-four-states/", desc: "互動學習固、液、氣、冰四態變化", cat: "science", level: "P2", icon: "❄️" },
-      { name: "水循環消消樂", url: "https://chengky-bot.github.io/water-cycle-match/", desc: "配對消除遊戲學習水循環知識", cat: "science", level: "P2", icon: "🎮" },
-      { name: "水循環互動學習", url: "https://chengky-bot.github.io/water-cycle-interactive/", desc: "可拖拽的水循環互動學習工具", cat: "science", level: "P2", icon: "🌊" },
-      { name: "蒸發模擬工具", url: "https://chengky-bot.github.io/evaporation/", desc: "模擬蒸發過程與影響因素的互動工具", cat: "science", level: "P2", icon: "💨" },
-      { name: "水的溶解打地鼠", url: "https://chengky-bot.github.io/dissolve-whack/", desc: "溶解概念打地鼠遊戲", cat: "science", level: "P1", icon: "🕳️" },
-      { name: "彩虹水實驗", url: "https://chengky-bot.github.io/rainbow-water/", desc: "模擬彩虹水實驗，理解液體分層與密度", cat: "science", level: "P2", icon: "🌈" },
-      { name: "磁力遊戲", url: "https://chengky-bot.github.io/magnet-game/", desc: "探索磁鐵的特性與互動遊戲", cat: "science", level: "P1", icon: "🧲" },
-      { name: "物質溶解實驗", url: "https://chengky-bot.github.io/dissolution/", desc: "虛擬實驗室學習物質溶解現象", cat: "science", level: "P2", icon: "🧪" },
-      { name: "浮力模擬", url: "https://chengky-bot.github.io/buoyancy-sim/", desc: "模擬浮力原理與物體沉浮條件", cat: "science", level: "P3", icon: "🚤" },
-      { name: "浮力遊戲 (POE)", url: "https://chengky-bot.github.io/buoyancy-poe/", desc: "Predict-Observe-Explain 浮力探究遊戲", cat: "science", level: "P3", icon: "🔬" },
-      { name: "科學互動工具 (Base44)", url: "https://base44.ai/tools/science", desc: "AI 科學互動工具合集", cat: "science", level: "P3", icon: "🤖" },
-      { name: "花花園探險記", url: "https://ihateusingai-beep.github.io/flower-garden/", desc: "花花園探險互動學習評估遊戲", cat: "science", level: "P1", icon: "🌸" },
-      // ===== 生活 =====
-      { name: "早安天氣與早餐", url: "https://morning-meal-mate.lovable.app/", desc: "結合天氣資訊的早餐選擇助手，培養生活自理能力", cat: "life", level: "P1", icon: "🌤️" },
-      // ===== 課堂 =====
-      { name: "課堂情緒溫度計", url: "https://v0-classroom-mood-thermometer.vercel.app/", desc: "檢測課堂情緒氛圍的互動工具", cat: "classroom", level: "all", icon: "🌡️" },
-      { name: "情緒舒緩", url: "https://chengky-bot.github.io/cf-video/", desc: "提供情緒舒緩與放鬆的輔助工具", cat: "classroom", level: "all", icon: "🧘" },
-      { name: "StarClass Hub", url: "https://ihateusingai-beep.github.io/starclass-hub/", desc: "課堂獎勵系統：學生管理、角色、等級與星星兑換", cat: "classroom", level: "all", icon: "⭐" },
-      { name: "Friendly Classroom", url: "https://chengky-bot.github.io/friendly-classroom/", desc: "正向行為支持與課堂管理工具", cat: "classroom", level: "all", icon: "🤝" },
-      { name: "學生任務應用", url: "https://chengky-bot.github.io/student-mission/", desc: "學生任務追蹤與完成激勵工具", cat: "classroom", level: "all", icon: "📋" },
-      // ===== 創意 =====
-      { name: "空氣畫 (Air Drawing)", url: "https://air-drawing.vercel.app/", desc: "用身體姿勢作畫，互動創意藝術體驗", cat: "art", level: "all", icon: "🎨" },
-      { name: "The Toymaker", url: "https://www.thetoymaker.com/", desc: "免費紙藝模型與摺紙資源", cat: "art", level: "all", icon: "✂️" },
-      // ===== 遊戲 =====
-      { name: "Jigidi", url: "https://www.jigidi.com/", desc: "免費線上拼圖遊戲，訓練觀察力與專注", cat: "game", level: "all", icon: "🧩" },
-      { name: "GeoFS", url: "https://www.geo-fs.com/", desc: "基於瀏覽器的全球飛行模擬器", cat: "game", level: "P3", icon: "✈️" },
-      // ===== 實用工具 =====
-      { name: "QR Code 產生器", url: "https://chengky-bot.github.io/qrcode-gen/", desc: "為工具生成 QR Code，方便移動裝置掃描", cat: "life", level: "all", icon: "📱" },
-      { name: "打字練習工具", url: "https://chengky-bot.github.io/typing-practice/", desc: "鍵盤指法練習，提升打字速度", cat: "life", level: "P2", icon: "⌨️" },
-      { name: "Typing Kingdom", url: "https://ihateusingai-beep.github.io/typing-kingdom/", desc: "打字王國：闖關式鍵盤練習，適合初學者", cat: "life", level: "all", icon: "⌨️" },
-      { name: "Kiddo Worksheets", url: "https://www.kiddoworksheets.com/", desc: "免費可列印兒童學習工作紙", cat: "math", level: "all", icon: "📝" },
-      // ===== 教育學習 =====
-      { name: "PhET Interactive Simulations", url: "https://phet.colorado.edu/", desc: "科羅拉多大學互動科學模擬實驗室", cat: "science", level: "P3", icon: "🔬" },
-      { name: "Explore.org", url: "https://explore.org/", desc: "野生動物直播與環境教育影片", cat: "science", level: "all", icon: "🦁" },
-      { name: "Animagraffs", url: "https://www.animagraffs.com/", desc: "剖面圖解機械與生物運作原理", cat: "science", level: "P3", icon: "⚙️" },
-      // ===== AI =====
-      { name: "Doubao (豆包)", url: "https://www.doubao.com/", desc: "位元組跳動 AI 助手，適合簡單學習問題", cat: "life", level: "P3", icon: "🤖" },
-    ];
-
-    const GRADE_LABELS = { P1: 'P1', P2: 'P2', P3: 'P3' };
-    const CAT_LABELS = { math:'📐', lang:'📖', science:'🔬', life:'🌱', classroom:'🏠', game:'🎮', art:'🎨' };
-
+    let STUDENT_TOOLS = [];
     let currentGrade = 'all';
     let currentCat = 'all';
     let currentSearch = '';
+
+    fetch('/KenCheng-homepage/assets/student-tools.json')
+      .then(r => r.json())
+      .then(data => {
+        STUDENT_TOOLS = data;
+        document.getElementById('tool-count').textContent = STUDENT_TOOLS.length;
+        renderTools();
+      })
+      .catch(() => { document.getElementById('tool-count').textContent = '?'; });
 
     function makeQR(url) {
       return `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(url)}`;
@@ -515,9 +461,7 @@
       }
     }
 
-    // Init - dark default
-    document.getElementById('tool-count').textContent = STUDENT_TOOLS.length;
-    renderTools();
+    // Init - dark default (tools loaded via fetch above)
   </script>
 </body>
 </html>
