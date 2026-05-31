@@ -103,6 +103,25 @@
     .light .tool-card h3 { color: #1f2937; }
     .tool-card p { font-size: 0.9rem; color: #9ca3af; line-height: 1.5; }
     .light .tool-card p { color: #6b7280; }
+
+    /* Loading skeletons */
+    .skeleton-card {
+      min-height: 280px;
+      border-radius: 1.25rem;
+      background: linear-gradient(90deg, #1e1b4b 25%, #2d2b5a 50%, #1e1b4b 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    .light .skeleton-card {
+      background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
     .fav-star {
       position: absolute; top: 12px; right: 12px;
       background: none; border: none; cursor: pointer;
@@ -384,7 +403,13 @@
   <!-- Tools grid -->
   <main class="max-w-7xl mx-auto px-4 pb-24">
     <div id="tools-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-      <!-- Populated by JS -->
+      <!-- Loading skeletons -->
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
     </div>
     <div id="no-results" class="hidden text-center py-16">
       <div class="text-5xl mb-4">🔍</div>
