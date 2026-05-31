@@ -489,7 +489,8 @@
       const noResults = document.getElementById('no-results');
       let tools = STUDENT_TOOLS;
       if (currentGrade !== 'all') tools = tools.filter(t => t.level === currentGrade);
-      if (currentCat !== 'all') tools = tools.filter(t => t.cat === currentCat);
+      if (currentCat === 'fav') tools = tools.filter(t => getFavorites().includes(t.name));
+      else if (currentCat !== 'all') tools = tools.filter(t => t.cat === currentCat);
       if (currentSearch.trim()) {
         const q = currentSearch.trim().toLowerCase();
         tools = tools.filter(t => t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q));
@@ -519,22 +520,7 @@
       document.querySelectorAll('.cat-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.cat === cat);
       });
-      if (cat === 'fav') {
-        const favs = getFavorites();
-        const grid = document.getElementById('tools-grid');
-        const noResults = document.getElementById('no-results');
-        const filtered = STUDENT_TOOLS.filter(t => favs.includes(t.name));
-        document.getElementById('filter-count').textContent = filtered.length;
-        if (filtered.length === 0) {
-          grid.innerHTML = '';
-          noResults.classList.remove('hidden');
-        } else {
-          noResults.classList.add('hidden');
-          grid.innerHTML = filtered.map(makeCard).join('');
-        }
-      } else {
-        renderTools();
-      }
+      renderTools();
     }
 
     function setSort(sort) {
