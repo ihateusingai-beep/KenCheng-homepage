@@ -1253,7 +1253,7 @@ background: rgba(255,255,255,0.97);
 
   <!-- Footer -->
   <footer role="contentinfo" aria-label="頁腳">
-    © 2026 <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" target="_blank" rel="noopener" >Ken Cheng</a> · <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/students.html" class="underline hover:text-primary-400" target="_blank" rel="noopener">🎓 學生專區</a> · <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" class="underline hover:text-primary-400">返回主頁</a>
+    © 2026 <a href="https://ihateusingai-beep.github.io/KenCheng-homepage/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Ken Cheng</a> · Created with Gemini Script & Tailwind CSS
   </footer>
   <!-- Gundam Console UI Mode Switcher -->
   <div id="gundam-switcher" >
@@ -1354,42 +1354,7 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
-// TTS Welcome Message (P5) — with quota/error handling
-function playWelcome() {
-  try {
-    if (!('speechSynthesis' in window)) return;
-    // Cancel any ongoing speech first
-    window.speechSynthesis.cancel();
-    var msg = new SpeechSynthesisUtterance('歡迎來到Ken Cheng的電子教學工具導航站');
-    msg.lang = 'zh-Hant';
-    msg.rate = 0.9;
-    msg.pitch = 1.1;
-    msg.volume = 0.8;
-    // Handle quota/error gracefully
-    msg.onerror = function(e) {
-      // Silently ignore TTS errors (quota, network, etc.)
-    };
-    msg.onend = function() {
-      // Clean up after speaking done
-    };
-    // Use a timeout to ensure speech starts after cancel
-    setTimeout(function() {
-      try { window.speechSynthesis.speak(msg); } catch(e) { /* TTS unavailable */ }
-    }, 100);
-  } catch(e) { /* TTS completely unavailable */ }
-}
-window.addEventListener('load', function() {
-  var played = sessionStorage.getItem('kc-tts-played');
-  if (!played) {
-    sessionStorage.setItem('kc-tts-played', '1');
-    // Delay to ensure page is ready
-    setTimeout(playWelcome, 2000);
-  }
-});
-// Respect user's motion preferences
-if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  sessionStorage.removeItem('kc-tts-played');
-}
+
 </script>
   <script>
     let gundamMenuOpen = false;
