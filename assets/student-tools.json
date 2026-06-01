@@ -3,7 +3,7 @@
     "name": "平面圖形",
     "url": "https://chengky-bot.github.io/math-2d-Shapes/",
     "desc": "互動式平面圖形認識與性質學習工具",
-    "cat": "math",
+    "cat": "數學",
     "level": "P1",
     "icon": "📐"
   },
@@ -11,7 +11,7 @@
     "name": "一元一次方程天平遊戲",
     "url": "https://app-e009ccc3.base44.app",
     "desc": "以天平平衡原理學習一元一次方程",
-    "cat": "math",
+    "cat": "數學",
     "level": "P2",
     "icon": "⚖️"
   },
@@ -19,7 +19,7 @@
     "name": "小數加法樂園",
     "url": "https://app-ec28e701.base44.app",
     "desc": "小數位值加法互動練習",
-    "cat": "math",
+    "cat": "數學",
     "level": "P2",
     "icon": "🎯"
   },
@@ -27,7 +27,7 @@
     "name": "數學2位減法樂園",
     "url": "https://chengky-bot.github.io/math-2digit-subtract/",
     "desc": "兩位數減法練習，帶棒形圖輔助",
-    "cat": "math",
+    "cat": "數學",
     "level": "P1",
     "icon": "🔢"
   },
@@ -35,7 +35,7 @@
     "name": "兩位數減法(動物篇)",
     "url": "https://chengky-bot.github.io/math-2digit-minus-animal/",
     "desc": "以動物情境學習兩位數減法",
-    "cat": "math",
+    "cat": "數學",
     "level": "P1",
     "icon": "🐾"
   },
@@ -43,7 +43,7 @@
     "name": "減法小幫手 - 棒形圖教學工具",
     "url": "https://chengky-bot.github.io/math-minus--Text-based-Questions-/",
     "desc": "棒形圖輔助減法學習",
-    "cat": "math",
+    "cat": "數學",
     "level": "P1",
     "icon": "📊"
   },
@@ -51,7 +51,7 @@
     "name": "10的分解",
     "url": "https://chengky-bot.github.io/Subtraction-within-10/",
     "desc": "10的分解與合成互動學習",
-    "cat": "math",
+    "cat": "數學",
     "level": "P1",
     "icon": "🔟"
   },
@@ -59,7 +59,7 @@
     "name": "2D 圖形認識",
     "url": "https://app-387d1d6d.base44.app/",
     "desc": "互動式二維圖形辨識與分類",
-    "cat": "math",
+    "cat": "數學",
     "level": "P1",
     "icon": "🔷"
   },
@@ -67,7 +67,7 @@
     "name": "4位數字比較遊戲",
     "url": "https://chengky-bot.github.io/4digit-compare/",
     "desc": "四位數大小比較競速遊戲",
-    "cat": "math",
+    "cat": "數學",
     "level": "P2",
     "icon": "🏆"
   },
@@ -75,7 +75,7 @@
     "name": "校園精靈",
     "url": "https://chengky-bot.github.io/math-2d-rpg-mon/",
     "desc": "校園主題數學闖關遊戲",
-    "cat": "math",
+    "cat": "數學",
     "level": "P2",
     "icon": "🏫"
   },
@@ -83,7 +83,7 @@
     "name": "知識地下城",
     "url": "https://math-quest-the-subtraction-dungeon-54c2e529.base44.app/",
     "desc": "RPG 風格知識問答遊戲",
-    "cat": "math",
+    "cat": "數學",
     "level": "P3",
     "icon": "⚔️"
   },
@@ -91,7 +91,7 @@
     "name": "數學地城",
     "url": "https://ihateusingai-beep.github.io/math-dungeon/",
     "desc": "城市建設主題乘法學習 RPG",
-    "cat": "math",
+    "cat": "數學",
     "level": "P2",
     "icon": "🏙️"
   },
@@ -99,7 +99,7 @@
     "name": "四素句寫作",
     "url": "https://chat.qwen.ai/s/deploy/t_51b2aac5-2727-4c20-81c2-85201717ac69",
     "desc": "練習時間、地點、人物、事件的造句結構",
-    "cat": "lang",
+    "cat": "語文",
     "level": "P2",
     "icon": "✍️"
   },
@@ -107,7 +107,7 @@
     "name": "朗讀文章工具",
     "url": "https://chat.qwen.ai/s/deploy/t_35a735bb-7e27-421a-b9f3-1a4910b71ca1",
     "desc": "AI 語音朗讀文章，輔助閱讀障礙或語言聽力訓練",
-    "cat": "lang",
+    "cat": "語文",
     "level": "P1",
     "icon": "📢"
   },
@@ -115,7 +115,7 @@
     "name": "朗讀詞彙",
     "url": "https://chengky-bot.github.io/read-aloud-word/",
     "desc": "輸入詞彙即可朗讀，輔助語言學習與發音練習",
-    "cat": "lang",
+    "cat": "語文",
     "level": "P1",
     "icon": "🔊"
   },
@@ -123,7 +123,7 @@
     "name": "生活偵探事務所：成語解密",
     "url": "https://chengky-bot.github.io/Chinese-find-word/",
     "desc": "以偵探遊戲學習成語意義與應用",
-    "cat": "lang",
+    "cat": "語文",
     "level": "P3",
     "icon": "🔍"
   },
@@ -131,7 +131,7 @@
     "name": "交通燈模擬器",
     "url": "https://crossing-light.preview.emergentagent.com/",
     "desc": "模擬交通燈運作原理與行人安全教育",
-    "cat": "science",
+    "cat": "科學",
     "level": "P1",
     "icon": "🚦"
   },
@@ -139,7 +139,7 @@
     "name": "小水滴的地球大冒險",
     "url": "https://chengky-bot.github.io/water-cycle-demo/",
     "desc": "跟隨小水滴經歷地球水循環的冒險故事",
-    "cat": "science",
+    "cat": "科學",
     "level": "P1",
     "icon": "💧"
   },
@@ -147,7 +147,7 @@
     "name": "水的四態循環",
     "url": "https://chengky-bot.github.io/sci-water-four-cycle/",
     "desc": "互動學習固、液、氣、冰四態變化",
-    "cat": "science",
+    "cat": "科學",
     "level": "P2",
     "icon": "❄️"
   },
@@ -155,7 +155,7 @@
     "name": "水循環消消樂",
     "url": "https://chengky-bot.github.io/water-cycle-candycrush/",
     "desc": "配對消除遊戲學習水循環知識",
-    "cat": "science",
+    "cat": "科學",
     "level": "P2",
     "icon": "🎮"
   },
@@ -163,7 +163,7 @@
     "name": "水循環互動學習",
     "url": "https://chengky-bot.github.io/sci-watercycle/",
     "desc": "可拖拽的水循環互動學習工具",
-    "cat": "science",
+    "cat": "科學",
     "level": "P2",
     "icon": "🌊"
   },
@@ -171,7 +171,7 @@
     "name": "蒸發模擬工具",
     "url": "https://chat.qwen.ai/s/deploy/t_873447cd-c24f-4839-978b-e0d1aa3beff9",
     "desc": "模擬蒸發過程與影響因素的互動工具",
-    "cat": "science",
+    "cat": "科學",
     "level": "P2",
     "icon": "💨"
   },
@@ -179,7 +179,7 @@
     "name": "水的溶解打地鼠",
     "url": "https://chengky-bot.github.io/sci-water-mole/",
     "desc": "溶解概念打地鼠遊戲",
-    "cat": "science",
+    "cat": "科學",
     "level": "P1",
     "icon": "🕳️"
   },
@@ -187,7 +187,7 @@
     "name": "彩虹水實驗",
     "url": "https://chengky-bot.github.io/sci-rainbow-water/",
     "desc": "模擬彩虹水實驗，理解液體分層與密度",
-    "cat": "science",
+    "cat": "科學",
     "level": "P2",
     "icon": "🌈"
   },
@@ -195,7 +195,7 @@
     "name": "物質溶解實驗",
     "url": "https://v0-elementary-science-experiment.vercel.app/",
     "desc": "虛擬實驗室學習物質溶解現象",
-    "cat": "science",
+    "cat": "科學",
     "level": "P2",
     "icon": "🧪"
   },
@@ -203,7 +203,7 @@
     "name": "浮力模擬",
     "url": "https://chat.qwen.ai/s/deploy/7eba41bb-8e71-4396-a333-bb9901d78cba",
     "desc": "模擬浮力原理與物體沉浮條件",
-    "cat": "science",
+    "cat": "科學",
     "level": "P3",
     "icon": "🚤"
   },
@@ -211,7 +211,7 @@
     "name": "浮力遊戲 (POE)",
     "url": "https://ihateusingai-beep.github.io/float-project/",
     "desc": "Predict-Observe-Explain 浮力探究遊戲",
-    "cat": "science",
+    "cat": "科學",
     "level": "P3",
     "icon": "🔬"
   },
@@ -219,7 +219,7 @@
     "name": "花花園探險記",
     "url": "https://ihateusingai-beep.github.io/flower-garden/",
     "desc": "花花園探險互動學習評估遊戲",
-    "cat": "science",
+    "cat": "科學",
     "level": "P1",
     "icon": "🌸"
   },
@@ -227,7 +227,7 @@
     "name": "課堂情緒溫度計",
     "url": "https://v0-classroom-mood-thermometer.vercel.app/",
     "desc": "檢測課堂情緒氛圍的互動工具",
-    "cat": "classroom",
+    "cat": "課室管理",
     "level": "all",
     "icon": "🌡️"
   },
@@ -235,7 +235,7 @@
     "name": "情緒舒緩",
     "url": "https://chengky-bot.github.io/cf-video/",
     "desc": "提供情緒舒緩與放鬆的輔助工具",
-    "cat": "classroom",
+    "cat": "課室管理",
     "level": "all",
     "icon": "🧘"
   },
@@ -243,7 +243,7 @@
     "name": "StarClass Hub",
     "url": "https://ihateusingai-beep.github.io/starclass-hub/",
     "desc": "課堂獎勵系統：學生管理、角色、等級與星星兑換",
-    "cat": "classroom",
+    "cat": "課室管理",
     "level": "all",
     "icon": "⭐"
   },
@@ -251,7 +251,7 @@
     "name": "Friendly Classroom",
     "url": "https://ihateusingai-beep.github.io/friendly-classroom-v2/",
     "desc": "正向行為支持與課堂管理工具",
-    "cat": "classroom",
+    "cat": "課室管理",
     "level": "all",
     "icon": "🤝"
   },
@@ -259,23 +259,15 @@
     "name": "空氣畫 (Air Drawing)",
     "url": "https://air-drawing.vercel.app/",
     "desc": "用身體姿勢作畫，互動創意藝術體驗",
-    "cat": "art",
+    "cat": "藝術",
     "level": "all",
     "icon": "🎨"
-  },
-  {
-    "name": "QR Code 產生器",
-    "url": "https://chengky-bot.github.io/qr-code-generator/",
-    "desc": "為工具生成 QR Code，方便移動裝置掃描",
-    "cat": "life",
-    "level": "all",
-    "icon": "📱"
   },
   {
     "name": "打字練習工具",
     "url": "https://app-8bfe8765.base44.app",
     "desc": "鍵盤指法練習，提升打字速度",
-    "cat": "life",
+    "cat": "打字",
     "level": "P2",
     "icon": "⌨️"
   },
@@ -283,7 +275,7 @@
     "name": "Typing Kingdom",
     "url": "https://ihateusingai-beep.github.io/typing-kingdom/",
     "desc": "打字王國：闖關式鍵盤練習，適合初學者",
-    "cat": "life",
+    "cat": "打字",
     "level": "all",
     "icon": "⌨️"
   }
