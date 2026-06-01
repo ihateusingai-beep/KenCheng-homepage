@@ -89,7 +89,7 @@
   },
   {
     "name": "乘數城市 (Multiplication Town)",
-    "url": "https://chengky-bot.github.io/multiplication-town/",
+    "url": "https://ihateusingai-beep.github.io/multiplication-town/",
     "desc": "城市建設主題乘法學習 RPG",
     "cat": "math",
     "level": "P2",
@@ -254,14 +254,6 @@
     "cat": "classroom",
     "level": "all",
     "icon": "🤝"
-  },
-  {
-    "name": "學生任務應用",
-    "url": "https://chengky-bot.github.io/student-mission/",
-    "desc": "學生任務追蹤與完成激勵工具",
-    "cat": "classroom",
-    "level": "all",
-    "icon": "📋"
   },
   {
     "name": "空氣畫 (Air Drawing)",
