@@ -191,14 +191,7 @@
     "level": "P2",
     "icon": "🌈"
   },
-  {
-    "name": "磁力遊戲",
-    "url": "https://chengky-bot.github.io/magnet-game/",
-    "desc": "探索磁鐵的特性與互動遊戲",
-    "cat": "science",
-    "level": "P1",
-    "icon": "🧲"
-  },
+  
   {
     "name": "物質溶解實驗",
     "url": "https://v0-elementary-science-experiment.vercel.app/",
@@ -217,7 +210,7 @@
   },
   {
     "name": "浮力遊戲 (POE)",
-    "url": "https://chengky-bot.github.io/buoyancy-poe/",
+    "url": "https://ihateusingai-beep.github.io/float-project/",
     "desc": "Predict-Observe-Explain 浮力探究遊戲",
     "cat": "science",
     "level": "P3",
@@ -273,7 +266,7 @@
   },
   {
     "name": "Friendly Classroom",
-    "url": "https://chengky-bot.github.io/friendly-classroom/",
+    "url": "https://ihateusingai-beep.github.io/friendly-classroom-v2/",
     "desc": "正向行為支持與課堂管理工具",
     "cat": "classroom",
     "level": "all",
