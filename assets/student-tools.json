@@ -191,7 +191,6 @@
     "level": "P2",
     "icon": "🌈"
   },
-  
   {
     "name": "物質溶解實驗",
     "url": "https://v0-elementary-science-experiment.vercel.app/",
@@ -217,28 +216,12 @@
     "icon": "🔬"
   },
   {
-    "name": "科學互動工具 (Base44)",
-    "url": "https://base44.ai/tools/science",
-    "desc": "AI 科學互動工具合集",
-    "cat": "science",
-    "level": "P3",
-    "icon": "🤖"
-  },
-  {
     "name": "花花園探險記",
     "url": "https://ihateusingai-beep.github.io/flower-garden/",
     "desc": "花花園探險互動學習評估遊戲",
     "cat": "science",
     "level": "P1",
     "icon": "🌸"
-  },
-  {
-    "name": "早安天氣與早餐",
-    "url": "https://morning-meal-mate.lovable.app/",
-    "desc": "結合天氣資訊的早餐選擇助手，培養生活自理能力",
-    "cat": "life",
-    "level": "P1",
-    "icon": "🌤️"
   },
   {
     "name": "課堂情緒溫度計",
@@ -289,30 +272,6 @@
     "icon": "🎨"
   },
   {
-    "name": "The Toymaker",
-    "url": "https://www.thetoymaker.com/",
-    "desc": "免費紙藝模型與摺紙資源",
-    "cat": "art",
-    "level": "all",
-    "icon": "✂️"
-  },
-  {
-    "name": "Jigidi",
-    "url": "https://www.jigidi.com/",
-    "desc": "免費線上拼圖遊戲，訓練觀察力與專注",
-    "cat": "game",
-    "level": "all",
-    "icon": "🧩"
-  },
-  {
-    "name": "GeoFS",
-    "url": "https://www.geo-fs.com/",
-    "desc": "基於瀏覽器的全球飛行模擬器",
-    "cat": "game",
-    "level": "P3",
-    "icon": "✈️"
-  },
-  {
     "name": "QR Code 產生器",
     "url": "https://chengky-bot.github.io/qr-code-generator/",
     "desc": "為工具生成 QR Code，方便移動裝置掃描",
@@ -335,45 +294,5 @@
     "cat": "life",
     "level": "all",
     "icon": "⌨️"
-  },
-  {
-    "name": "Kiddo Worksheets",
-    "url": "https://www.kiddoworksheets.com/",
-    "desc": "免費可列印兒童學習工作紙",
-    "cat": "math",
-    "level": "all",
-    "icon": "📝"
-  },
-  {
-    "name": "PhET Interactive Simulations",
-    "url": "https://phet.colorado.edu/",
-    "desc": "科羅拉多大學互動科學模擬實驗室",
-    "cat": "science",
-    "level": "P3",
-    "icon": "🔬"
-  },
-  {
-    "name": "Explore.org",
-    "url": "https://explore.org/",
-    "desc": "野生動物直播與環境教育影片",
-    "cat": "science",
-    "level": "all",
-    "icon": "🦁"
-  },
-  {
-    "name": "Animagraffs",
-    "url": "https://www.animagraffs.com/",
-    "desc": "剖面圖解機械與生物運作原理",
-    "cat": "science",
-    "level": "P3",
-    "icon": "⚙️"
-  },
-  {
-    "name": "Doubao (豆包)",
-    "url": "https://www.doubao.com/",
-    "desc": "位元組跳動 AI 助手，適合簡單學習問題",
-    "cat": "life",
-    "level": "P3",
-    "icon": "🤖"
   }
 ]
