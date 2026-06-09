@@ -302,5 +302,13 @@
     "cat": "社會",
     "level": "P1-P3",
     "icon": "📜"
+  },
+  {
+    "name": "乘法樂園",
+    "url": "https://ihateusingai-beep.github.io/sen-math-multiplication/",
+    "desc": "SEN乘法文字題24題生活例子，橫式練習+即時feedback+證書",
+    "cat": "數學",
+    "level": "P1-P3",
+    "icon": "🧮"
   }
 ]
