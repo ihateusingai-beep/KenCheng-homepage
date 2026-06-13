@@ -1338,6 +1338,19 @@ background: rgba(255,255,255,0.97);
 @media (max-width:560px){.hero-section{padding:48px 16px 24px}.hero-eyebrow{font-size:11px;letter-spacing:1px;padding:3px 10px}.hero-orb{display:none}}
 /* Gundam mode: hero sits beneath the .hero-bg blur layer (z-index:0) and never bleeds onto React cards */
 [data-theme^="gundam-"] .hero-section{z-index:1;background:transparent;backdrop-filter:none}
+
+/* R33 / Track C — PWA install banner */
+#pwa-install-banner{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(140%);max-width:520px;width:calc(100% - 32px);background:rgba(15,23,42,.95);color:#fff;padding:12px 16px;border-radius:12px;border:1px solid rgba(99,102,238,.5);box-shadow:0 8px 32px rgba(0,0,0,.35);display:flex;align-items:center;gap:12px;z-index:99990;transition:transform .35s cubic-bezier(.2,.8,.2,1);font-size:14px;line-height:1.4}
+#pwa-install-banner.show{transform:translateX(-50%) translateY(0)}
+#pwa-install-banner .pwa-text{flex:1;min-width:0}
+#pwa-install-banner .pwa-title{font-weight:600;margin-bottom:2px}
+#pwa-install-banner .pwa-desc{font-size:12px;opacity:.8}
+#pwa-install-banner button{font:inherit;border-radius:8px;border:1px solid rgba(255,255,255,.2);padding:6px 12px;cursor:pointer;background:rgba(255,255,255,.08);color:#fff;transition:background .15s,border-color .15s}
+#pwa-install-banner button:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.4)}
+#pwa-install-banner #pwa-install-btn{background:#6366f1;border-color:#6366f1;font-weight:600}
+#pwa-install-banner #pwa-install-btn:hover{background:#4f46e5;border-color:#4f46e5}
+#pwa-install-banner #pwa-dismiss-btn{background:transparent;padding:6px 8px}
+@media (prefers-reduced-motion: reduce){#pwa-install-banner{transition:none}#pwa-install-banner.show{transform:translateX(-50%)}}
 </style>
 </head>
 <body class="dark notranslate" data-theme="dark">
@@ -1354,7 +1367,7 @@ background: rgba(255,255,255,0.97);
     <p class="hero-subtitle">匡智張玉瓊晨暉學校老師整理嘅教學工具、AI 應用、開發環境同模擬體驗 — 全部一個頁面搵得到。</p>
   </section>
 
-  <a href="#main-content" class="skip-link" style="position:absolute;top:-99px;left:16px;z-index:999999;background:#4f46e5;color:white;padding:8px 16px;border-radius:0 0 8px 8px;font-weight:600;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-99px'">跳至主要內容</a>
+  <a href="#root" class="skip-link" style="position:absolute;top:-99px;left:16px;z-index:999999;background:#4f46e5;color:white;padding:8px 16px;border-radius:0 0 8px 8px;font-weight:600;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-99px'">跳至主要內容</a>
 
   <div id="root" role="main" aria-label="主要內容"></div>
 
@@ -1362,6 +1375,16 @@ background: rgba(255,255,255,0.97);
   <button id="dark-mode-toggle" onclick="toggleDarkMode()" title="切換深色/淺色主題" aria-label="切換深色/淺色主題（目前為淺色模式）" style="position:fixed;bottom:24px;left:24px;z-index:9999;width:49px;height:49px;border-radius:50%;border:2px solid var(--border-color,#334155);background:var(--bg-card,#1e293b);color:var(--accent,#00D4FF);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 12px var(--accent-glow,rgba(0,212,255,0.2));transition:all .3s;" aria-pressed="false">
     🌙
   </button>
+
+  <!-- R33 / Track C — PWA install banner (hidden until beforeinstallprompt fires) -->
+  <div id="pwa-install-banner" role="region" aria-label="安裝 PWA 應用程式" aria-hidden="true" hidden>
+    <div class="pwa-text">
+      <div class="pwa-title">📲 加到主畫面</div>
+      <div class="pwa-desc">安裝後可離線使用，開啟更快</div>
+    </div>
+    <button type="button" id="pwa-install-btn" aria-label="安裝應用程式">安裝</button>
+    <button type="button" id="pwa-dismiss-btn" aria-label="關閉安裝提示">✕</button>
+  </div>
 
   <!-- Footer -->
   <footer role="contentinfo" aria-label="頁腳">
@@ -2452,6 +2475,12 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     var si=document.querySelector('input[type="text"], input[placeholder*="搜尋"]');
     if(!si||si.dataset.kcInstant==='1')return;
     si.dataset.kcInstant='1';
+    if(!si.getAttribute('aria-label')&&!si.getAttribute('aria-labelledby')){
+      si.setAttribute('aria-label','搜尋教學工具（輸入名稱、描述或標籤）');
+    }
+    si.setAttribute('autocomplete','off');
+    si.setAttribute('spellcheck','false');
+    si.setAttribute('enterkeyhint','search');
 
     var wrapper=document.createElement('div');
     wrapper.style.position='relative';
@@ -2605,6 +2634,46 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
       initCardRipple();
     },2000);
   });
+})();
+</script>
+<script>
+/* R33 / Track C — PWA install banner
+   - 攔截 native beforeinstallprompt event，5s 或 scroll 50% 觸發顯示
+   - 點擊安裝觸發 prompt()，installed 後 dismiss
+   - localStorage.kc-pwa-dismissed 7 日持久化
+   - standalone / installed 自動跳過
+   - 唔影響 P0 / Track A / Track B 任何核心 */
+(function(){
+  var K='kc-pwa-dismissed', DAYS=7, TH=0.5, DELAY=5000;
+  if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true)return;
+  try{var ts=parseInt(localStorage.getItem(K),10);if(isFinite(ts)&&(Date.now()-ts)<DAYS*864e5)return;}catch(e){}
+  var b=document.getElementById('pwa-install-banner');
+  var ib=document.getElementById('pwa-install-btn');
+  var db=document.getElementById('pwa-dismiss-btn');
+  if(!b||!ib||!db)return;
+  b.hidden=false;
+  var prompt_=null, shown=false;
+  function show(){if(shown||!prompt_)return;shown=true;b.classList.add('show');b.setAttribute('aria-hidden','false');}
+  function hide(p){b.classList.remove('show');b.setAttribute('aria-hidden','true');b.hidden=true;shown=true;if(p)try{localStorage.setItem(K,String(Date.now()));}catch(e){}}
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();prompt_=e;});
+  ib.addEventListener('click',function(){
+    if(!prompt_){hide(true);return;}
+    prompt_.prompt();
+    prompt_.userChoice.then(function(c){
+      hide(true);
+      prompt_=null;
+    }).catch(function(){hide(true);});
+  });
+  db.addEventListener('click',function(){hide(true);});
+  b.addEventListener('keydown',function(e){if(e.key==='Escape')hide(true);});
+  window.addEventListener('appinstalled',function(){hide(true);});
+  setTimeout(show,DELAY);
+  function onScroll(){
+    var sc=window.scrollY||document.documentElement.scrollTop||0;
+    var max=Math.max(1,(document.documentElement.scrollHeight||0)-window.innerHeight);
+    if(sc/max>=TH){show();window.removeEventListener('scroll',onScroll,{passive:true});}
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
 })();
 </script>
 </body>

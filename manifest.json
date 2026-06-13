@@ -28,5 +28,15 @@
   "prefer_related_applications": false,
   "launch_handler": {
     "client_mode": "navigate-existing"
-  }
+  },
+  "screenshots": [
+    {
+      "src": "/KenCheng-homepage/og-image.png",
+      "sizes": "900x472",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Ken Cheng 教學工具首頁"
+    }
+  ],
+  "version": "R33"
 }
