@@ -1,3 +1,15 @@
 node_modules/
 .netlify/
 .env
+
+# Mavis / OpenCode / harness agent runtime (local only, never commit)
+.mavis/
+.opencode/
+.harness/
+
+# macOS / IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
