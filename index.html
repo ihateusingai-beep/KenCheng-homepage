@@ -1300,6 +1300,17 @@ background: rgba(255,255,255,0.97);
 /* Card appearing animation */
 @keyframes cardAppear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 #root .group.relative{animation:cardAppear .3s ease-out}
+/* P1 #7/#8: bookmark + NEW badge */
+.kc-bookmark-btn{position:absolute;top:8px;left:8px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(255,255,255,.85);color:#94a3b8;font-size:14px;line-height:1;cursor:pointer;opacity:0;transition:opacity .2s,background .2s,color .2s,transform .15s;z-index:21;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.12);padding:0}
+#root .group.relative:hover .kc-bookmark-btn,.kc-bookmark-btn:focus{opacity:1}
+.kc-bookmark-btn:hover{background:#fff;color:#f59e0b;transform:scale(1.08)}
+.kc-bookmark-btn.on{opacity:1;color:#f59e0b;background:rgba(254,243,199,.95)}
+.dark .kc-bookmark-btn{background:rgba(15,23,42,.7);color:#64748b}
+.dark .kc-bookmark-btn:hover{background:rgba(15,23,42,.95);color:#fbbf24}
+.dark .kc-bookmark-btn.on{background:rgba(120,53,15,.7);color:#fbbf24}
+.kc-new-badge{position:absolute;top:8px;right:8px;padding:2px 7px;font-size:9px;font-weight:700;border-radius:9999px;background:linear-gradient(135deg,#10b981,#06b6d4);color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px;animation:kcNewPulse 2.4s ease-in-out infinite;box-shadow:0 0 0 0 rgba(16,185,129,.5)}
+@keyframes kcNewPulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}50%{box-shadow:0 0 0 6px rgba(16,185,129,0)}}
+.tda-badge~.kc-new-badge{display:none}
 </style>
 </head>
 <body class="dark notranslate" data-theme="dark">
@@ -1722,12 +1733,39 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
 
     <script>
     (function() {
+      // P1 #8 — Recommendation engine. Reads localStorage for bookmarks/recent
+      // and returns up to 5 cards. Falls back to a hardcoded catalog of 5
+      // popular teaching tools whenever bookmarks+recent is empty (or the
+      // union is shorter than 5), so the section is never blank.
+      var CATALOG = [
+        {url:'TDA-Prompt-Builder/',   name:'TDA 提示詞生成器', desc:'AI 教學助手 — 一鍵生成差異化教材提示詞', icon:'Bot'},
+        {url:'qr-code-generator/',    name:'QR Code 生成器',   desc:'為教材、影片、網站快速生成 QR Code',   icon:'Wrench'},
+        {url:'cf-video/',             name:'CF Video 工具',    desc:'課堂錄影與剪輯工具',                    icon:'Video'},
+        {url:'multiplication-town/',  name:'乘法小鎮',         desc:'互動乘法遊戲，提升學生計算動機',         icon:'Calculator'},
+        {url:'friendly-classroom-v2/',name:'友善課室 v2',      desc:'課堂管理與獎勵系統',                     icon:'Star'}
+      ];
+      function kcArr(k){try{var v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}}
+      function lookupTool(href){
+        var h=String(href||'');
+        for(var i=0;i<CATALOG.length;i++) if(h.indexOf(CATALOG[i].url)>=0) return CATALOG[i];
+        var slug=h.replace(/^.*\//,'').replace(/[?#].*$/,'').replace(/[-_]+/g,' ').trim();
+        return {url:h, name:slug||h, desc:'最近瀏覽的工具', icon:'Folder'};
+      }
+      window.__recommendTools = function(){
+        var bk=kcArr('kencheng-bookmarks');
+        var ru=kcArr('kencheng-recent');
+        var seen={}, out=[];
+        function push(t){if(!t||seen[t.url])return;seen[t.url]=1;out.push(t);}
+        bk.slice(0,5).forEach(function(b){push(lookupTool(b.href));});
+        ru.slice(0,5).forEach(function(r){push(lookupTool(r.href));});
+        if(out.length<5) CATALOG.forEach(push);
+        return out.slice(0,5);
+      };
+
       function initRecommendations() {
         if (!window.__recommendTools) return;
-        var bk = JSON.parse(localStorage.getItem('kencheng-bookmarks') || '[]');
-        var ru = JSON.parse(localStorage.getItem('kencheng-recent') || '[]');
-        if (bk.length === 0 && ru.length === 0) return;
-
+        // Empty-state fallback lives inside __recommendTools (the static
+        // CATALOG), so this section is always populated (spec §4).
         var recs = window.__recommendTools();
         if (!recs || recs.length === 0) return;
 
@@ -1914,6 +1952,13 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
 
 <script id="phase23-js">
 (function(){
+  // P1 #7/#8 — localStorage write helpers for bookmarks + recent visits.
+  function kcRead(k){try{var v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}}
+  function kcWrite(k,a){try{localStorage.setItem(k,JSON.stringify(a));}catch(e){}}
+  function isBookmarked(h){return kcRead('kencheng-bookmarks').some(function(x){return x&&x.href===h;});}
+  function toggleBookmark(h,t){var a=kcRead('kencheng-bookmarks'),i=a.findIndex(function(x){return x&&x.href===h;});if(i>=0)a.splice(i,1);else a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>50)a=a.slice(0,50);kcWrite('kencheng-bookmarks',a);return i<0;}
+  function addToRecent(h,t){if(!h)return;var a=kcRead('kencheng-recent').filter(function(x){return x&&x.href!==h;});a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>20)a=a.slice(0,20);kcWrite('kencheng-recent',a);}
+  window.isBookmarked=isBookmarked;window.toggleBookmark=toggleBookmark;window.addToRecent=addToRecent;
 var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','computer-logo-prompt--builder/','Student-mission-app/','multiplication-town/','air-drawing/','starclass-hub/','friendly-classroom/','friendly-classroom-v2/','Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','gundam-chatbot/','yt-dlp-gundam/','flower-parts-sen/','cai-lun-paper/','sen-math-multiplication/','sen-yue-read-score/','plant-diversity-sen/','math-quiz/']);
   var STUDENT_URLS = new Set(['math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','air-drawing/','plant-diversity-sen/','math-quiz/']);
   var COLLEAGUE_URLS = new Set(['Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','friendly-classroom/','friendly-classroom-v2/','starclass-hub/']);
@@ -2277,20 +2322,67 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
 
   function initHotTracking(){
     injectTechTags();
+    injectBookmarkButtons();
+    injectNewBadges();
     var cards=document.querySelectorAll('#root .group.relative');
     cards.forEach(function(card){
-      card.addEventListener('click',function(){
+      card.addEventListener('click',function(e){
+        if(e.target.closest&&e.target.closest('.kc-bookmark-btn'))return;
         var a=card.querySelector('a[href]');
         if(!a)return;
         var href=a.getAttribute('href');
+        if(!href)return;
         var key='kc-hot-'+href;
         var count=parseInt(localStorage.getItem(key)||'0')+1;
         localStorage.setItem(key,String(count));
+        var h3=card.querySelector('h3');
+        var title=h3?h3.textContent.trim():(a.textContent.trim()||href);
+        try{window.addToRecent(href,title);}catch(_){}
       });
     });
 
     // Sort by click count every 30s
     setInterval(sortByHot,30000);
+  }
+
+  // P1 #8 — per-card bookmark button (top-left, hover-revealed).
+  function injectBookmarkButtons(){
+    document.querySelectorAll('#root .group.relative').forEach(function(card){
+      if(card.querySelector('.kc-bookmark-btn'))return;
+      var a=card.querySelector('a[href]');if(!a)return;
+      var href=a.getAttribute('href')||'';if(!href)return;
+      var on=window.isBookmarked(href);
+      var btn=document.createElement('button');
+      btn.type='button';btn.className='kc-bookmark-btn'+(on?' on':'');
+      btn.setAttribute('aria-label','加入書籤');
+      btn.setAttribute('aria-pressed',on?'true':'false');
+      btn.dataset.href=href;btn.textContent=on?'\u2605':'\u2606';
+      btn.addEventListener('click',function(e){
+        e.preventDefault();e.stopPropagation();
+        var h3=card.querySelector('h3'),title=h3?h3.textContent.trim():(a.textContent.trim()||href);
+        var nowOn=window.toggleBookmark(href,title);
+        btn.classList.toggle('on',nowOn);btn.textContent=nowOn?'\u2605':'\u2606';
+        btn.setAttribute('aria-pressed',nowOn?'true':'false');
+      });
+      card.appendChild(btn);
+    });
+  }
+
+  // P1 #7 — NEW badge: a card is "new" if its href is not yet in
+  // kencheng-recent (addToRecent runs on click, so first-visit = NEW).
+  function injectNewBadges(){
+    var seen={};
+    try{var r=JSON.parse(localStorage.getItem('kencheng-recent')||'[]');if(Array.isArray(r))r.forEach(function(x){if(x&&x.href)seen[x.href]=1;});}catch(e){}
+    document.querySelectorAll('#root .group.relative').forEach(function(card){
+      if(card.querySelector('.kc-new-badge'))return;
+      var a=card.querySelector('a[href]');if(!a)return;
+      var href=a.getAttribute('href')||'';
+      if(seen[href]||card.querySelector('.tda-badge'))return;
+      var b=document.createElement('span');
+      b.className='kc-new-badge';b.textContent='\uD83C\uDD95 NEW';
+      b.setAttribute('aria-label','新加入的工具');
+      card.appendChild(b);
+    });
   }
 
   // P0 #5 — Search instant-result dropdown
