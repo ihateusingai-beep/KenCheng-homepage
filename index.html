@@ -174,23 +174,16 @@
 .dark ::selection { background: #FF69B4; color: #0a0f1a; }
 [data-theme^="gundam-"] ::selection { background: var(--accent); color: var(--bg-primary); }
 
-/* Accessibility: focus-visible — clear visible focus ring for keyboard users */
+/* Accessibility: focus-visible — unified 2px solid focus ring (P2 #16) */
+:root { --kc-focus-ring-w: 2px; --kc-focus-ring-c: #6366f1; --kc-focus-ring-o: 2px; }
+.dark { --kc-focus-ring-c: #22d3ee; }
+[data-theme^="gundam-"] { --kc-focus-ring-c: var(--accent); --kc-focus-ring-o: 3px; }
 :focus-visible {
-  outline: 3px solid #6366f1;
-  outline-offset: 2px;
+  outline: var(--kc-focus-ring-w) solid var(--kc-focus-ring-c);
+  outline-offset: var(--kc-focus-ring-o);
   border-radius: 4px;
 }
-.dark :focus-visible {
-  outline-color: #22d3ee;
-}
-[data-theme^="gundam-"] :focus-visible {
-  outline-color: var(--accent);
-  outline-offset: 3px;
-}
-/* Remove outline for mouse clicks */
-:focus:not(:focus-visible) {
-  outline: none;
-}
+:focus:not(:focus-visible) { outline: none; }
 
 /* Loading Skeleton */
 @keyframes shimmer {
@@ -1289,17 +1282,63 @@ background: rgba(255,255,255,0.97);
 @media (max-width: 560px){.filter-bar-outer{margin-bottom:64px}.filter-btn{font-size:12px;padding:8px 14px}}
 /* Search instant-result dropdown (P0 #5) */
 #search-instant{position:absolute;top:100%;left:0;right:0;margin-top:6px;background:var(--bg-card,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:12px;box-shadow:0 8px 24px rgba(15,23,42,.12);max-height:340px;overflow-y:auto;z-index:9998;display:none}.search-instant-item{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-bottom:1px solid rgba(0,0,0,.04);font-size:13px;color:var(--text-primary,#1e293b)}.search-instant-item:last-child{border-bottom:none}.search-instant-item:hover,.search-instant-item.act{background:rgba(99,102,241,.08)}.search-instant-item .si-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}.search-instant-item .si-name{font-weight:600;color:inherit}.search-instant-item .si-desc{font-size:11px;color:#64748b;margin-top:2px;display:block;line-height:1.3}.search-instant-empty{padding:14px 12px;text-align:center;color:#94a3b8;font-size:12px}
-/* Card micro-interactions */
-#root .group.relative{transition:transform .2s,box-shadow .2s}
+/* Card micro-interactions (P1 #6) — timing unified via --kc-card-tx */
+:root{--kc-card-tx-dur:.2s;--kc-card-arrow-size:14px;--kc-card-arrow-bg:#6366f1;--kc-card-arrow-c:#fff;--kc-card-ripple-c:rgba(99,102,241,.35)}
+.dark{--kc-card-arrow-bg:#22d3ee;--kc-card-arrow-c:#0f172a;--kc-card-ripple-c:rgba(34,211,238,.35)}
+[data-theme^="gundam-"]{--kc-card-arrow-bg:var(--accent);--kc-card-arrow-c:var(--bg-primary);--kc-card-ripple-c:var(--accent-glow)}
+#root .group.relative{position:relative;transition:transform var(--kc-card-tx-dur),box-shadow var(--kc-card-tx-dur);overflow:hidden}
 #root .group.relative:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
 #root .group.relative:active{transform:translateY(0) scale(.98)}
 .dark #root .group.relative:hover{box-shadow:0 8px 24px rgba(0,0,0,.4)}
+/* Hover arrow (top-right "↗") — pointer-events:none so it never blocks bookmark or click */
+#root .group.relative::after{content:"↗";position:absolute;top:8px;right:8px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:var(--kc-card-arrow-size);line-height:1;font-weight:700;border-radius:6px;background:var(--kc-card-arrow-bg);color:var(--kc-card-arrow-c);opacity:0;transform:translate(-4px,-4px) scale(.85);transition:opacity var(--kc-card-tx-dur),transform var(--kc-card-tx-dur);pointer-events:none;z-index:5;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+#root .group.relative:hover::after{opacity:1;transform:translate(0,0) scale(1)}
+/* Card-click ripple (P1 #6) — JS injects .kc-ripple on click, CSS animates it out */
+.kc-ripple{position:absolute;border-radius:50%;transform:scale(0);background:var(--kc-card-ripple-c);pointer-events:none;z-index:1;animation:kcRipple .4s ease-out forwards}
+@keyframes kcRipple{to{transform:scale(2.6);opacity:0}}
 /* Ken badge pulse animation */
 @keyframes kenBadgePulse{0%,100%{box-shadow:0 0 4px rgba(99,102,241,.5)}50%{box-shadow:0 0 10px rgba(99,102,241,.8),0 0 20px rgba(139,92,246,.4)}}
 .tda-badge.ken{animation:kenBadgePulse 2s ease-in-out infinite}
 /* Card appearing animation */
 @keyframes cardAppear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 #root .group.relative{animation:cardAppear .3s ease-out}
+
+/* P1 #7/#8: bookmark + NEW badge */
+.kc-bookmark-btn{position:absolute;top:8px;left:8px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(255,255,255,.85);color:#94a3b8;font-size:14px;line-height:1;cursor:pointer;opacity:0;transition:opacity .2s,background .2s,color .2s,transform .15s;z-index:21;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.12);padding:0}
+
+/* Card metadata line-clamp (P2 #15) — keeps description from blowing up card height */
+#root .group.relative p,.card-desc,.kc-card-desc{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;line-clamp:3}
+
+/* ============================
+   TRACK B: HERO SECTION (P1 #11) + POLISH (P2 #10/12/15/16)
+   ============================ */
+.hero-section{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:72px 24px 36px;text-align:center;color:var(--text-primary,#E8F4F8);pointer-events:none}
+.hero-section *{pointer-events:auto}
+.hero-eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:9999px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;margin-bottom:14px;opacity:.95}
+.dark .hero-eyebrow{background:linear-gradient(135deg,#22d3ee,#0ea5e9);color:#0f172a}
+[data-theme^="gundam-"] .hero-eyebrow{background:linear-gradient(135deg,var(--accent),var(--accent-secondary));color:var(--bg-primary);box-shadow:0 0 12px var(--accent-glow)}
+.hero-title{font-size:clamp(28px,5vw,44px);font-weight:800;line-height:1.15;margin:0 0 12px;background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.5px}
+.dark .hero-title{background:linear-gradient(135deg,#22d3ee 0%,#0ea5e9 50%,#a855f7 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme^="gundam-"] .hero-title{background:linear-gradient(135deg,var(--accent) 0%,var(--accent-secondary) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+.hero-subtitle{font-size:clamp(14px,2vw,16px);line-height:1.6;color:#475569;max-width:640px;margin:0 auto 0;font-weight:500}
+.dark .hero-subtitle{color:#94a3b8}
+[data-theme^="gundam-"] .hero-subtitle{color:var(--text-secondary)}
+/* Floating orbs — subtle 2-3 ambient pulses; opacity stays below the hero-bg blur to avoid React render interference */
+.hero-orb{position:absolute;border-radius:50%;filter:blur(28px);opacity:.35;pointer-events:none;z-index:-1;will-change:transform}
+.hero-orb.o1{width:180px;height:180px;top:20px;left:8%;background:radial-gradient(circle,#6366f1,transparent 70%);animation:heroFloat1 9s ease-in-out infinite}
+.hero-orb.o2{width:140px;height:140px;top:80px;right:10%;background:radial-gradient(circle,#ec4899,transparent 70%);animation:heroFloat2 11s ease-in-out infinite}
+.hero-orb.o3{width:120px;height:120px;top:160px;left:55%;background:radial-gradient(circle,#22d3ee,transparent 70%);animation:heroFloat3 13s ease-in-out infinite;opacity:.25}
+[data-theme^="gundam-"] .hero-orb{opacity:.18}
+[data-theme^="gundam-"] .hero-orb.o1{background:radial-gradient(circle,var(--accent),transparent 70%)}
+[data-theme^="gundam-"] .hero-orb.o3{background:radial-gradient(circle,var(--accent-secondary),transparent 70%)}
+@keyframes heroFloat1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(20px,-14px) scale(1.08)}}
+@keyframes heroFloat2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-18px,16px) scale(1.05)}}
+@keyframes heroFloat3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(12px,18px) scale(1.1)}}
+/* Mobile (≤560px): shrink hero typography, keep section tidy */
+@media (max-width:560px){.hero-section{padding:48px 16px 24px}.hero-eyebrow{font-size:11px;letter-spacing:1px;padding:3px 10px}.hero-orb{display:none}}
+/* Gundam mode: hero sits beneath the .hero-bg blur layer (z-index:0) and never bleeds onto React cards */
+[data-theme^="gundam-"] .hero-section{z-index:1;background:transparent;backdrop-filter:none}
+
 /* R33 / Track C — PWA install banner */
 #pwa-install-banner{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(140%);max-width:520px;width:calc(100% - 32px);background:rgba(15,23,42,.95);color:#fff;padding:12px 16px;border-radius:12px;border:1px solid rgba(99,102,238,.5);box-shadow:0 8px 32px rgba(0,0,0,.35);display:flex;align-items:center;gap:12px;z-index:99990;transition:transform .35s cubic-bezier(.2,.8,.2,1);font-size:14px;line-height:1.4}
 #pwa-install-banner.show{transform:translateX(-50%) translateY(0)}
@@ -1317,6 +1356,16 @@ background: rgba(255,255,255,0.97);
 <body class="dark notranslate" data-theme="dark">
   <!-- Hero Animated Background (P4) -->
   <div class="hero-bg" aria-hidden="true"></div>
+
+  <!-- Hero Section (P1 #11) — headline + subtitle; search bar lives inside #root below -->
+  <section class="hero-section" aria-label="網站標題">
+    <span class="hero-orb o1" aria-hidden="true"></span>
+    <span class="hero-orb o2" aria-hidden="true"></span>
+    <span class="hero-orb o3" aria-hidden="true"></span>
+    <span class="hero-eyebrow">Resource Dashboard · 2026</span>
+    <h1 class="hero-title">Ken Cheng 電子教學工具導航站</h1>
+    <p class="hero-subtitle">匡智張玉瓊晨暉學校老師整理嘅教學工具、AI 應用、開發環境同模擬體驗 — 全部一個頁面搵得到。</p>
+  </section>
 
   <a href="#root" class="skip-link" style="position:absolute;top:-99px;left:16px;z-index:999999;background:#4f46e5;color:white;padding:8px 16px;border-radius:0 0 8px 8px;font-weight:600;transition:top .2s" onfocus="this.style.top='0'" onblur="this.style.top='-99px'">跳至主要內容</a>
 
@@ -1744,12 +1793,39 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
 
     <script>
     (function() {
+      // P1 #8 — Recommendation engine. Reads localStorage for bookmarks/recent
+      // and returns up to 5 cards. Falls back to a hardcoded catalog of 5
+      // popular teaching tools whenever bookmarks+recent is empty (or the
+      // union is shorter than 5), so the section is never blank.
+      var CATALOG = [
+        {url:'TDA-Prompt-Builder/',   name:'TDA 提示詞生成器', desc:'AI 教學助手 — 一鍵生成差異化教材提示詞', icon:'Bot'},
+        {url:'qr-code-generator/',    name:'QR Code 生成器',   desc:'為教材、影片、網站快速生成 QR Code',   icon:'Wrench'},
+        {url:'cf-video/',             name:'CF Video 工具',    desc:'課堂錄影與剪輯工具',                    icon:'Video'},
+        {url:'multiplication-town/',  name:'乘法小鎮',         desc:'互動乘法遊戲，提升學生計算動機',         icon:'Calculator'},
+        {url:'friendly-classroom-v2/',name:'友善課室 v2',      desc:'課堂管理與獎勵系統',                     icon:'Star'}
+      ];
+      function kcArr(k){try{var v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}}
+      function lookupTool(href){
+        var h=String(href||'');
+        for(var i=0;i<CATALOG.length;i++) if(h.indexOf(CATALOG[i].url)>=0) return CATALOG[i];
+        var slug=h.replace(/^.*\//,'').replace(/[?#].*$/,'').replace(/[-_]+/g,' ').trim();
+        return {url:h, name:slug||h, desc:'最近瀏覽的工具', icon:'Folder'};
+      }
+      window.__recommendTools = function(){
+        var bk=kcArr('kencheng-bookmarks');
+        var ru=kcArr('kencheng-recent');
+        var seen={}, out=[];
+        function push(t){if(!t||seen[t.url])return;seen[t.url]=1;out.push(t);}
+        bk.slice(0,5).forEach(function(b){push(lookupTool(b.href));});
+        ru.slice(0,5).forEach(function(r){push(lookupTool(r.href));});
+        if(out.length<5) CATALOG.forEach(push);
+        return out.slice(0,5);
+      };
+
       function initRecommendations() {
         if (!window.__recommendTools) return;
-        var bk = JSON.parse(localStorage.getItem('kencheng-bookmarks') || '[]');
-        var ru = JSON.parse(localStorage.getItem('kencheng-recent') || '[]');
-        if (bk.length === 0 && ru.length === 0) return;
-
+        // Empty-state fallback lives inside __recommendTools (the static
+        // CATALOG), so this section is always populated (spec §4).
         var recs = window.__recommendTools();
         if (!recs || recs.length === 0) return;
 
@@ -1936,6 +2012,13 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
 
 <script id="phase23-js">
 (function(){
+  // P1 #7/#8 — localStorage write helpers for bookmarks + recent visits.
+  function kcRead(k){try{var v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}}
+  function kcWrite(k,a){try{localStorage.setItem(k,JSON.stringify(a));}catch(e){}}
+  function isBookmarked(h){return kcRead('kencheng-bookmarks').some(function(x){return x&&x.href===h;});}
+  function toggleBookmark(h,t){var a=kcRead('kencheng-bookmarks'),i=a.findIndex(function(x){return x&&x.href===h;});if(i>=0)a.splice(i,1);else a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>50)a=a.slice(0,50);kcWrite('kencheng-bookmarks',a);return i<0;}
+  function addToRecent(h,t){if(!h)return;var a=kcRead('kencheng-recent').filter(function(x){return x&&x.href!==h;});a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>20)a=a.slice(0,20);kcWrite('kencheng-recent',a);}
+  window.isBookmarked=isBookmarked;window.toggleBookmark=toggleBookmark;window.addToRecent=addToRecent;
 var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','computer-logo-prompt--builder/','Student-mission-app/','multiplication-town/','air-drawing/','starclass-hub/','friendly-classroom/','friendly-classroom-v2/','Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','gundam-chatbot/','yt-dlp-gundam/','flower-parts-sen/','cai-lun-paper/','sen-math-multiplication/','sen-yue-read-score/','plant-diversity-sen/','math-quiz/']);
   var STUDENT_URLS = new Set(['math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','air-drawing/','plant-diversity-sen/','math-quiz/']);
   var COLLEAGUE_URLS = new Set(['Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','friendly-classroom/','friendly-classroom-v2/','starclass-hub/']);
@@ -2211,6 +2294,7 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     injectBadges();
     applyTheme();
     initSearchInstant();
+    initCardRipple();
 
     // Observe theme changes
     var obs=new MutationObserver(function(){
@@ -2299,20 +2383,67 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
 
   function initHotTracking(){
     injectTechTags();
+    injectBookmarkButtons();
+    injectNewBadges();
     var cards=document.querySelectorAll('#root .group.relative');
     cards.forEach(function(card){
-      card.addEventListener('click',function(){
+      card.addEventListener('click',function(e){
+        if(e.target.closest&&e.target.closest('.kc-bookmark-btn'))return;
         var a=card.querySelector('a[href]');
         if(!a)return;
         var href=a.getAttribute('href');
+        if(!href)return;
         var key='kc-hot-'+href;
         var count=parseInt(localStorage.getItem(key)||'0')+1;
         localStorage.setItem(key,String(count));
+        var h3=card.querySelector('h3');
+        var title=h3?h3.textContent.trim():(a.textContent.trim()||href);
+        try{window.addToRecent(href,title);}catch(_){}
       });
     });
 
     // Sort by click count every 30s
     setInterval(sortByHot,30000);
+  }
+
+  // P1 #8 — per-card bookmark button (top-left, hover-revealed).
+  function injectBookmarkButtons(){
+    document.querySelectorAll('#root .group.relative').forEach(function(card){
+      if(card.querySelector('.kc-bookmark-btn'))return;
+      var a=card.querySelector('a[href]');if(!a)return;
+      var href=a.getAttribute('href')||'';if(!href)return;
+      var on=window.isBookmarked(href);
+      var btn=document.createElement('button');
+      btn.type='button';btn.className='kc-bookmark-btn'+(on?' on':'');
+      btn.setAttribute('aria-label','加入書籤');
+      btn.setAttribute('aria-pressed',on?'true':'false');
+      btn.dataset.href=href;btn.textContent=on?'\u2605':'\u2606';
+      btn.addEventListener('click',function(e){
+        e.preventDefault();e.stopPropagation();
+        var h3=card.querySelector('h3'),title=h3?h3.textContent.trim():(a.textContent.trim()||href);
+        var nowOn=window.toggleBookmark(href,title);
+        btn.classList.toggle('on',nowOn);btn.textContent=nowOn?'\u2605':'\u2606';
+        btn.setAttribute('aria-pressed',nowOn?'true':'false');
+      });
+      card.appendChild(btn);
+    });
+  }
+
+  // P1 #7 — NEW badge: a card is "new" if its href is not yet in
+  // kencheng-recent (addToRecent runs on click, so first-visit = NEW).
+  function injectNewBadges(){
+    var seen={};
+    try{var r=JSON.parse(localStorage.getItem('kencheng-recent')||'[]');if(Array.isArray(r))r.forEach(function(x){if(x&&x.href)seen[x.href]=1;});}catch(e){}
+    document.querySelectorAll('#root .group.relative').forEach(function(card){
+      if(card.querySelector('.kc-new-badge'))return;
+      var a=card.querySelector('a[href]');if(!a)return;
+      var href=a.getAttribute('href')||'';
+      if(seen[href]||card.querySelector('.tda-badge'))return;
+      var b=document.createElement('span');
+      b.className='kc-new-badge';b.textContent='\uD83C\uDD95 NEW';
+      b.setAttribute('aria-label','新加入的工具');
+      card.appendChild(b);
+    });
   }
 
   // P0 #5 — Search instant-result dropdown
@@ -2476,10 +2607,31 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     });
     cards.forEach(function(c){grid.appendChild(c);});
   }
+  // Track B P1 #6: card click ripple — delegated so it survives React filter/sort re-renders.
+  function initCardRipple(){
+    var root=document.getElementById('root');
+    if(!root||root.dataset.kcRipple==='1')return;
+    root.dataset.kcRipple='1';
+    root.addEventListener('click',function(e){
+      var card=e.target.closest('.group.relative');
+      if(!card)return;
+      var rect=card.getBoundingClientRect();
+      var size=Math.max(rect.width,rect.height);
+      var ripple=document.createElement('span');
+      ripple.className='kc-ripple';
+      ripple.style.width=size+'px';
+      ripple.style.height=size+'px';
+      ripple.style.left=(e.clientX-rect.left-size/2)+'px';
+      ripple.style.top=(e.clientY-rect.top-size/2)+'px';
+      card.appendChild(ripple);
+      setTimeout(function(){if(ripple.parentNode)ripple.parentNode.removeChild(ripple);},450);
+    });
+  }
   window.addEventListener('load',function(){
     setTimeout(function(){
       initHotTracking();
       sortByHot();
+      initCardRipple();
     },2000);
   });
 })();
