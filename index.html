@@ -1221,6 +1221,64 @@ background: rgba(255,255,255,0.97);
 .about-inner::-webkit-scrollbar-track { background: transparent; }
 .about-inner::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 .dark .about-inner::-webkit-scrollbar-thumb { background: #475569; }
+
+/* ============================
+   MOBILE — Gundam mode HUD responsive overrides
+   <768px: shrink corners, hide oversized deco, dock control buttons
+   ============================ */
+@media (max-width: 768px) {
+  /* HUD corner frames: shrink from 80px → 40px so they don't cover hero */
+  #hud-corner-tl, #hud-corner-tr, #hud-corner-bl, #hud-corner-br {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  /* Top-center theme emblem: shrink */
+  #theme-emblem {
+    width: 80px !important;
+    height: 40px !important;
+    top: 8px !important;
+  }
+  /* 400px MS silhouette is the biggest offender — hide on mobile */
+  #ms-silhouette { display: none !important; }
+  /* Radar / energy / status decos are noise on phone — hide */
+  #hud-radar, #hud-energy, #hud-status { display: none !important; }
+  /* Burst corners + sparkles + scanline: tone down to keep deco feel but no overlap */
+  #burst-tl, #burst-tr, #burst-bl, #burst-br {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  #sparkle-1, #sparkle-2, #sparkle-3, #sparkle-4 { display: none !important; }
+
+  /* Control dock: stack the three floating buttons in a column on the right,
+     keep dark-mode toggle on the left bottom, and shrink the watermark */
+  #dark-mode-toggle {
+    bottom: 16px !important;
+    left: 12px !important;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 16px !important;
+  }
+  #gundam-switcher {
+    bottom: 64px !important;
+    right: 12px !important;
+    gap: 4px !important;
+  }
+  .gundam-mode-btn {
+    width: 72px !important;
+    font-size: 11px !important;
+    min-height: 36px !important;
+  }
+  #watermark {
+    bottom: 8px !important;
+    right: 8px !important;
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+    max-width: 50vw !important;
+    gap: 4px !important;
+  }
+  #watermark img { height: 18px !important; }
+  #watermark span { font-size: 10px !important; }
+}
 </style>
 
 
@@ -1787,7 +1845,6 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
             <a href="https://ihateusingai-beep.github.io/starclass-hub/" target="_blank" rel="noopener" class="about-link">⭐ StarClass Hub</a>
             <a href="https://ihateusingai-beep.github.io/friendly-classroom-v2/" target="_blank" rel="noopener" class="about-link">😊 Friendly Classroom</a>
             <a href="https://github.com/ihateusingai-beep" target="_blank" rel="noopener" class="about-link">🐙 GitHub</a>
-            <a href="https://www.linkedin.com/in/ken-cheng-123456789/" target="_blank" rel="noopener" class="about-link">💼 LinkedIn</a>
           </div>
         </div>
       </div>
@@ -1799,8 +1856,9 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
 
 <script id="phase23-js">
 (function(){
-  var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','computer-logo-prompt--builder/','Student-mission-app/','multiplication-town/','air-drawing/','starclass-hub/','friendly-classroom/','Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','sen-math-multiplication/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','gundam-chatbot/','yt-dlp-gundam/','flower-parts-sen/','cai-lun-paper/','sen-math-multiplication/','sen-yue-read-score/','plant-diversity-sen/','math-quiz/']);\n  var STUDENT_URLS = new Set(['math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','air-drawing/','plant-diversity-sen/','math-quiz/']);
-  var COLLEAGUE_URLS = new Set(['Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','friendly-classroom/','starclass-hub/']);
+var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','computer-logo-prompt--builder/','Student-mission-app/','multiplication-town/','air-drawing/','starclass-hub/','friendly-classroom/','friendly-classroom-v2/','Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','gundam-chatbot/','yt-dlp-gundam/','flower-parts-sen/','cai-lun-paper/','sen-math-multiplication/','sen-yue-read-score/','plant-diversity-sen/','math-quiz/']);
+  var STUDENT_URLS = new Set(['math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','air-drawing/','plant-diversity-sen/','math-quiz/']);
+  var COLLEAGUE_URLS = new Set(['Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','friendly-classroom/','friendly-classroom-v2/','starclass-hub/']);
 
   function isKenURL(h){for(var u of KEN_URLS)if(h.includes(u))return true;return false}
   function isStudentURL(h){for(var u of STUDENT_URLS)if(h.includes(u))return true;return false}
@@ -1820,13 +1878,18 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
     outer.id='filter-bar-outer';
     outer.style.cssText='padding:14px 0 8px';
 
+    // Audience tagline
+    var tagline=document.createElement('div');
+    tagline.style.cssText='display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px';
+    tagline.innerHTML='<span style="font-size:13px;color:#64748b;font-weight:500">👋 匡智張玉瓊晨暉學校老師的教學工具導航站</span><a href="students.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-radius:9999px;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(99,102,241,0.35);transition:all .2s" onmouseover="this.style.transform=\'translateY(-1px)\';this.style.boxShadow=\'0 4px 12px rgba(99,102,241,0.45)\'" onmouseout="this.style.transform=\'\';this.style.boxShadow=\'0 2px 8px rgba(99,102,241,0.35)\'">🎓 學生專區 <span style="font-size:16px;line-height:1">→</span></a>';
+
     var bar=document.createElement('div');
     bar.className='filter-bar';
     bar.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center';
     bar.setAttribute('role','group');
     bar.setAttribute('aria-label','作者篩選');
 
-    var groups={all:'全部',ken:'👤 Ken',colleague:'👥 Colleague',student:'🎮 Student'};
+    var groups={all:'全部',ken:'👤 Ken',colleague:'👥 同事',student:'🧑‍🎓 學生作品'};
     var first=true;
     Object.keys(groups).forEach(function(g){
       var btn=document.createElement('button');
@@ -1843,6 +1906,7 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
       first=false;
     });
 
+    outer.appendChild(tagline);
     outer.appendChild(bar);
     return outer;
   }
@@ -1856,8 +1920,8 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
       var href=a?a.getAttribute('href'):'';
       var badge=null;
       var authorType=null;
-      if(isStudentURL(href)){badge=makeBadge('student','Student');counts.student++;authorType='student';}
-      else if(isColleagueURL(href)){badge=makeBadge('colleague','Colleague');counts.colleague++;authorType='colleague';}
+      if(isStudentURL(href)){badge=makeBadge('student','學生作品');counts.student++;authorType='student';}
+      else if(isColleagueURL(href)){badge=makeBadge('colleague','同事');counts.colleague++;authorType='colleague';}
       else if(isKenURL(href)){badge=makeBadge('ken','Ken');counts.ken++;authorType='ken';}
       if(badge){card.style.position='relative';card.appendChild(badge);}
     });

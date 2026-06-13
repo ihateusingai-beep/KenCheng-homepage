@@ -74,7 +74,7 @@
     <div id="status-panel" class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 mb-6 shadow-sm">
       <div class="flex items-center justify-between mb-4">
         <span class="font-semibold text-gray-700 dark:text-gray-200">準備下載</span>
-        <span id="progress-text" class="text-sm text-gray-400">共 43 個工具</span>
+        <span id="progress-text" class="text-sm text-gray-400">共 — 個工具</span>
       </div>
       <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
         <div id="progress-bar" class="h-full bg-primary-500 rounded-full transition-all duration-300" style="width:0%"></div>
@@ -137,6 +137,13 @@ let CAT_INFO = {
 };
 let isGenerating = false;
 
+// Map UI button keys (English) -> JSON `cat` field values (Chinese)
+const CAT_KEY_MAP = {
+  math:    '數學',
+  science: '科學',
+  lang:    '語文',
+};
+
 fetch('/KenCheng-homepage/assets/student-tools.json')
   .then(r => r.json())
   .then(data => {
@@ -151,12 +158,14 @@ function initCatButtons() {
   STUDENT_TOOLS.forEach(t => { byCat[t.cat] = (byCat[t.cat] || 0) + 1; });
   const totalEl = document.getElementById('btn-all-count');
   if (totalEl) totalEl.textContent = total + '個工具';
+  const headerEl = document.getElementById('progress-text');
+  if (headerEl) headerEl.textContent = `共 ${total} 個工具`;
   const mathEl = document.getElementById('btn-math-count');
-  if (mathEl) mathEl.textContent = (byCat['math'] || 0) + '個工具';
+  if (mathEl) mathEl.textContent = (byCat[CAT_KEY_MAP.math] || 0) + '個工具';
   const sciEl = document.getElementById('btn-science-count');
-  if (sciEl) sciEl.textContent = (byCat['science'] || 0) + '個工具';
+  if (sciEl) sciEl.textContent = (byCat[CAT_KEY_MAP.science] || 0) + '個工具';
   const langEl = document.getElementById('btn-lang-count');
-  if (langEl) langEl.textContent = (byCat['lang'] || 0) + '個工具';
+  if (langEl) langEl.textContent = (byCat[CAT_KEY_MAP.lang] || 0) + '個工具';
 }
 
 function makeQRUrl(url, size = 256) {
@@ -167,7 +176,8 @@ async function generatePDF(catFilter) {
   if (isGenerating) return;
   isGenerating = true;
 
-  const tools = catFilter === 'all' ? STUDENT_TOOLS : STUDENT_TOOLS.filter(t => t.cat === catFilter);
+  const jsonCat = catFilter === 'all' ? 'all' : CAT_KEY_MAP[catFilter];
+  const tools = catFilter === 'all' ? STUDENT_TOOLS : STUDENT_TOOLS.filter(t => t.cat === jsonCat);
   const total = tools.length;
   const label = catFilter === 'all' ? '全部工具' : (CAT_INFO[catFilter]?.label || catFilter);
   const color = catFilter === 'all' ? '#4f46e5' : (CAT_INFO[catFilter]?.color || '#4f46e5');
