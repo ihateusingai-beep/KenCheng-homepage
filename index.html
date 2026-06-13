@@ -1283,6 +1283,12 @@ background: rgba(255,255,255,0.97);
 
 
 <style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;min-height:44px}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}
+/* Mobile (≤560px): 学生专区 CTA on its own line, full-width, so wrap doesn't squeeze it. */
+@media (max-width: 560px){.filter-bar-outer>div:first-child{flex-direction:column;align-items:stretch !important}.filter-bar-outer>div:first-child>a{align-self:flex-start;padding:6px 12px !important;font-size:12px !important}}
+/* Mobile (≤560px): filter buttons row wraps cleanly without overlapping watermark */
+@media (max-width: 560px){.filter-bar-outer{margin-bottom:64px}.filter-btn{font-size:12px;padding:8px 14px}}
+/* Search instant-result dropdown (P0 #5) */
+#search-instant{position:absolute;top:100%;left:0;right:0;margin-top:6px;background:var(--bg-card,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:12px;box-shadow:0 8px 24px rgba(15,23,42,.12);max-height:340px;overflow-y:auto;z-index:9998;display:none}.search-instant-item{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border-bottom:1px solid rgba(0,0,0,.04);font-size:13px;color:var(--text-primary,#1e293b)}.search-instant-item:last-child{border-bottom:none}.search-instant-item:hover,.search-instant-item.act{background:rgba(99,102,241,.08)}.search-instant-item .si-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}.search-instant-item .si-name{font-weight:600;color:inherit}.search-instant-item .si-desc{font-size:11px;color:#64748b;margin-top:2px;display:block;line-height:1.3}.search-instant-empty{padding:14px 12px;text-align:center;color:#94a3b8;font-size:12px}
 /* Card micro-interactions */
 #root .group.relative{transition:transform .2s,box-shadow .2s}
 #root .group.relative:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
@@ -1313,8 +1319,8 @@ background: rgba(255,255,255,0.97);
   <footer role="contentinfo" aria-label="頁腳">
     © 2026 Ken Cheng · 匡智張玉瓊晨暉學校老師 · <a href="https://github.com/ihateusingai-beep" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">🐙 GitHub</a>
   </footer>
-  <!-- Gundam Console UI Mode Switcher -->
-  <div id="gundam-switcher" >
+  <!-- Gundam Console UI Mode Switcher (admin-only Easter egg: hidden by default, reveal via Ctrl+Shift+G) -->
+  <div id="gundam-switcher" data-admin-only="true" style="display:none" >
     <!-- Mode Buttons -->
     <div id="gundam-modes" role="menu" >
       <button onclick="setGundamMode('gundam-ntd')" data-mode="gundam-ntd" class="gundam-mode-btn" aria-label="切換 NT-D 主題" style="border-color:#FF69B4;background:linear-gradient(135deg,#1a0a1a,#2a1530);color:#FF69B4;box-shadow:0 0 10px rgba(255,105,180,0.3);">
@@ -1379,9 +1385,36 @@ function toggleDarkMode() {
 }
 
 // Keyboard Shortcuts (P5): H=help, R=random gundam, ESC=close modals
+// Gundam admin gating (P0 #2): visitors see nothing. Admin uses Ctrl+Shift+G to reveal.
+function isGundamAdmin(){
+  try { return localStorage.getItem('kc-gundam-admin') === '1'; } catch(e) { return false; }
+}
+function setGundamAdmin(on){
+  try { localStorage.setItem('kc-gundam-admin', on ? '1' : '0'); } catch(e) {}
+  applyGundamAdmin();
+}
+function applyGundamAdmin(){
+  var sw = document.getElementById('gundam-switcher');
+  if (!sw) return;
+  if (isGundamAdmin()) {
+    sw.style.display = '';
+    sw.removeAttribute('data-admin-only');
+  } else {
+    sw.style.display = 'none';
+    sw.setAttribute('data-admin-only', 'true');
+  }
+}
 document.addEventListener('keydown', function(e) {
   // Skip if typing in input
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+  // Ctrl+Shift+G (or Cmd+Shift+G): toggle Gundam admin mode (Easter egg)
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'G' || e.key === 'g')) {
+    e.preventDefault();
+    setGundamAdmin(!isGundamAdmin());
+    return;
+  }
+
   var key = e.key.toUpperCase();
   if (key === 'H' && !e.ctrlKey && !e.metaKey) {
     e.preventDefault();
@@ -1392,7 +1425,9 @@ document.addEventListener('keydown', function(e) {
       if (!isHidden) help.querySelector('.help-backdrop') && help.querySelector('.help-backdrop').click();
     }
   }
+  // R: cycle gundam theme — admin-only (visitors do nothing)
   if (key === 'R' && !e.ctrlKey && !e.metaKey) {
+    if (!isGundamAdmin()) return;
     e.preventDefault();
     var modes = ['gundam-ntd','gundam-seed','gundam-crossbone','gundam-ntd-green','gundam-00','gundam-destiny','gundam-god','gundam-cartoon'];
     var current = document.documentElement.dataset.theme;
@@ -1411,6 +1446,29 @@ document.addEventListener('keydown', function(e) {
     }
   }
 });
+
+// On load: visitors get clean page. Admin sees previous gundam theme + switcher.
+function gundamInitOnLoad(){
+  if (!isGundamAdmin()) {
+    // Visitor: clear any leftover session gundam theme, ensure switcher is hidden,
+    // and force HTML data-theme off (so HUD elements stay opacity 0).
+    try { sessionStorage.removeItem('kc-gundam-theme'); } catch(e) {}
+    document.documentElement.removeAttribute('data-theme');
+    return;
+  }
+  // Admin: reveal switcher and re-apply last gundam theme if any.
+  applyGundamAdmin();
+  var saved = null;
+  try { saved = sessionStorage.getItem('kc-gundam-theme'); } catch(e) {}
+  if (saved && saved.indexOf('gundam-') === 0 && typeof setGundamMode === 'function') {
+    setGundamMode(saved);
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', gundamInitOnLoad);
+} else {
+  gundamInitOnLoad();
+}
 
 
 </script>
@@ -1864,6 +1922,53 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
   function isStudentURL(h){for(var u of STUDENT_URLS)if(h.includes(u))return true;return false}
   function isColleagueURL(h){for(var u of COLLEAGUE_URLS)if(h.includes(u))return true;return false}
 
+  // Single source of truth for author classification.
+  // Priority: student > colleague > ken (ken-only) > other.
+  // 'ken' here means "pure Ken, not also student/colleague" — matches filterGroup behavior.
+  function getAuthorType(href){
+    if(isStudentURL(href))return'student';
+    if(isColleagueURL(href))return'colleague';
+    if(isKenURL(href))return'ken';
+    return'other';
+  }
+
+  // Single source of truth for category (used by the second filter row).
+  // Returns 'math' | 'science' | 'lang' | 'other' based on the existing TECH_MAP keys.
+  var CAT_TECH_MAP={
+    // Math
+    'TDA-Prompt-Builder':null,'qr-code-generator':'qr','cf-video':null,'computer-logo-prompt--builder':null,
+    'Student-mission-app':null,'multiplication-town':'math','sen-math-multiplication':'math','air-drawing':'other','starclass-hub':null,'friendly-classroom':null,
+    'Collaborative-Learning-Grouping-Tool':null,'morning-meal-mate':null,'math-minus--Text-based-Questions-':'math',
+    'math-2d-Shapes':'math','math-2d-rpg-mon':'math','math-2digit-minus-animal':'math','math-2digit-subtract':'math',
+    'Subtraction-within-10':'math','read-aloud-word':'lang','Chinese-find-word':'lang','sen-yue-read-score':'lang','4digit-compare':'math',
+    'water-cycle-demo':'science','sci-waterfour-cycle':'science','sci-water-mole':'science','sci-watercycle':'science',
+    'water-cycle-candycrush':'science','sci-rainbow-water':'science','flower-parts-sen':'science','plant-diversity-sen':'science',
+    // Ken's projects
+    'gundam-chatbot':null,'yt-dlp-gundam':null,'cai-lun-paper':'lang',
+    // Ken's chengky-bot pages
+    'math-quest':'math','typing-kingdom':null,'typing-practice':null,'qrcode-gen':'qr',
+    'plane-shapes':'math','equation-balance':'math','decimal-add':'math','subtraction-2digit':'math',
+    'subtract-animal':'math','subtraction-bar':'math','number-breakdown':'math','school-elf':'math',
+    'knowledge-dungeon':'math','2d-shapes':'math',
+    'magnet-game':'science','dissolution':'science','buoyancy-sim':'science','buoyancy-poe':'science',
+    'traffic-light':'science','water-adventure':'science','water-four-states':'science',
+    'water-cycle-match':'science','water-cycle-interactive':'science','evaporation':'science',
+    'dissolve-whack':'science','rainbow-water':'science',
+    'idiom-detective':'lang','student-mission':null,
+    // External
+    'kahoot':null,'times-tables':'math','school-elf.lovable.app':'math','kiddoworksheets':'math',
+    'kids.nationalgeographic':'science','phet.colorado.edu':'science','explore.org':'science','animagraffs':'science',
+    'getepic.com':'lang','classroom-mood-thermometer':null,'air-drawing.vercel.app':null,'thetoymaker':null,
+    'jigidi':null,'geo-fs':null,'doubao.com':null,'base44.ai':null,
+    'flower-garden':'science','math-quiz':'math'
+  };
+  function getCategory(href){
+    for(var key in CAT_TECH_MAP){
+      if(CAT_TECH_MAP[key]&&href.indexOf(key)>=0)return CAT_TECH_MAP[key];
+    }
+    return'other';
+  }
+
   function makeBadge(cls,text){
     var d=document.createElement('div');
     d.className='tda-badge '+cls;
@@ -1883,8 +1988,10 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     tagline.style.cssText='display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px';
     tagline.innerHTML='<span style="font-size:13px;color:#64748b;font-weight:500">👋 匡智張玉瓊晨暉學校老師的教學工具導航站</span><a href="students.html" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-radius:9999px;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(99,102,241,0.35);transition:all .2s" onmouseover="this.style.transform=\'translateY(-1px)\';this.style.boxShadow=\'0 4px 12px rgba(99,102,241,0.45)\'" onmouseout="this.style.transform=\'\';this.style.boxShadow=\'0 2px 8px rgba(99,102,241,0.35)\'">🎓 學生專區 <span style="font-size:16px;line-height:1">→</span></a>';
 
+    // Row 1: Author filter
     var bar=document.createElement('div');
     bar.className='filter-bar';
+    bar.id='filter-bar-author';
     bar.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center';
     bar.setAttribute('role','group');
     bar.setAttribute('aria-label','作者篩選');
@@ -1896,6 +2003,7 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
       btn.className='filter-btn'+(first?' act':'');
       btn.id='fb-'+g;
       btn.dataset.group=g;
+      btn.dataset.kind='author';
       btn.style.cssText='display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;min-height:44px';
       var span=document.createElement('span');
       span.className='fc';
@@ -1906,29 +2014,71 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
       first=false;
     });
 
+    // Row 2: Category filter (AND with row 1)
+    var catBar=document.createElement('div');
+    catBar.className='filter-bar';
+    catBar.id='filter-bar-cat';
+    catBar.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px';
+    catBar.setAttribute('role','group');
+    catBar.setAttribute('aria-label','分類篩選');
+
+    var catLabel=document.createElement('span');
+    catLabel.textContent='📂 分類';
+    catLabel.style.cssText='font-size:12px;color:#64748b;font-weight:600;margin-right:4px';
+    catBar.appendChild(catLabel);
+
+    var cats={all:'全部',math:'🔢 數學',science:'🔬 科學',lang:'🀄 語文',other:'🎯 其他'};
+    var firstCat=true;
+    Object.keys(cats).forEach(function(c){
+      var btn=document.createElement('button');
+      btn.className='filter-btn'+(firstCat?' act':'');
+      btn.id='fc-'+c;
+      btn.dataset.group=c;
+      btn.dataset.kind='cat';
+      btn.style.cssText='display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:9999px;font-size:12px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;min-height:32px';
+      var span=document.createElement('span');
+      span.className='cc';
+      btn.appendChild(document.createTextNode(cats[c]+' '));
+      btn.appendChild(span);
+      btn.addEventListener('click',filterGroup);
+      catBar.appendChild(btn);
+      firstCat=false;
+    });
+
+    // Visible counter line (P0 #1 also: shows post-filter context)
+    var ctx=document.createElement('div');
+    ctx.id='filter-context';
+    ctx.style.cssText='font-size:11px;color:#94a3b8;margin-top:6px;font-family:sans-serif';
+
     outer.appendChild(tagline);
     outer.appendChild(bar);
+    outer.appendChild(catBar);
+    outer.appendChild(ctx);
     return outer;
   }
 
   function injectBadges(){
     var cards=document.querySelectorAll('#root .group.relative');
-    var counts={ken:0,colleague:0,student:0};
+    var counts={ken:0,colleague:0,student:0,other:0};
+    var catCounts={math:0,science:0,lang:0,other:0};
     cards.forEach(function(card){
       if(card.querySelector('.tda-badge'))return;
       var a=card.querySelector('a[href]');
       var href=a?a.getAttribute('href'):'';
+      var t=getAuthorType(href);
+      counts[t]=(counts[t]||0)+1;
+      var c=getCategory(href);
+      catCounts[c]=(catCounts[c]||0)+1;
       var badge=null;
-      var authorType=null;
-      if(isStudentURL(href)){badge=makeBadge('student','學生作品');counts.student++;authorType='student';}
-      else if(isColleagueURL(href)){badge=makeBadge('colleague','同事');counts.colleague++;authorType='colleague';}
-      else if(isKenURL(href)){badge=makeBadge('ken','Ken');counts.ken++;authorType='ken';}
+      if(t==='student')badge=makeBadge('student','學生作品');
+      else if(t==='colleague')badge=makeBadge('colleague','同事');
+      else if(t==='ken')badge=makeBadge('ken','Ken');
       if(badge){card.style.position='relative';card.appendChild(badge);}
     });
 
-    // Update button counts - ALL button shows total visible, not count
+    // Update button counts
     var allBtn=document.getElementById('fb-all');
-    var totalCards=document.querySelectorAll('#root .group.relative').length;
+    var totalCards=cards.length;
     var allSpan=allBtn?allBtn.querySelector('.fc'):null;
     if(allSpan)allSpan.textContent='('+totalCards+')';
     var ke=document.getElementById('fb-ken');
@@ -1937,31 +2087,71 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     if(ke)ke.querySelector('.fc').textContent='('+counts.ken+')';
     if(co)co.querySelector('.fc').textContent='('+counts.colleague+')';
     if(st)st.querySelector('.fc').textContent='('+counts.student+')';
+    var cm=document.getElementById('fc-math');
+    var cs=document.getElementById('fc-science');
+    var cl=document.getElementById('fc-lang');
+    var co2=document.getElementById('fc-other');
+    if(cm)cm.querySelector('.cc').textContent='('+catCounts.math+')';
+    if(cs)cs.querySelector('.cc').textContent='('+catCounts.science+')';
+    if(cl)cl.querySelector('.cc').textContent='('+catCounts.lang+')';
+    if(co2)co2.querySelector('.cc').textContent='('+catCounts.other+')';
+
+    // Set initial context line
+    var ctx=document.getElementById('filter-context');
+    if(ctx)ctx.textContent='顯示全部 '+totalCards+' 個工具';
   }
 
   function filterGroup(e){
     var g=e.currentTarget.dataset.group;
-    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('act');});
+    var kind=e.currentTarget.dataset.kind;
+    // Toggle active only within the same kind (author OR cat), not cross-kind.
+    var parentId=kind==='cat'?'filter-bar-cat':'filter-bar-author';
+    document.querySelectorAll('#'+parentId+' .filter-btn').forEach(function(b){b.classList.remove('act');});
     e.currentTarget.classList.add('act');
 
-    // Apply active style
-    var isDark=document.documentElement.classList.contains('dark')||document.documentElement.dataset.theme==='dark'||document.documentElement.dataset.theme==='cyber';
+    var authorBtn=document.querySelector('#filter-bar-author .filter-btn.act');
+    var catBtn=document.querySelector('#filter-bar-cat .filter-btn.act');
+    var authorG=authorBtn?authorBtn.dataset.group:'all';
+    var catG=catBtn?catBtn.dataset.group:'all';
 
     var cards=document.querySelectorAll('#root .group.relative');
-    var vis={ken:0,colleague:0,student:0};
+    var vis={ken:0,colleague:0,student:0,other:0};
+    var catVis={math:0,science:0,lang:0,other:0};
+    var totalShown=0;
     cards.forEach(function(card){
       var a=card.querySelector('a[href]');
       var href=a?a.getAttribute('href'):'';
-      var show=(g==='all')||(g==='student'&&isStudentURL(href))||(g==='colleague'&&isColleagueURL(href))||(g==='ken'&&isKenURL(href)&&!isStudentURL(href)&&!isColleagueURL(href));
+      var t=getAuthorType(href);
+      var c=getCategory(href);
+      var authorMatch=authorG==='all'||authorG===t;
+      var catMatch=catG==='all'||catG===c;
+      var show=authorMatch&&catMatch;
       card.style.display=show?'':'none';
       if(show){
-        if(isStudentURL(href))vis.student++;
-        else if(isColleagueURL(href))vis.colleague++;
-        else vis.ken++;
+        vis[t]=(vis[t]||0)+1;
+        catVis[c]=(catVis[c]||0)+1;
+        totalShown++;
       }
     });
     var spans={ken:document.querySelector('#fb-ken .fc'),colleague:document.querySelector('#fb-colleague .fc'),student:document.querySelector('#fb-student .fc')};
     Object.keys(spans).forEach(function(k){if(spans[k])spans[k].textContent='('+vis[k]+')';});
+    var cspans={math:document.querySelector('#fc-math .cc'),science:document.querySelector('#fc-science .cc'),lang:document.querySelector('#fc-lang .cc'),other:document.querySelector('#fc-other .cc')};
+    Object.keys(cspans).forEach(function(k){if(cspans[k])cspans[k].textContent='('+catVis[k]+')';});
+    var allSpan=document.querySelector('#fb-all .fc');
+    if(allSpan)allSpan.textContent='('+totalShown+')';
+
+    // Context line — what filter combo is active
+    var ctx=document.getElementById('filter-context');
+    if(ctx){
+      var parts=[];
+      if(authorG!=='all')parts.push('👤 '+authorG);
+      if(catG!=='all')parts.push('📂 '+catG);
+      if(parts.length===0){
+        ctx.textContent='顯示全部 '+totalShown+' 個工具';
+      } else {
+        ctx.textContent='篩選：'+parts.join(' ＋ ')+' → 顯示 '+totalShown+' 個工具';
+      }
+    }
   }
 
   function applyTheme(){
@@ -1998,6 +2188,7 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     }
     injectBadges();
     applyTheme();
+    initSearchInstant();
 
     // Observe theme changes
     var obs=new MutationObserver(function(){
@@ -2100,6 +2291,147 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
 
     // Sort by click count every 30s
     setInterval(sortByHot,30000);
+  }
+
+  // P0 #5 — Search instant-result dropdown
+  // Wrap React-rendered search input with a relative container + dropdown panel.
+  function buildSearchIndex(){
+    var cards=document.querySelectorAll('#root .group.relative');
+    var idx=[];
+    cards.forEach(function(card){
+      var a=card.querySelector('a[href]');
+      if(!a)return;
+      var href=a.getAttribute('href')||'';
+      var h3=card.querySelector('h3');
+      var title=h3?h3.textContent.trim():'';
+      if(!title){
+        // fallback: derive from URL last segment
+        var m=href.match(/\/([^\/?#]+)\/?$/);
+        title=m?decodeURIComponent(m[1]).replace(/[-_]/g,' '):href;
+      }
+      var desc='';
+      var ps=card.querySelectorAll('p');
+      for(var i=0;i<ps.length;i++){var t=ps[i].textContent.trim();if(t.length>5){desc=t;break;}}
+      var tag=card.querySelector('.tech-tag');
+      var tech=tag?tag.textContent.trim():'';
+      idx.push({href:href,title:title,desc:desc,tech:tech,_card:card});
+    });
+    return idx;
+  }
+  function initSearchInstant(){
+    var si=document.querySelector('input[type="text"], input[placeholder*="搜尋"]');
+    if(!si||si.dataset.kcInstant==='1')return;
+    si.dataset.kcInstant='1';
+
+    var wrapper=document.createElement('div');
+    wrapper.style.position='relative';
+    si.parentNode.insertBefore(wrapper,si);
+    wrapper.appendChild(si);
+
+    var dropdown=document.createElement('div');
+    dropdown.id='search-instant';
+    dropdown.setAttribute('role','listbox');
+    wrapper.appendChild(dropdown);
+
+    var idx=buildSearchIndex();
+    var activeIdx=-1;
+    var currentResults=[];
+
+    function normalize(s){return (s||'').toLowerCase().replace(/\s+/g,'');}
+    function score(q,item){
+      if(!q)return 0;
+      var nq=normalize(q), nt=normalize(item.title), nd=normalize(item.desc), nh=normalize(item.href);
+      if(nt===nq)return 100;
+      if(nt.indexOf(nq)===0)return 80;
+      if(nt.indexOf(nq)>0)return 60;
+      if(nd.indexOf(nq)>=0)return 40;
+      if(nh.indexOf(nq)>=0)return 20;
+      // Subsequence fallback: every char of q appears in nt in order (typo tolerance).
+      // Score higher when subsequence is a tight match (chars close together).
+      var qi=0;
+      var lastHit=-1;
+      var gap=0;
+      for(var ni=0;ni<nt.length&&qi<nq.length;ni++){
+        if(nt[ni]===nq[qi]){
+          if(lastHit>=0)gap+=ni-lastHit-1;
+          lastHit=ni;
+          qi++;
+        }
+      }
+      if(qi===nq.length){
+        // tighter gap → higher score (max 25, min 5)
+        var density=Math.max(0,15-gap);
+        return 5+density;
+      }
+      return -1;
+    }
+    function iconFor(item){
+      if(item.tech){
+        var m={Math:'🔢',Science:'🔬','Math RPG':'⚔️',Reading:'📖',Chinese:'🀄',History:'📜',Game:'🎮','QR Code':'📱',AI:'🤖','AI Chat':'💬','AI Design':'🎨',Mission:'🎯',Typing:'⌨️',AR:'🖌️',Grouping:'👥',Meal:'🍱',Classroom:'🏫',Art:'🎭',Video:'🎬'};
+        return m[item.tech]||'🔗';
+      }
+      return '🔗';
+    }
+    function render(q){
+      if(!q||q.length<1){dropdown.style.display='none';return;}
+      var results=[];
+      for(var i=0;i<idx.length;i++){
+        var s=score(q,idx[i]);
+        if(s>=0)results.push({item:idx[i],s:s});
+      }
+      results.sort(function(a,b){return b.s-a.s;});
+      results=results.slice(0,6);
+      currentResults=results;
+      activeIdx=results.length>0?0:-1;
+      if(results.length===0){
+        dropdown.innerHTML='<div class="search-instant-empty">冇搵到「'+escapeHtml(q)+'」相關工具</div>';
+      } else {
+        dropdown.innerHTML=results.map(function(r,i){
+          var it=r.item;
+          return '<div class="search-instant-item'+(i===0?' act':'')+'" role="option" data-href="'+escapeAttr(it.href)+'" data-idx="'+i+'">'
+            +'<span class="si-icon">'+iconFor(it)+'</span>'
+            +'<div style="flex:1;min-width:0;overflow:hidden">'
+            +'<span class="si-name">'+escapeHtml(it.title)+'</span>'
+            +(it.desc?'<span class="si-desc">'+escapeHtml(it.desc.slice(0,80))+(it.desc.length>80?'…':'')+'</span>':'')
+            +(it.tech?'<span class="si-desc" style="color:#6366f1">🏷 '+escapeHtml(it.tech)+'</span>':'')
+            +'</div></div>';
+        }).join('');
+      }
+      dropdown.style.display='block';
+    }
+    function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+    function escapeAttr(s){return escapeHtml(s);}
+
+    function highlightActive(){
+      var items=dropdown.querySelectorAll('.search-instant-item');
+      items.forEach(function(el,i){el.classList.toggle('act',i===activeIdx);});
+      if(activeIdx>=0&&items[activeIdx])items[activeIdx].scrollIntoView({block:'nearest'});
+    }
+    function pick(i){
+      var r=currentResults[i];
+      if(!r)return;
+      window.location.href=r.item.href;
+    }
+
+    si.addEventListener('input',function(){render(si.value);});
+    si.addEventListener('focus',function(){if(si.value)render(si.value);});
+    si.addEventListener('keydown',function(e){
+      if(dropdown.style.display==='none')return;
+      if(e.key==='ArrowDown'){e.preventDefault();if(currentResults.length){activeIdx=(activeIdx+1)%currentResults.length;highlightActive();}}
+      else if(e.key==='ArrowUp'){e.preventDefault();if(currentResults.length){activeIdx=(activeIdx-1+currentResults.length)%currentResults.length;highlightActive();}}
+      else if(e.key==='Enter'){e.preventDefault();if(activeIdx>=0)pick(activeIdx);}
+      else if(e.key==='Escape'){dropdown.style.display='none';si.blur();}
+    });
+    dropdown.addEventListener('click',function(e){
+      var item=e.target.closest('.search-instant-item');
+      if(!item)return;
+      e.preventDefault();
+      pick(parseInt(item.dataset.idx||'0',10));
+    });
+    // close on outside click
+    document.addEventListener('click',function(e){
+      if(!wrapper.contains(e.target))dropdown.style.display='none';
+    });
   }
 
   function sortByHot(){
