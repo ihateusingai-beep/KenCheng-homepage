@@ -2395,12 +2395,18 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
   }
 
   function init(n){
-    if(n===0)return;
+    console.log('[KC-DEBUG] init called with n='+n);
+    if(n===0){console.log('[KC-DEBUG] init early-returned because n===0');return;}
     // Insert filter bar after main element
     var main=document.querySelector('main');
+    console.log('[KC-DEBUG] main element:', main ? (main.id ? main.id : main.tagName) : 'NOT FOUND');
     if(main){
       var fb=createFilterBar();
+      console.log('[KC-DEBUG] filterBar element:', fb ? ('created, id='+fb.id) : 'NULL');
       main.parentNode.insertBefore(fb,main.nextSibling);
+      console.log('[KC-DEBUG] filterBar inserted after main, parent:', main.parentNode.tagName);
+      // verify it landed in DOM
+      console.log('[KC-DEBUG] filter-bar-author in DOM:', !!document.getElementById('filter-bar-author'));
     }
     injectBadges();
     applyTheme();
@@ -2420,11 +2426,13 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
       tries++;
       var main=document.querySelector('main');
       var cards=document.querySelectorAll('#root .group.relative').length;
-      if((main||tries>5)&&tries<=20){clearInterval(iv);cb(cards);}
-      else if(tries>20){clearInterval(iv);cb(0);}
+      console.log('[KC-DEBUG] waitForReact try='+tries+' main='+!!main+' cards='+cards);
+      if((main||tries>5)&&tries<=20){clearInterval(iv);console.log('[KC-DEBUG] waitForReact RESOLVED at try '+tries+' with '+cards+' cards');cb(cards);}
+      else if(tries>20){clearInterval(iv);console.log('[KC-DEBUG] waitForReact TIMED OUT at try 20, calling cb(0)');cb(0);}
     },400);
   }
 
+  console.log('[KC-DEBUG] inline script executing, document.readyState='+document.readyState);
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded',function(){waitForReact(init);});
   } else {
