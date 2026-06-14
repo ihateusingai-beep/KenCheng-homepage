@@ -224,6 +224,14 @@
     "icon": "🐰"
   },
   {
+    "name": "粵語朗讀評分",
+    "url": "https://ihateusingai-beep.github.io/sen-yue-read-score/",
+    "desc": "粵語朗讀 + 語音評分，老師工作台 4 tabs 管理學生進度",
+    "cat": "語文",
+    "level": "all",
+    "icon": "🎙️"
+  },
+  {
     "name": "張騫出使西域",
     "url": "https://ihateusingai-beep.github.io/zhang-qian-journey/",
     "desc": "跟張騫走絲綢之路！認識西域傳入中國和中國傳到西域的物品",
