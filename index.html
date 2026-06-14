@@ -184,6 +184,24 @@
 }
 :focus:not(:focus-visible) { outline: none; }
 
+/* ── Reduced Motion: kill all animations/transitions by default ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── JS toggle: .reduce-motion class kills animations for ALL users ── */
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
 /* Loading Skeleton */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
@@ -1467,6 +1485,11 @@ background: rgba(255,255,255,0.97);
 
   <div id="root" role="main" aria-label="主要內容"></div>
 
+  <!-- Reduce Motion Toggle -->
+  <button id="reduce-motion-toggle" onclick="toggleReduceMotion()" title="開關網頁特效" aria-label="開關網頁特效（目前為開）" style="position:fixed;bottom:24px;left:80px;z-index:9999;width:44px;height:44px;border-radius:50%;border:2px solid var(--border-color,#334155);background:var(--bg-card,#1e293b);color:var(--accent,#00D4FF);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 12px var(--accent-glow,rgba(0,212,255,0.2));transition:all .3s;" aria-pressed="false">
+    ✨️
+  </button>
+
   <!-- Dark Mode Toggle (P5) -->
   <button id="dark-mode-toggle" onclick="toggleDarkMode()" title="切換深色/淺色主題" aria-label="切換深色/淺色主題（目前為淺色模式）" style="position:fixed;bottom:24px;left:24px;z-index:9999;width:49px;height:49px;border-radius:50%;border:2px solid var(--border-color,#334155);background:var(--bg-card,#1e293b);color:var(--accent,#00D4FF);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 12px var(--accent-glow,rgba(0,212,255,0.2));transition:all .3s;" aria-pressed="false">
     🌙
@@ -1550,6 +1573,48 @@ function toggleDarkMode() {
     }
   }
 }
+
+// Reduce Motion Toggle
+function toggleReduceMotion() {
+  var isReduced = document.documentElement.classList.contains('reduce-motion');
+  var toggle = document.getElementById('reduce-motion-toggle');
+  if (isReduced) {
+    document.documentElement.classList.remove('reduce-motion');
+    try { localStorage.setItem('kc-reduce-motion', 'off'); } catch(e) {}
+    if (toggle) {
+      toggle.textContent = '✨️';
+      toggle.style.opacity = '1';
+      toggle.setAttribute('aria-label', '開關網頁特效（目前為開）');
+      toggle.setAttribute('aria-pressed', 'false');
+    }
+  } else {
+    document.documentElement.classList.add('reduce-motion');
+    try { localStorage.setItem('kc-reduce-motion', 'on'); } catch(e) {}
+    if (toggle) {
+      toggle.textContent = '💤';
+      toggle.style.opacity = '0.5';
+      toggle.setAttribute('aria-label', '開關網頁特效（目前為關）');
+      toggle.setAttribute('aria-pressed', 'true');
+    }
+  }
+}
+
+// Init reduce motion from localStorage (system pref + user override)
+(function initReduceMotion() {
+  var saved = null;
+  try { saved = localStorage.getItem('kc-reduce-motion'); } catch(e) {}
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (saved === 'on' || (saved === null && prefersReduced)) {
+    document.documentElement.classList.add('reduce-motion');
+    var toggle = document.getElementById('reduce-motion-toggle');
+    if (toggle) {
+      toggle.textContent = '💤';
+      toggle.style.opacity = '0.5';
+      toggle.setAttribute('aria-label', '開關網頁特效（目前為關）');
+      toggle.setAttribute('aria-pressed', 'true');
+    }
+  }
+})();
 
 // Keyboard Shortcuts (P5): H=help, R=random gundam, ESC=close modals
 // Gundam admin gating (P0 #2): visitors see nothing. Admin uses Ctrl+Shift+G to reveal.
