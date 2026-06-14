@@ -88,8 +88,9 @@
 
     <!-- Dark Mode Init - MUST be before body renders to prevent flash -->
     <script>
+    var STORAGE={THEME:'kc-theme',REDUCE_MOTION:'kc-reduce-motion',GUNDAM_ADMIN:'kc-gundam-admin',BOOKMARKS:'kencheng-bookmarks',RECENT:'kencheng-recent',PWA_DISMISS:'kc-pwa-dismiss'};
     (function(){
-      var stored = localStorage.getItem('kc-theme');
+      var stored = localStorage.getItem(STORAGE.THEME);
       var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       if (stored === 'dark' || (!stored && prefersDark)) {
         document.documentElement.classList.add('dark');
@@ -218,6 +219,7 @@
 }
 
 /* CSS containment for performance */
+/* ── Core: scrollbar / selection / focus / a11y / reduced-motion / layout ── */
 #root { contain: content layout style paint; }
 main .grid { contain: layout style; }
 
@@ -1286,7 +1288,7 @@ background: rgba(255,255,255,0.97);
 }
 </style>
 
-
+/* ── Inline Component Styles (filter bar, search, cards, badges) ── */
 <style id="phase23-css">.filter-bar-outer{padding:14px 0 8px}.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.filter-btn{display:inline-flex;align-items:center;gap:5px;padding:10px 18px;border-radius:9999px;font-size:13px;font-weight:600;border:1.5px solid #e2e8f0;background:#fff;color:#64748b;cursor:pointer;transition:all .2s;white-space:nowrap;line-height:1;min-height:44px}.filter-btn:hover{border-color:#6366f1;color:#6366f1}.filter-btn.act{background:#6366f1;border-color:#6366f1;color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.3)}.filter-btn.dark{border-color:#334155;background:#1e293b;color:#94a3b8}.filter-btn.dark:hover{border-color:#22d3ee;color:#22d3ee}.filter-btn.dark.act{background:#22d3ee;border-color:#22d3ee;color:#0f172a;box-shadow:0 2px 10px rgba(34,211,238,.3)}.tda-badge{position:absolute;top:9px;right:9px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:9999px;color:#fff;z-index:20;pointer-events:none;letter-spacing:.3px}.tda-badge.ken{background:linear-gradient(135deg,#6366f1,#8b5cf6)}.tda-badge.colleague{background:linear-gradient(135deg,#10b981,#059669)}.tda-badge.student{background:linear-gradient(135deg,#f59e0b,#d97706)}
 /* Mobile (≤560px): 学生专区 CTA on its own line, full-width, so wrap doesn't squeeze it. */
 @media (max-width: 560px){.filter-bar-outer>div:first-child{flex-direction:column;align-items:stretch !important}.filter-bar-outer>div:first-child>a{align-self:flex-start;padding:6px 12px !important;font-size:12px !important}}
@@ -1555,7 +1557,7 @@ function toggleDarkMode() {
   var toggle = document.getElementById('dark-mode-toggle');
   if (isDark) {
     html.classList.remove('dark');
-    localStorage.setItem('kc-theme', 'light');
+    localStorage.setItem(STORAGE.THEME, 'light');
     if (toggle) {
       toggle.textContent = '🌙';
       toggle.style.color = '#00D4FF';
@@ -1564,7 +1566,7 @@ function toggleDarkMode() {
     }
   } else {
     html.classList.add('dark');
-    localStorage.setItem('kc-theme', 'dark');
+    localStorage.setItem(STORAGE.THEME, 'dark');
     if (toggle) {
       toggle.textContent = '☀️';
       toggle.style.color = '#FFD700';
@@ -1580,7 +1582,7 @@ function toggleReduceMotion() {
   var toggle = document.getElementById('reduce-motion-toggle');
   if (isReduced) {
     document.documentElement.classList.remove('reduce-motion');
-    try { localStorage.setItem('kc-reduce-motion', 'off'); } catch(e) {}
+    try { localStorage.setItem(STORAGE.REDUCE_MOTION, 'off'); } catch(e) {}
     if (toggle) {
       toggle.textContent = '✨️';
       toggle.style.opacity = '1';
@@ -1589,7 +1591,7 @@ function toggleReduceMotion() {
     }
   } else {
     document.documentElement.classList.add('reduce-motion');
-    try { localStorage.setItem('kc-reduce-motion', 'on'); } catch(e) {}
+    try { localStorage.setItem(STORAGE.REDUCE_MOTION, 'on'); } catch(e) {}
     if (toggle) {
       toggle.textContent = '💤';
       toggle.style.opacity = '0.5';
@@ -1602,7 +1604,7 @@ function toggleReduceMotion() {
 // Init reduce motion from localStorage (system pref + user override)
 (function initReduceMotion() {
   var saved = null;
-  try { saved = localStorage.getItem('kc-reduce-motion'); } catch(e) {}
+  try { saved = localStorage.getItem(STORAGE.REDUCE_MOTION); } catch(e) {}
   var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (saved === 'on' || (saved === null && prefersReduced)) {
     document.documentElement.classList.add('reduce-motion');
@@ -1619,10 +1621,10 @@ function toggleReduceMotion() {
 // Keyboard Shortcuts (P5): H=help, R=random gundam, ESC=close modals
 // Gundam admin gating (P0 #2): visitors see nothing. Admin uses Ctrl+Shift+G to reveal.
 function isGundamAdmin(){
-  try { return localStorage.getItem('kc-gundam-admin') === '1'; } catch(e) { return false; }
+  try { return localStorage.getItem(STORAGE.GUNDAM_ADMIN) === '1'; } catch(e) { return false; }
 }
 function setGundamAdmin(on){
-  try { localStorage.setItem('kc-gundam-admin', on ? '1' : '0'); } catch(e) {}
+  try { localStorage.setItem(STORAGE.GUNDAM_ADMIN, on ? '1' : '0'); } catch(e) {}
   applyGundamAdmin();
 }
 function applyGundamAdmin(){
@@ -2083,15 +2085,18 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
 <div id="watermark" style="position:fixed;bottom:16px;right:16px;display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.6);border-radius:8px;z-index:9999;pointer-events:none"><img src="/KenCheng-homepage/assets/images/avatar.png" alt="KC" loading="lazy" style="height:24px;width:auto;"><span style="color:#fff;font-size:12px;font-family:sans-serif;">© Ken Cheng 製作 <button onclick="openAboutModal()" style="pointer-events:auto;background:none;border:none;color:#fff;text-decoration:underline;cursor:pointer;font-size:11px;padding:0;margin-left:6px">關於我</button></span></div>
 
 <script id="phase23-js">
+var STORAGE={
+  THEME:'kc-theme',REDUCE_MOTION:'kc-reduce-motion',GUNDAM_ADMIN:'kc-gundam-admin',
+  BOOKMARKS:'kencheng-bookmarks',RECENT:'kencheng-recent',PWA_DISMISS:'kc-pwa-dismiss'
+};
 (function(){
-  // P1 #7/#8 — localStorage write helpers for bookmarks + recent visits.
   function kcRead(k){try{var v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}}
   function kcWrite(k,a){try{localStorage.setItem(k,JSON.stringify(a));}catch(e){}}
-  function isBookmarked(h){return kcRead('kencheng-bookmarks').some(function(x){return x&&x.href===h;});}
-  function toggleBookmark(h,t){var a=kcRead('kencheng-bookmarks'),i=a.findIndex(function(x){return x&&x.href===h;});if(i>=0)a.splice(i,1);else a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>50)a=a.slice(0,50);kcWrite('kencheng-bookmarks',a);return i<0;}
-  function addToRecent(h,t){if(!h)return;var a=kcRead('kencheng-recent').filter(function(x){return x&&x.href!==h;});a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>20)a=a.slice(0,20);kcWrite('kencheng-recent',a);}
+  function isBookmarked(h){return kcRead(STORAGE.BOOKMARKS).some(function(x){return x&&x.href===h;});}
+  function toggleBookmark(h,t){var a=kcRead(STORAGE.BOOKMARKS),i=a.findIndex(function(x){return x&&x.href===h;});if(i>=0)a.splice(i,1);else a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>50)a=a.slice(0,50);kcWrite(STORAGE.BOOKMARKS,a);return i<0;}
+  function addToRecent(h,t){if(!h)return;var a=kcRead(STORAGE.RECENT).filter(function(x){return x&&x.href!==h;});a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>20)a=a.slice(0,20);kcWrite(STORAGE.RECENT,a);}
   window.isBookmarked=isBookmarked;window.toggleBookmark=toggleBookmark;window.addToRecent=addToRecent;
-  // P1 #8 — Recommendation engine: CATALOG + __recommendTools + initRecommendations
+  // ── Recommendation engine ─────────────────────────────────────────────────────────
   var CATALOG=[
     {url:'TDA-Prompt-Builder/',   name:'TDA 提示詞生成器', desc:'AI 教學助手 — 一鍵生成差異化教材提示詞', icon:'Bot'},
     {url:'qr-code-generator/',    name:'QR Code 生成器',   desc:'為教材、影片、網站快速生成 QR Code',   icon:'Wrench'},
@@ -2106,7 +2111,7 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
     return{url:h,name:slug||h,desc:'最近瀏覽的工具',icon:'Folder'};
   }
   window.__recommendTools=function(){
-    var bk=kcRead('kencheng-bookmarks'),ru=kcRead('kencheng-recent');
+    var bk=kcRead(STORAGE.BOOKMARKS),ru=kcRead(STORAGE.RECENT);
     var seen={},out=[];
     function push(t){if(!t||seen[t.url])return;seen[t.url]=1;out.push(t);}
     bk.slice(0,5).forEach(function(b){push(_lookupTool(b.href));});
@@ -2114,7 +2119,6 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
     if(out.length<5)CATALOG.forEach(push);
     return out.slice(0,5);
   };
-  // Renders "為你推薦" cards into the weekly picks section
   function initRecommendations(){
     var recs=window.__recommendTools();
     if(!recs||recs.length===0)return;
@@ -2123,7 +2127,6 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
     if(!weeklyH2)return;
     var section=weeklyH2.closest('section');if(!section)return;
     var grid=section.querySelector('.grid');if(!grid)return;
-    var icons={Wrench:'Wrench',Bot:'Bot',Calculator:'Calculator',Video:'Video',Atom:'Atom',Star:'Star',Folder:'Folder'};
     var html='';
     for(var j=0;j<recs.length&&j<5;j++){
       var tool=recs[j];
@@ -2146,15 +2149,14 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
       weeklyH2.parentNode.replaceChild(newH2,weeklyH2);
     }
   }
-var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','computer-logo-prompt--builder/','Student-mission-app/','multiplication-town/','air-drawing/','starclass-hub/','friendly-classroom/','friendly-classroom-v2/','Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','gundam-chatbot/','yt-dlp-gundam/','flower-parts-sen/','cai-lun-paper/','sen-math-multiplication/','sen-yue-read-score/','plant-diversity-sen/','math-quiz/']);
+  // ── Author URL Sets ────────────────────────────────────────────────────────────
+  var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','computer-logo-prompt--builder/','Student-mission-app/','multiplication-town/','air-drawing/','starclass-hub/','friendly-classroom/','friendly-classroom-v2/','Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','gundam-chatbot/','yt-dlp-gundam/','flower-parts-sen/','cai-lun-paper/','sen-math-multiplication/','sen-yue-read-score/','plant-diversity-sen/','math-quiz/']);
   var STUDENT_URLS = new Set(['math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','air-drawing/','plant-diversity-sen/','math-quiz/']);
   var COLLEAGUE_URLS = new Set(['Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','friendly-classroom/','friendly-classroom-v2/','starclass-hub/']);
-
   function isKenURL(h){return KEN_URLS.some(function(u){return h.includes(u);});}
   function isStudentURL(h){return STUDENT_URLS.some(function(u){return h.includes(u);});}
   function isColleagueURL(h){return COLLEAGUE_URLS.some(function(u){return h.includes(u);});}
-
-  // Single source of truth for author classification.
+  // ── Single source of truth for author classification ───────────────────────────
   // Priority: student > colleague > ken (ken-only) > other.
   // 'ken' here means "pure Ken, not also student/colleague" — matches filterGroup behavior.
   function getAuthorType(href){
@@ -2428,11 +2430,14 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
       }
     });
     var spans={ken:document.querySelector('#fb-ken .fc'),colleague:document.querySelector('#fb-colleague .fc'),student:document.querySelector('#fb-student .fc')};
-    Object.keys(spans).forEach(function(k){if(spans[k])spans[k].textContent='('+vis[k]+')';});
     var cspans={math:document.querySelector('#fc-math .cc'),science:document.querySelector('#fc-science .cc'),lang:document.querySelector('#fc-lang .cc'),other:document.querySelector('#fc-other .cc')};
-    Object.keys(cspans).forEach(function(k){if(cspans[k])cspans[k].textContent='('+catVis[k]+')';});
     var allSpan=document.querySelector('#fb-all .fc');
-    if(allSpan)allSpan.textContent='('+totalShown+')';
+    // perf: batch all textContent writes into a single rAF to avoid 8 separate reflows
+    requestAnimationFrame(function(){
+      Object.keys(spans).forEach(function(k){if(spans[k])spans[k].textContent='('+(vis[k]||0)+')';});
+      Object.keys(cspans).forEach(function(k){if(cspans[k])cspans[k].textContent='('+(catVis[k]||0)+')';});
+      if(allSpan)allSpan.textContent='('+totalShown+')';
+    });
 
     // Context line — what filter combo is active
     var ctx=document.getElementById('filter-context');
@@ -2597,7 +2602,7 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
   // kencheng-recent (addToRecent runs on click, so first-visit = NEW).
   function injectNewBadges(){
     var seen={};
-    try{var r=JSON.parse(localStorage.getItem('kencheng-recent')||'[]');if(Array.isArray(r))r.forEach(function(x){if(x&&x.href)seen[x.href]=1;});}catch(e){}
+    try{var r=JSON.parse(localStorage.getItem(STORAGE.RECENT)||'[]');if(Array.isArray(r))r.forEach(function(x){if(x&&x.href)seen[x.href]=1;});}catch(e){}
     document.querySelectorAll('#root .group.relative').forEach(function(card){
       if(card.querySelector('.kc-new-badge'))return;
       var a=card.querySelector('a[href]');if(!a)return;
@@ -2808,7 +2813,7 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
    - standalone / installed 自動跳過
    - 唔影響 P0 / Track A / Track B 任何核心 */
 (function(){
-  var K='kc-pwa-dismissed', DAYS=7, TH=0.5, DELAY=5000;
+  var K=STORAGE.PWA_DISMISS, DAYS=7, TH=0.5, DELAY=5000;
   if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true)return;
   try{var ts=parseInt(localStorage.getItem(K),10);if(isFinite(ts)&&(Date.now()-ts)<DAYS*864e5)return;}catch(e){}
   var b=document.getElementById('pwa-install-banner');
