@@ -1350,6 +1350,103 @@ background: rgba(255,255,255,0.97);
 #pwa-install-banner #pwa-install-btn:hover{background:#4f46e5;border-color:#4f46e5}
 #pwa-install-banner #pwa-dismiss-btn{background:transparent;padding:6px 8px}
 @media (prefers-reduced-motion: reduce){#pwa-install-banner{transition:none}#pwa-install-banner.show{transform:translateX(-50%)}}
+
+/* ── Tier 2: tablist → mobile horizontal-scroll chip design ─────────────────────
+   Mobile (≤640px): transform the 14-tab row into a horizontally scrollable
+   chip pill strip using ARIA role selectors so it works regardless of what
+   wrapper class the React build assigns. Desktop keeps its existing style.
+   ─────────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  nav[role="tablist"],
+  div[role="tablist"],
+  section[role="tablist"] {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    padding-bottom: 8px !important;
+    /* Hide scrollbar — keep the clean pill look */
+    scrollbar-width: none !important;
+  }
+  nav[role="tablist"]::-webkit-scrollbar,
+  div[role="tablist"]::-webkit-scrollbar,
+  section[role="tablist"]::-webkit-scrollbar { display: none !important; }
+
+  /* Tab pills */
+  nav[role="tablist"] [role="tab"],
+  nav[role="tablist"] button[role="tab"],
+  div[role="tablist"] [role="tab"],
+  div[role="tablist"] button[role="tab"],
+  section[role="tablist"] [role="tab"],
+  section[role="tablist"] button[role="tab"] {
+    flex-shrink: 0 !important;
+    scroll-snap-align: start !important;
+    border-radius: 9999px !important;
+    border: 1.5px solid #e2e8f0 !important;
+    background: #fff !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 6px 14px !important;
+    color: #64748b !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    transition: border-color .15s, color .15s, background .15s, box-shadow .15s !important;
+    min-height: 32px !important;
+    line-height: 1 !important;
+  }
+  /* Active chip */
+  nav[role="tablist"] [role="tab"][aria-selected="true"],
+  nav[role="tablist"] button[role="tab"][aria-selected="true"],
+  div[role="tablist"] [role="tab"][aria-selected="true"],
+  div[role="tablist"] button[role="tab"][aria-selected="true"],
+  section[role="tablist"] [role="tab"][aria-selected="true"],
+  section[role="tablist"] button[role="tab"][aria-selected="true"] {
+    background: #6366f1 !important;
+    border-color: #6366f1 !important;
+    color: #fff !important;
+    box-shadow: 0 2px 10px rgba(99,102,241,.3) !important;
+  }
+  /* Hover chip */
+  nav[role="tablist"] [role="tab"]:hover,
+  nav[role="tablist"] button[role="tab"]:hover,
+  div[role="tablist"] [role="tab"]:hover,
+  div[role="tablist"] button[role="tab"]:hover,
+  section[role="tablist"] [role="tab"]:hover,
+  section[role="tablist"] button[role="tab"]:hover {
+    border-color: #6366f1 !important;
+    color: #6366f1 !important;
+  }
+  /* Dark mode chips */
+  .dark nav[role="tablist"] [role="tab"],
+  .dark nav[role="tablist"] button[role="tab"],
+  .dark div[role="tablist"] [role="tab"],
+  .dark div[role="tablist"] button[role="tab"],
+  .dark section[role="tablist"] [role="tab"],
+  .dark section[role="tablist"] button[role="tab"] {
+    border-color: #334155 !important;
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+  }
+  .dark nav[role="tablist"] [role="tab"][aria-selected="true"],
+  .dark nav[role="tablist"] button[role="tab"][aria-selected="true"],
+  .dark div[role="tablist"] [role="tab"][aria-selected="true"],
+  .dark div[role="tablist"] button[role="tab"][aria-selected="true"],
+  .dark section[role="tablist"] [role="tab"][aria-selected="true"],
+  .dark section[role="tablist"] button[role="tab"][aria-selected="true"] {
+    background: #22d3ee !important;
+    border-color: #22d3ee !important;
+    color: #0f172a !important;
+    box-shadow: 0 2px 10px rgba(34,211,238,.3) !important;
+  }
+  .dark nav[role="tablist"] [role="tab"]:hover,
+  .dark div[role="tablist"] [role="tab"]:hover,
+  .dark section[role="tablist"] [role="tab"]:hover {
+    border-color: #22d3ee !important;
+    color: #22d3ee !important;
+  }
+}
 </style>
 </head>
 <body class="dark notranslate" data-theme="dark">
