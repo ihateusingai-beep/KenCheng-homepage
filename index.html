@@ -1950,112 +1950,8 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
                     });
             });
         }
-    </script>
+     </script>
 
-    <script>
-    (function() {
-      // Local HTML/attr escapers for inline-rendered strings (search/reco modules
-      // share window-scoped versions but this IIFE runs before those load).
-      function _escH(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-      function _escA(s){return _escH(s);}
-      // P1 #8 — Recommendation engine. Reads localStorage for bookmarks/recent
-      // and returns up to 5 cards. Falls back to a hardcoded catalog of 5
-      // popular teaching tools whenever bookmarks+recent is empty (or the
-      // union is shorter than 5), so the section is never blank.
-      var CATALOG = [
-        {url:'TDA-Prompt-Builder/',   name:'TDA 提示詞生成器', desc:'AI 教學助手 — 一鍵生成差異化教材提示詞', icon:'Bot'},
-        {url:'qr-code-generator/',    name:'QR Code 生成器',   desc:'為教材、影片、網站快速生成 QR Code',   icon:'Wrench'},
-        {url:'cf-video/',             name:'CF Video 工具',    desc:'課堂錄影與剪輯工具',                    icon:'Video'},
-        {url:'multiplication-town/',  name:'乘法小鎮',         desc:'互動乘法遊戲，提升學生計算動機',         icon:'Calculator'},
-        {url:'friendly-classroom-v2/',name:'友善課室 v2',      desc:'課堂管理與獎勵系統',                     icon:'Star'}
-      ];
-      function kcArr(k){try{var v=JSON.parse(localStorage.getItem(k)||'[]');return Array.isArray(v)?v:[];}catch(e){return[];}}
-      function lookupTool(href){
-        var h=String(href||'');
-        for(var i=0;i<CATALOG.length;i++) if(h.indexOf(CATALOG[i].url)>=0) return CATALOG[i];
-        var slug=h.replace(/^.*\//,'').replace(/[?#].*$/,'').replace(/[-_]+/g,' ').trim();
-        return {url:h, name:slug||h, desc:'最近瀏覽的工具', icon:'Folder'};
-      }
-      window.__recommendTools = function(){
-        var bk=kcArr('kencheng-bookmarks');
-        var ru=kcArr('kencheng-recent');
-        var seen={}, out=[];
-        function push(t){if(!t||seen[t.url])return;seen[t.url]=1;out.push(t);}
-        bk.slice(0,5).forEach(function(b){push(lookupTool(b.href));});
-        ru.slice(0,5).forEach(function(r){push(lookupTool(r.href));});
-        if(out.length<5) CATALOG.forEach(push);
-        return out.slice(0,5);
-      };
-
-      function initRecommendations() {
-        if (!window.__recommendTools) return;
-        // Empty-state fallback lives inside __recommendTools (the static
-        // CATALOG), so this section is always populated (spec §4).
-        var recs = window.__recommendTools();
-        if (!recs || recs.length === 0) return;
-
-        // Find the weekly picks section h2
-        var h2s = document.querySelectorAll('h2');
-        var weeklyH2 = null;
-        for (var i = 0; i < h2s.length; i++) {
-          if (h2s[i].textContent.trim() === '每週精選') {
-            weeklyH2 = h2s[i];
-            break;
-          }
-        }
-        if (!weeklyH2) return;
-
-        // Find the parent section
-        var section = weeklyH2.closest('section');
-        if (!section) return;
-
-        // Find the tool cards container (the grid div inside section)
-        var grid = section.querySelector('.grid');
-        if (!grid) return;
-
-        // Build recommendation cards - matching the existing card structure
-        var icons = {Wrench: 'Wrench', Bot: 'Bot', Calculator: 'Calculator', Video: 'Video', Atom: 'Atom', Star: 'Star', Folder: 'Folder'};
-        var html = '';
-        for (var j = 0; j < recs.length && j < 5; j++) {
-          var tool = recs[j];
-          var iconName = icons[tool.icon] || 'Star';
-          var starBadge = '<div class="absolute -top-1 -left-1 px-2 py-0.5 text-xs font-bold rounded-full bg-purple-600 text-white">★</div>';
-          // Use data-href + delegated listener to avoid escaping tool.url into inline onclick
-          // (URLs containing quotes would break the previous splice).
-          var card = '<div class="relative">' + starBadge +
-            '<div class="reco-card p-4 rounded-xl border border-gray-200 dark:border-cyan-500/30 bg-white dark:bg-slate-900/50 shadow-sm hover:shadow-md transition-shadow cursor-pointer" data-href="' + _escA(tool.url) + '">' +
-            '<h3 class="font-bold text-gray-800 dark:text-cyan-50 text-sm mb-1">' + _escH(tool.name) + '</h3>' +
-            '<p class="text-xs text-gray-500 dark:text-slate-400 line-clamp-2">' + _escH(tool.desc) + '</p>' +
-            '</div></div>';
-          html += card;
-        }
-
-        if (html) {
-          grid.innerHTML = html;
-          // Delegated click handler — survives React re-renders and avoids
-          // splicing tool.url into an inline onclick="..." attribute (which
-          // breaks for URLs containing quotes).
-          grid.addEventListener('click', function (e) {
-            var card = e.target.closest('.reco-card');
-            if (!card || !grid.contains(card)) return;
-            var href = card.getAttribute('data-href');
-            if (href) window.open(href, '_blank');
-          });
-          // Update section heading
-          var newH2 = weeklyH2.cloneNode(true);
-          newH2.innerHTML = '⭐ 為你推薦';
-          weeklyH2.parentNode.replaceChild(newH2, weeklyH2);
-        }
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initRecommendations);
-      } else {
-        // Small delay to ensure React has rendered
-        setTimeout(initRecommendations, 500);
-      }
-    })();
-    </script>
 
 <!-- HUD Corner Assets — Fixed position corners -->
   <div id="hud-corner-tl" class="hud-corner" style="position:fixed;top:0;left:0;width:80px;height:80px;z-index:8888;pointer-events:none;opacity:0;"></div>
@@ -2195,6 +2091,61 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
   function toggleBookmark(h,t){var a=kcRead('kencheng-bookmarks'),i=a.findIndex(function(x){return x&&x.href===h;});if(i>=0)a.splice(i,1);else a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>50)a=a.slice(0,50);kcWrite('kencheng-bookmarks',a);return i<0;}
   function addToRecent(h,t){if(!h)return;var a=kcRead('kencheng-recent').filter(function(x){return x&&x.href!==h;});a.unshift({href:h,title:t||h,ts:Date.now()});if(a.length>20)a=a.slice(0,20);kcWrite('kencheng-recent',a);}
   window.isBookmarked=isBookmarked;window.toggleBookmark=toggleBookmark;window.addToRecent=addToRecent;
+  // P1 #8 — Recommendation engine: CATALOG + __recommendTools + initRecommendations
+  var CATALOG=[
+    {url:'TDA-Prompt-Builder/',   name:'TDA 提示詞生成器', desc:'AI 教學助手 — 一鍵生成差異化教材提示詞', icon:'Bot'},
+    {url:'qr-code-generator/',    name:'QR Code 生成器',   desc:'為教材、影片、網站快速生成 QR Code',   icon:'Wrench'},
+    {url:'cf-video/',             name:'CF Video 工具',    desc:'課堂錄影與剪輯工具',                    icon:'Video'},
+    {url:'multiplication-town/',  name:'乘法小鎮',         desc:'互動乘法遊戲，提升學生計算動機',         icon:'Calculator'},
+    {url:'friendly-classroom-v2/',name:'友善課室 v2',      desc:'課堂管理與獎勵系統',                     icon:'Star'}
+  ];
+  function _lookupTool(href){
+    var h=String(href||'');
+    for(var i=0;i<CATALOG.length;i++)if(h.indexOf(CATALOG[i].url)>=0)return CATALOG[i];
+    var slug=h.replace(/^.*\//,'').replace(/[?#].*$/,'').replace(/[-_]+/g,' ').trim();
+    return{url:h,name:slug||h,desc:'最近瀏覽的工具',icon:'Folder'};
+  }
+  window.__recommendTools=function(){
+    var bk=kcRead('kencheng-bookmarks'),ru=kcRead('kencheng-recent');
+    var seen={},out=[];
+    function push(t){if(!t||seen[t.url])return;seen[t.url]=1;out.push(t);}
+    bk.slice(0,5).forEach(function(b){push(_lookupTool(b.href));});
+    ru.slice(0,5).forEach(function(r){push(_lookupTool(r.href));});
+    if(out.length<5)CATALOG.forEach(push);
+    return out.slice(0,5);
+  };
+  // Renders "為你推薦" cards into the weekly picks section
+  function initRecommendations(){
+    var recs=window.__recommendTools();
+    if(!recs||recs.length===0)return;
+    var h2s=document.querySelectorAll('h2'),weeklyH2=null;
+    for(var i=0;i<h2s.length;i++){if(h2s[i].textContent.trim()==='每週精選'){weeklyH2=h2s[i];break;}}
+    if(!weeklyH2)return;
+    var section=weeklyH2.closest('section');if(!section)return;
+    var grid=section.querySelector('.grid');if(!grid)return;
+    var icons={Wrench:'Wrench',Bot:'Bot',Calculator:'Calculator',Video:'Video',Atom:'Atom',Star:'Star',Folder:'Folder'};
+    var html='';
+    for(var j=0;j<recs.length&&j<5;j++){
+      var tool=recs[j];
+      var card='<div class="relative"><div class="absolute -top-1 -left-1 px-2 py-0.5 text-xs font-bold rounded-full bg-purple-600 text-white">★</div>'+
+        '<div class="reco-card p-4 rounded-xl border border-gray-200 dark:border-cyan-500/30 bg-white dark:bg-slate-900/50 shadow-sm hover:shadow-md transition-shadow cursor-pointer" data-href="'+escapeHtml(tool.url)+'">'+
+        '<h3 class="font-bold text-gray-800 dark:text-cyan-50 text-sm mb-1">'+escapeHtml(tool.name)+'</h3>'+
+        '<p class="text-xs text-gray-500 dark:text-slate-400 line-clamp-2">'+escapeHtml(tool.desc)+'</p></div></div>';
+      html+=card;
+    }
+    if(html){
+      grid.innerHTML=html;
+      grid.addEventListener('click',function(e){
+        var card=e.target.closest('.reco-card');
+        if(!card||!grid.contains(card))return;
+        var href=card.getAttribute('data-href');
+        if(href)window.open(href,'_blank');
+      });
+      var newH2=weeklyH2.cloneNode(true);
+      newH2.innerHTML='⭐ 為你推薦';
+      weeklyH2.parentNode.replaceChild(newH2,weeklyH2);
+    }
+  }
 var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','computer-logo-prompt--builder/','Student-mission-app/','multiplication-town/','air-drawing/','starclass-hub/','friendly-classroom/','friendly-classroom-v2/','Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','gundam-chatbot/','yt-dlp-gundam/','flower-parts-sen/','cai-lun-paper/','sen-math-multiplication/','sen-yue-read-score/','plant-diversity-sen/','math-quiz/']);
   var STUDENT_URLS = new Set(['math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','air-drawing/','plant-diversity-sen/','math-quiz/']);
   var COLLEAGUE_URLS = new Set(['Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','friendly-classroom/','friendly-classroom-v2/','starclass-hub/']);
@@ -2213,40 +2164,72 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     return'other';
   }
 
-  // Single source of truth for category (used by the second filter row).
-  // Returns 'math' | 'science' | 'lang' | 'other' based on the existing TECH_MAP keys.
-  var CAT_TECH_MAP={
-    // Math
-    'TDA-Prompt-Builder':null,'qr-code-generator':'qr','cf-video':null,'computer-logo-prompt--builder':null,
-    'Student-mission-app':null,'multiplication-town':'math','sen-math-multiplication':'math','air-drawing':'other','starclass-hub':null,'friendly-classroom':null,
-    'Collaborative-Learning-Grouping-Tool':null,'morning-meal-mate':null,'math-minus--Text-based-Questions-':'math',
-    'math-2d-Shapes':'math','math-2d-rpg-mon':'math','math-2digit-minus-animal':'math','math-2digit-subtract':'math',
-    'Subtraction-within-10':'math','read-aloud-word':'lang','Chinese-find-word':'lang','sen-yue-read-score':'lang','4digit-compare':'math',
-    'water-cycle-demo':'science','sci-waterfour-cycle':'science','sci-water-mole':'science','sci-watercycle':'science',
-    'water-cycle-candycrush':'science','sci-rainbow-water':'science','flower-parts-sen':'science','plant-diversity-sen':'science',
+  // ── Single source of truth: TOOL_META {slug → {cat, tech}} ──────────────────────────
+  // cat: 'math'|'science'|'lang'|null   tech: 'Math'|'Science'|null
+  // Derived: CAT_TECH_MAP (cat), TECH_MAP (tech), _catRe, _tagRe — generated once
+  var TOOL_META={
+    // Ken's own TDA
+    'TDA-Prompt-Builder':{cat:null,tech:'Vibe Coding'},'qr-code-generator':{cat:'qr',tech:'QR Code'},'cf-video':{cat:null,tech:'Video'},
+    'computer-logo-prompt--builder':{cat:null,tech:'AI Design'},'Student-mission-app':{cat:null,tech:'Mission'},'multiplication-town':{cat:'math',tech:'Math'},
+    'sen-math-multiplication':{cat:'math',tech:'Math'},'air-drawing':{cat:'other',tech:'AR'},'starclass-hub':{cat:null,tech:'AI'},
+    'friendly-classroom':{cat:null,tech:'AI'},'friendly-classroom-v2':{cat:null,tech:'AI'},
+    'Collaborative-Learning-Grouping-Tool':{cat:null,tech:'Grouping'},'morning-meal-mate':{cat:null,tech:'Meal'},
+    'math-minus--Text-based-Questions-':{cat:'math',tech:'Math'},'math-2d-Shapes':{cat:'math',tech:'Math'},
+    'math-2d-rpg-mon':{cat:'math',tech:'Math RPG'},'math-2digit-minus-animal':{cat:'math',tech:'Math'},
+    'math-2digit-subtract':{cat:'math',tech:'Math'},'Subtraction-within-10':{cat:'math',tech:'Math'},
+    'read-aloud-word':{cat:'lang',tech:'Reading'},'Chinese-find-word':{cat:'lang',tech:'Chinese'},
+    'sen-yue-read-score':{cat:'lang',tech:'Chinese'},'4digit-compare':{cat:'math',tech:'Math'},
+    'water-cycle-demo':{cat:'science',tech:'Science'},'sci-waterfour-cycle':{cat:'science',tech:'Science'},
+    'sci-water-mole':{cat:'science',tech:'Science'},'sci-watercycle':{cat:'science',tech:'Science'},
+    'water-cycle-candycrush':{cat:'science',tech:'Science'},'sci-rainbow-water':{cat:'science',tech:'Science'},
+    'flower-parts-sen':{cat:'science',tech:'Science'},'plant-diversity-sen':{cat:'science',tech:'Science'},
     // Ken's projects
-    'gundam-chatbot':null,'yt-dlp-gundam':null,'cai-lun-paper':'lang',
-    // Ken's chengky-bot pages
-    'math-quest':'math','typing-kingdom':null,'typing-practice':null,'qrcode-gen':'qr',
-    'plane-shapes':'math','equation-balance':'math','decimal-add':'math','subtraction-2digit':'math',
-    'subtract-animal':'math','subtraction-bar':'math','number-breakdown':'math','school-elf':'math',
-    'knowledge-dungeon':'math','2d-shapes':'math',
-    'magnet-game':'science','dissolution':'science','buoyancy-sim':'science','buoyancy-poe':'science',
-    'traffic-light':'science','water-adventure':'science','water-four-states':'science',
-    'water-cycle-match':'science','water-cycle-interactive':'science','evaporation':'science',
-    'dissolve-whack':'science','rainbow-water':'science',
-    'idiom-detective':'lang','student-mission':null,
-    // External
-    'kahoot':null,'times-tables':'math','school-elf.lovable.app':'math','kiddoworksheets':'math',
-    'kids.nationalgeographic':'science','phet.colorado.edu':'science','explore.org':'science','animagraffs':'science',
-    'getepic.com':'lang','classroom-mood-thermometer':null,'air-drawing.vercel.app':null,'thetoymaker':null,
-    'jigidi':null,'geo-fs':null,'doubao.com':null,'base44.ai':null,
-    'flower-garden':'science','math-quiz':'math'
+    'gundam-chatbot':{cat:null,tech:'AI Chat'},'yt-dlp-gundam':{cat:null,tech:'Video'},'cai-lun-paper':{cat:'lang',tech:'History'},
+    // Ken's chengky-bot pages (math)
+    'math-quest':{cat:'math',tech:'Math'},'typing-kingdom':{cat:null,tech:'Typing'},'typing-practice':{cat:null,tech:'Typing'},
+    'qrcode-gen':{cat:'qr',tech:'QR Code'},'plane-shapes':{cat:'math',tech:'Math'},'equation-balance':{cat:'math',tech:'Math'},
+    'decimal-add':{cat:'math',tech:'Math'},'subtraction-2digit':{cat:'math',tech:'Math'},'subtract-animal':{cat:'math',tech:'Math'},
+    'subtraction-bar':{cat:'math',tech:'Math'},'number-breakdown':{cat:'math',tech:'Math'},'school-elf':{cat:'math',tech:'Math'},
+    'knowledge-dungeon':{cat:'math',tech:'Math'},'2d-shapes':{cat:'math',tech:'Math'},
+    // Ken's chengky-bot pages (science)
+    'magnet-game':{cat:'science',tech:'Science'},'dissolution':{cat:'science',tech:'Science'},'buoyancy-sim':{cat:'science',tech:'Science'},
+    'buoyancy-poe':{cat:'science',tech:'Science'},'traffic-light':{cat:'science',tech:'Science'},'water-adventure':{cat:'science',tech:'Science'},
+    'water-four-states':{cat:'science',tech:'Science'},'water-cycle-match':{cat:'science',tech:'Science'},
+    'water-cycle-interactive':{cat:'science',tech:'Science'},'evaporation':{cat:'science',tech:'Science'},
+    'dissolve-whack':{cat:'science',tech:'Science'},'rainbow-water':{cat:'science',tech:'Science'},
+    // Ken's chengky-bot pages (language + misc)
+    'idiom-detective':{cat:'lang',tech:'Chinese'},'student-mission':{cat:null,tech:'Mission'},
+    // External: math
+    'kahoot':{cat:null,tech:'Game'},'times-tables':{cat:'math',tech:'Math'},'school-elf.lovable.app':{cat:'math',tech:'Math'},
+    'kiddoworksheets':{cat:'math',tech:'Math'},
+    // External: science
+    'kids.nationalgeographic':{cat:'science',tech:'Science'},'phet.colorado.edu':{cat:'science',tech:'Science'},
+    'explore.org':{cat:'science',tech:'Science'},'animagraffs':{cat:'science',tech:'Science'},
+    // External: language/reading
+    'getepic.com':{cat:'lang',tech:'Reading'},
+    // External: classroom/tools
+    'classroom-mood-thermometer':{cat:null,tech:'Classroom'},'air-drawing.vercel.app':{cat:'other',tech:'AR'},
+    'thetoymaker':{cat:null,tech:'Art'},
+    // External: game
+    'jigidi':{cat:null,tech:'Game'},'geo-fs':{cat:null,tech:'Game'},
+    // External: AI/utilities
+    'doubao.com':{cat:null,tech:'AI'},'base44.ai':{cat:null,tech:'AI'},
+    // flower-garden
+    'flower-garden':{cat:'science',tech:'Science'},'math-quiz':{cat:'math',tech:'Math'}
   };
-  // Build once: combined regex for all CAT_TECH_MAP keys → single test per card
-  var _catRe = (function(){
-    var keys=[];
-    for(var k in CAT_TECH_MAP){if(CAT_TECH_MAP[k])keys.push(k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));}
+  // Derived: cat-only map (for getCategory)
+  var CAT_TECH_MAP={};Object.keys(TOOL_META).forEach(function(k){CAT_TECH_MAP[k]=TOOL_META[k].cat;});
+  // Derived: tech-only map (for injectTechTags)
+  var TECH_MAP={};Object.keys(TOOL_META).forEach(function(k){TECH_MAP[k]=TOOL_META[k].tech;});
+  // Derived: combined regexes
+  var _catRe=(function(){
+    var keys=Object.keys(CAT_TECH_MAP).filter(function(k){return CAT_TECH_MAP[k];})
+      .map(function(k){return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');});
+    return new RegExp(keys.join('|'));
+  })();
+  var _tagRe=(function(){
+    var keys=Object.keys(TECH_MAP).sort(function(a,b){return b.length-a.length;})
+      .map(function(k){return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');});
     return new RegExp(keys.join('|'));
   })();
   function getCategory(href){
@@ -2510,6 +2493,7 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     initSearchInstant();
     initCardRipple();
     initCardObserver();      // perf: IntersectionObserver entrance fade-in — no paint until visible
+    initRecommendations();   // refactor: moved from separate IIFE → single waitForReact chain
 
     // Observe theme changes
     var obs=new MutationObserver(function(){
@@ -2538,51 +2522,9 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
   }
 
   // Phase 3+4: Tech stack tags + hot/pin tracking
+  // TECH_MAP and _tagRe are now derived from TOOL_META (defined above)
   function injectTechTags(){
     var cards=document.querySelectorAll('#root .group.relative');
-    var TECH_MAP={
-      // Ken's own TDA (Vite-built, internal)
-      'TDA-Prompt-Builder':'Vibe Coding','qr-code-generator':'QR Code','cf-video':'Video','computer-logo-prompt--builder':'AI Design',
-      'Student-mission-app':'Mission','multiplication-town':'Math','sen-math-multiplication':'Math','air-drawing':'AR','starclass-hub':'AI','friendly-classroom':'AI',
-      'Collaborative-Learning-Grouping-Tool':'Grouping','morning-meal-mate':'Meal','math-minus--Text-based-Questions-':'Math',
-      'math-2d-Shapes':'Math','math-2d-rpg-mon':'Math RPG','math-2digit-minus-animal':'Math','math-2digit-subtract':'Math',
-      'Subtraction-within-10':'Math','read-aloud-word':'Reading','Chinese-find-word':'Chinese','sen-yue-read-score':'Chinese','4digit-compare':'Math',
-      'water-cycle-demo':'Science','sci-waterfour-cycle':'Science','sci-water-mole':'Science','sci-watercycle':'Science',
-      'water-cycle-candycrush':'Science','sci-rainbow-water':'Science','flower-parts-sen':'Science','plant-diversity-sen':'Science',
-      // Ken's projects
-      'gundam-chatbot':'AI Chat',
-      'yt-dlp-gundam':'Video',
-      'cai-lun-paper':'History',
-      // Ken's chengky-bot pages (math)
-      'math-quest':'Math','typing-kingdom':'Typing','typing-practice':'Typing','qrcode-gen':'QR Code',
-      'plane-shapes':'Math','equation-balance':'Math','decimal-add':'Math','subtraction-2digit':'Math',
-      'subtract-animal':'Math','subtraction-bar':'Math','number-breakdown':'Math','school-elf':'Math',
-      'knowledge-dungeon':'Math','2d-shapes':'Math',
-      // Ken's chengky-bot pages (science)
-      'magnet-game':'Science','dissolution':'Science','buoyancy-sim':'Science','buoyancy-poe':'Science',
-      'traffic-light':'Science','water-adventure':'Science','water-four-states':'Science',
-      'water-cycle-match':'Science','water-cycle-interactive':'Science','evaporation':'Science',
-      'dissolve-whack':'Science','rainbow-water':'Science',
-      // Ken's chengky-bot pages (language + misc)
-      'idiom-detective':'Chinese','student-mission':'Mission',
-      // External: math
-      'kahoot':'Game','times-tables':'Math','school-elf.lovable.app':'Math','kiddoworksheets':'Math',
-      // External: science
-      'kids.nationalgeographic':'Science','phet.colorado.edu':'Science','explore.org':'Science','animagraffs':'Science',
-      // External: language/reading
-      'getepic.com':'Reading',
-      // External: classroom/tools
-      'classroom-mood-thermometer':'Classroom','air-drawing.vercel.app':'AR','thetoymaker':'Art',
-      // External: game
-      'jigidi':'Game','geo-fs':'Game',
-      // External: AI/utilities
-      'doubao.com':'AI','base44.ai':'AI',
-      // flower-garden (new)
-      'flower-garden':'Science'
-    };
-    // perf: build combined regex once (keys sorted longest-first to avoid partial matches)
-    var _tagKeys=Object.keys(TECH_MAP).sort(function(a,b){return b.length-a.length;});
-    var _tagRe=new RegExp(_tagKeys.map(function(k){return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}).join('|'));
     cards.forEach(function(card){
       if(card.querySelector('.tech-tag'))return;
       // use pre-built card index if available
