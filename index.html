@@ -153,15 +153,10 @@
   z-index: 0;
   pointer-events: none;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 60%, #f5576c 100%);
-  background-size: 400% 400%;
-  animation: heroGradient 12s ease infinite;
+  background-size: 200% 200%;
+  background-position: 60% 30%; /* static mid-position — no animation */
   opacity: 0.15;
   filter: blur(40px);
-}
-@keyframes heroGradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
 /* Custom Scrollbar (gundam theme compatible) */
@@ -187,18 +182,18 @@
 /* ── Reduced Motion: kill all animations/transitions by default ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 0 !important;
+    transition-duration: 0s !important;
     scroll-behavior: auto !important;
   }
 }
 
 /* ── JS toggle: .reduce-motion class kills animations for ALL users ── */
 .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
-  animation-duration: 0.001ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.001ms !important;
+  animation-duration: 0s !important;
+  animation-iteration-count: 0 !important;
+  transition-duration: 0s !important;
   scroll-behavior: auto !important;
 }
 
@@ -2199,9 +2194,9 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
   var STUDENT_URLS = new Set(['math-2d-Shapes/','math-2d-rpg-mon/','math-2digit-minus-animal/','math-2digit-subtract/','Subtraction-within-10/','read-aloud-word/','Chinese-find-word/','4digit-compare/','water-cycle-demo/','sci-waterfour-cycle/','sci-water-mole/','sci-watercycle/','water-cycle-candycrush/','sci-rainbow-water/','air-drawing/','plant-diversity-sen/','math-quiz/']);
   var COLLEAGUE_URLS = new Set(['Collaborative-Learning-Grouping-Tool/','morning-meal-mate.lovable.app/','math-minus--Text-based-Questions-/','friendly-classroom/','friendly-classroom-v2/','starclass-hub/']);
 
-  function isKenURL(h){for(var u of KEN_URLS)if(h.includes(u))return true;return false}
-  function isStudentURL(h){for(var u of STUDENT_URLS)if(h.includes(u))return true;return false}
-  function isColleagueURL(h){for(var u of COLLEAGUE_URLS)if(h.includes(u))return true;return false}
+  function isKenURL(h){return KEN_URLS.some(function(u){return h.includes(u);});}
+  function isStudentURL(h){return STUDENT_URLS.some(function(u){return h.includes(u);});}
+  function isColleagueURL(h){return COLLEAGUE_URLS.some(function(u){return h.includes(u);});}
 
   // Single source of truth for author classification.
   // Priority: student > colleague > ken (ken-only) > other.
@@ -2243,10 +2238,15 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     'jigidi':null,'geo-fs':null,'doubao.com':null,'base44.ai':null,
     'flower-garden':'science','math-quiz':'math'
   };
+  // Build once: combined regex for all CAT_TECH_MAP keys → single test per card
+  var _catRe = (function(){
+    var keys=[];
+    for(var k in CAT_TECH_MAP){if(CAT_TECH_MAP[k])keys.push(k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));}
+    return new RegExp(keys.join('|'));
+  })();
   function getCategory(href){
-    for(var key in CAT_TECH_MAP){
-      if(CAT_TECH_MAP[key]&&href.indexOf(key)>=0)return CAT_TECH_MAP[key];
-    }
+    var m=href.match(_catRe);
+    if(m)return CAT_TECH_MAP[m[0]];
     return'other';
   }
 
@@ -2679,7 +2679,7 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     var idx=buildSearchIndex();
     var activeIdx=-1;
     var currentResults=[];
-
+    function debounce(fn,delay){var t;return function(){var a=arguments,ctx=this;clearTimeout(t);t=setTimeout(function(){fn.apply(ctx,a);},delay);};}
     function normalize(s){return (s||'').toLowerCase().replace(/\s+/g,'');}
     function score(q,item){
       if(!q)return 0;
@@ -2756,7 +2756,7 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
       window.location.href=r.item.href;
     }
 
-    si.addEventListener('input',function(){render(si.value);});
+    si.addEventListener('input', debounce(function(){render(si.value);}, 150));
     si.addEventListener('focus',function(){if(si.value)render(si.value);});
     si.addEventListener('keydown',function(e){
       if(dropdown.style.display==='none')return;
