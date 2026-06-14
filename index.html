@@ -1792,6 +1792,10 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
 
     <script>
     (function() {
+      // Local HTML/attr escapers for inline-rendered strings (search/reco modules
+      // share window-scoped versions but this IIFE runs before those load).
+      function _escH(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+      function _escA(s){return _escH(s);}
       // P1 #8 — Recommendation engine. Reads localStorage for bookmarks/recent
       // and returns up to 5 cards. Falls back to a hardcoded catalog of 5
       // popular teaching tools whenever bookmarks+recent is empty (or the
@@ -1854,16 +1858,27 @@ new MutationObserver(syncAboutTheme).observe(document.documentElement, {attribut
           var tool = recs[j];
           var iconName = icons[tool.icon] || 'Star';
           var starBadge = '<div class="absolute -top-1 -left-1 px-2 py-0.5 text-xs font-bold rounded-full bg-purple-600 text-white">★</div>';
+          // Use data-href + delegated listener to avoid escaping tool.url into inline onclick
+          // (URLs containing quotes would break the previous splice).
           var card = '<div class="relative">' + starBadge +
-            '<div class="p-4 rounded-xl border border-gray-200 dark:border-cyan-500/30 bg-white dark:bg-slate-900/50 shadow-sm hover:shadow-md transition-shadow cursor-pointer" onclick="window.open(\'' + tool.url + '\', \'_blank\')">' +
-            '<h3 class="font-bold text-gray-800 dark:text-cyan-50 text-sm mb-1">' + tool.name + '</h3>' +
-            '<p class="text-xs text-gray-500 dark:text-slate-400 line-clamp-2">' + tool.desc + '</p>' +
+            '<div class="reco-card p-4 rounded-xl border border-gray-200 dark:border-cyan-500/30 bg-white dark:bg-slate-900/50 shadow-sm hover:shadow-md transition-shadow cursor-pointer" data-href="' + _escA(tool.url) + '">' +
+            '<h3 class="font-bold text-gray-800 dark:text-cyan-50 text-sm mb-1">' + _escH(tool.name) + '</h3>' +
+            '<p class="text-xs text-gray-500 dark:text-slate-400 line-clamp-2">' + _escH(tool.desc) + '</p>' +
             '</div></div>';
           html += card;
         }
 
         if (html) {
           grid.innerHTML = html;
+          // Delegated click handler — survives React re-renders and avoids
+          // splicing tool.url into an inline onclick="..." attribute (which
+          // breaks for URLs containing quotes).
+          grid.addEventListener('click', function (e) {
+            var card = e.target.closest('.reco-card');
+            if (!card || !grid.contains(card)) return;
+            var href = card.getAttribute('data-href');
+            if (href) window.open(href, '_blank');
+          });
           // Update section heading
           var newH2 = weeklyH2.cloneNode(true);
           newH2.innerHTML = '⭐ 為你推薦';
