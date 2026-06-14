@@ -1297,8 +1297,13 @@ background: rgba(255,255,255,0.97);
 /* Card micro-interactions (P1 #6) — timing unified via --kc-card-tx */
 :root{--kc-card-tx-dur:.2s;--kc-card-arrow-size:14px;--kc-card-arrow-bg:#6366f1;--kc-card-arrow-c:#fff;--kc-card-ripple-c:rgba(99,102,241,.35)}
 .dark{--kc-card-arrow-bg:#22d3ee;--kc-card-arrow-c:#0f172a;--kc-card-ripple-c:rgba(34,211,238,.35)}
-[data-theme^="gundam-"]{--kc-card-arrow-bg:var(--accent);--kc-card-arrow-c:var(--bg-primary);--kc-card-ripple-c:var(--accent-glow)}
-#root .group.relative{position:relative;transition:transform var(--kc-card-tx-dur),box-shadow var(--kc-card-tx-dur);overflow:hidden}
+[data-theme^="gund-"]{--kc-card-arrow-bg:var(--accent);--kc-card-arrow-c:var(--bg-primary);--kc-card-ripple-c:var(--accent-glow)}
+#root .group.relative{position:relative;overflow:hidden;contain:layout style;transition:transform var(--kc-card-tx-dur),box-shadow var(--kc-card-tx-dur),opacity .25s ease-out}
+/* perf: IntersectionObserver entrance — invisible until visible, then fade+slide in */
+#root .group.relative.card-lazy{opacity:0;transform:translateY(10px)}
+#root .group.relative.card-visible{opacity:1;transform:none}
+/* reduce-motion: show immediately, no entrance animation */
+.reduce-motion #root .group.relative.card-lazy{opacity:1;transform:none}
 #root .group.relative:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
 #root .group.relative:active{transform:translateY(0) scale(.98)}
 .dark #root .group.relative:hover{box-shadow:0 8px 24px rgba(0,0,0,.4)}
@@ -2382,6 +2387,32 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     if(ctx)ctx.textContent='顯示全部 '+totalCards+' 個工具';
   }
 
+  // perf: build card metadata index once (O(n) regex + DOM reads → 1 pass, reused forever)
+  function buildCardIndex(){
+    var cards=document.querySelectorAll('#root .group.relative');
+    window.__cardIndex=new Map();
+    cards.forEach(function(card){
+      var a=card.querySelector('a[href]');
+      var href=a?a.getAttribute('href'):'';
+      window.__cardIndex.set(card,{href:href,author:getAuthorType(href),cat:getCategory(href)});
+    });
+  }
+
+  // perf: single IntersectionObserver handles all 108 cards — entrance fade-in, no paint until visible
+  function initCardObserver(){
+    var cards=document.querySelectorAll('#root .group.relative');
+    if(!('IntersectionObserver' in window)){cards.forEach(function(c){c.style.opacity='1';});return;}
+    var observer=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('card-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },{rootMargin:'100px 0px',threshold:0});
+    cards.forEach(function(card){card.classList.add('card-lazy');observer.observe(card);});
+  }
+
   function filterGroup(e){
     var g=e.currentTarget.dataset.group;
     var kind=e.currentTarget.dataset.kind;
@@ -2395,22 +2426,21 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
     var authorG=authorBtn?authorBtn.dataset.group:'all';
     var catG=catBtn?catBtn.dataset.group:'all';
 
-    var cards=document.querySelectorAll('#root .group.relative');
+    // perf: read from pre-built index map — O(1) per card, no DOM queries or regex
     var vis={ken:0,colleague:0,student:0,other:0};
     var catVis={math:0,science:0,lang:0,other:0};
     var totalShown=0;
-    cards.forEach(function(card){
-      var a=card.querySelector('a[href]');
-      var href=a?a.getAttribute('href'):'';
-      var t=getAuthorType(href);
-      var c=getCategory(href);
-      var authorMatch=authorG==='all'||authorG===t;
-      var catMatch=catG==='all'||catG===c;
+    var idx=window.__cardIndex;
+    document.querySelectorAll('#root .group.relative').forEach(function(card){
+      var meta=idx&&idx.get(card);
+      if(!meta){card.style.display='';return;}
+      var authorMatch=authorG==='all'||authorG===meta.author;
+      var catMatch=catG==='all'||catG===meta.cat;
       var show=authorMatch&&catMatch;
       card.style.display=show?'':'none';
       if(show){
-        vis[t]=(vis[t]||0)+1;
-        catVis[c]=(catVis[c]||0)+1;
+        vis[meta.author]=(vis[meta.author]||0)+1;
+        catVis[meta.cat]=(catVis[meta.cat]||0)+1;
         totalShown++;
       }
     });
@@ -2474,9 +2504,12 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
       console.log('[KC-DEBUG] filter-bar-author in DOM:', !!document.getElementById('filter-bar-author'));
     }
     injectBadges();
+    buildCardIndex();       // perf: build metadata index once, reuse in filterGroup + injectTechTags
+    injectTechTags();        // now reads from __cardIndex instead of DOM+regex per card
     applyTheme();
     initSearchInstant();
     initCardRipple();
+    initCardObserver();      // perf: IntersectionObserver entrance fade-in — no paint until visible
 
     // Observe theme changes
     var obs=new MutationObserver(function(){
@@ -2547,15 +2580,20 @@ var KEN_URLS = new Set(['TDA-Prompt-Builder/','qr-code-generator/','cf-video/','
       // flower-garden (new)
       'flower-garden':'Science'
     };
+    // perf: build combined regex once (keys sorted longest-first to avoid partial matches)
+    var _tagKeys=Object.keys(TECH_MAP).sort(function(a,b){return b.length-a.length;});
+    var _tagRe=new RegExp(_tagKeys.map(function(k){return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}).join('|'));
     cards.forEach(function(card){
       if(card.querySelector('.tech-tag'))return;
-      var a=card.querySelector('a[href]');
-      var href=a?a.getAttribute('href'):'';
-      var tag=null;
-      Object.keys(TECH_MAP).forEach(function(key){
-        if(href.includes(key)){tag=TECH_MAP[key];}
-      });
-      if(tag){
+      // use pre-built card index if available
+      var meta=window.__cardIndex&&window.__cardIndex.get(card);
+      var href=meta?meta.href:(function(){
+        var a=card.querySelector('a[href]');
+        return a?a.getAttribute('href'):'';
+      })();
+      var m=href.match(_tagRe);
+      if(m){
+        var tag=TECH_MAP[m[0]];
         var el=document.createElement('span');
         el.className='tech-tag';
         el.textContent=tag;
