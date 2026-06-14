@@ -2561,8 +2561,8 @@ var STORAGE={
       });
     });
 
-    // Sort by click count every 30s
-    setInterval(sortByHot,30000);
+    // Sort by click count once (init)
+    sortByHot();
   }
 
   // P1 #8 — per-card bookmark button (top-left, hover-revealed).
